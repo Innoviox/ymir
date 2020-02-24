@@ -8,7 +8,7 @@ from visualizer.FileReader import *
 class Controller():
     speed_cap = 2
     dt = .1
-    scale = .1
+    scale = .4
 
     def __init__(self, player):
         self.player = player
