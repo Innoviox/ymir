@@ -8,12 +8,8 @@ class GroundType(Enum):
     RIGHT = 3
 
 class Theme(Enum):
-    BLUE, BROWN, CAKE, CASTLE, CHOCO, DIRT, GRASS, GREEN, METAL, PURPLE, SAND, SNOW, TUNDRA, YELLOW = range(14)
-
-grounds = {
-    'blue': ['3', '5', '4', '6'],
-
-}
+    BLUE, BROWN, CASTLE, CHOCO, DIRT = range(5)
+        #, DIRT, GRASS, GREEN, METAL, PURPLE, SAND, SNOW, TUNDRA, YELLOW = range(13)
 
 def file_for_char(c: str, typ: GroundType, theme: Theme=None) -> str:
     '''
@@ -22,10 +18,9 @@ def file_for_char(c: str, typ: GroundType, theme: Theme=None) -> str:
       -> Background.
     '''
     if theme is None:
-        theme = choice(list(grounds.keys()))
+        theme = choice(list(Theme))
 
     if c == 'G':
-        return f"assets/tiles/{theme}/{}"
-        # return f"assets/tiles/{theme}/tile{theme.title()}_{grounds[theme][typ.value].zfill(2)}.png"
+        return f"assets/tiles/{theme.name.lower()}/{typ.name.lower()}.png"
 
 print(file_for_char('G', GroundType.BOTTOM))
