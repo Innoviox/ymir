@@ -10,8 +10,6 @@ tile_map = {
     'E': TileType.END
 }
 
-
-
 class FileReader():
     def __init__(self, file_name):
         self.file_name = file_name
@@ -32,9 +30,11 @@ class FileReader():
                         type = GroundType.LEFT
                     else:
                         type = GroundType.BOTTOM
-                    level[y].append(Tile([x,y], assets.texture(tile, type, theme=theme), tile_map[tile]))
+                    level[y].append(Tile([x,y], 
+                        assets.texture(tile_map[tile], type, theme=theme), 
+                        tile_map[tile]))
                     if x < len(line) - 1 and level[y][x - 1].type == TileType.GROUND and level[y][x].type == TileType.AIR:
-                        level[y][x-1].texture = assets.texture(tile,GroundType.RIGHT, theme=theme)
+                        level[y][x-1].texture = assets.texture(tile_map[tile],GroundType.RIGHT, theme=theme)
 
         #flip the ys
         level = [[Tile([t.position[0],len(level) - t.position[1] - 1], t.texture, t.type) for t in line] for line in level]

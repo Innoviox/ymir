@@ -8,7 +8,7 @@ class TileType(Enum):
     END = 4
 
 class Tile():
-    def __init__(self,position, texture, type):
+    def __init__(self, position, texture, type):
         self.position = position
         self.texture = texture
         self.type = type

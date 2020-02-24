@@ -2,6 +2,7 @@ from enum   import Enum
 from random import choice
 from ursina import load_texture, compress_textures
 from shutil import copyfile
+from visualizer.tile import TileType
 
 class GroundType(Enum):
     BOTTOM = 0
@@ -20,16 +21,13 @@ def load_ground_textures():
             copyfile(file, name)
             # print(load_texture(name, file))
 
-def texture(c: str, typ: GroundType, theme: Theme=None) -> str:
+def texture(c: TileType, typ: GroundType, theme: Theme=None) -> str:
     '''
     Return the string representing the location of the proper texture file.
-    Tile mappings:
-    A -> Ground
-      -> Background.
     '''
     # pick a random theme if none is specified
     if theme is None:
         theme = choice(list(Theme))
 
-    if c == 'A':
+    if c == TileType.GROUND:
         return f"{theme.name.lower()}_{typ.name.lower()}"

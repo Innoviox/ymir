@@ -29,7 +29,10 @@ class Controller():
     def build_from_array(self, array):
         for y,row in enumerate(array):
             for x,tile in enumerate(row):
-                self.entities.append(Entity(model="cube", texture=tile.texture,scale = self.scale,position=(self.scale*tile.x,self.scale*tile.y,0)))
+                self.entities.append(Entity(model="cube", 
+                    texture=tile.texture,
+                    scale = self.scale,
+                    position=(self.scale*tile.x,self.scale*tile.y,0)))
 
     def start(self):
         load_ground_textures()
