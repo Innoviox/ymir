@@ -8,10 +8,9 @@ class GroundType(Enum):
     RIGHT = 3
 
 class Theme(Enum):
-    BLUE, BROWN, CASTLE, CHOCO, DIRT = range(5)
-        #, DIRT, GRASS, GREEN, METAL, PURPLE, SAND, SNOW, TUNDRA, YELLOW = range(13)
+    BLUE, BROWN, CASTLE, CHOCO, DIRT, GRASS, GREEN, METAL, PURPLE, SAND, SNOW, TUNDRA, YELLOW = range(13)
 
-def file_for_char(c: str, typ: GroundType, theme: Theme=None) -> str:
+def texture(c: str, typ: GroundType, theme: Theme=None) -> str:
     '''
     Tile mappings:
     G -> Ground
@@ -20,7 +19,9 @@ def file_for_char(c: str, typ: GroundType, theme: Theme=None) -> str:
     if theme is None:
         theme = choice(list(Theme))
 
+    file = None
     if c == 'G':
-        return f"assets/tiles/{theme.name.lower()}/{typ.name.lower()}.png"
+        file = f"assets/tiles/{theme.name.lower()}/{typ.name.lower()}.png"
 
-print(file_for_char('G', GroundType.BOTTOM))
+        
+
