@@ -1,4 +1,5 @@
 from enum import Enum
+from ursina import *
 
 class TileType(Enum):
     GROUND = 1
@@ -7,7 +8,7 @@ class TileType(Enum):
     END = 4
 
 class Tile():
-    def __init__(self,position, image, type):
+    def __init__(self,position, texture, type):
         self.position = position
-        self.image = image
+        self.texture = texture
         self.type = type

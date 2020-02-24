@@ -1,4 +1,4 @@
-from visualizer.assets import file_for_char, GroundType
+from visualizer.assets import texture, GroundType
 from visualizer.tile import *
 
 
@@ -14,7 +14,6 @@ tile_map = {
 class FileReader():
     def __init__(self, file_name):
         self.file_name = file_name
-
     '''
     returns 2D array with tiles
     '''
@@ -31,8 +30,10 @@ class FileReader():
                         type = GroundType.LEFT
                     else:
                         type = GroundType.bottom
-
-                    level[y].append(Tile([x,y], file_for_char(tile, type), tile_map[tile]))
-
+                    level[y].append(Tile([x,y], texture(tile, type), tile_map[tile]))
                     if x < len(line) - 1 and level[y][x - 1].type == TileType.GROUND and level[y][x].type == TileType.AIR:
-                        level[y][x-1].image = file_for_char(tile,GroundType.RIGHT)
+                        level[y][x-1].texture = texture(tile,GroundType.RIGHT)
+
+        #flip the ys
+        level = [[Tile([t.x,len(level) - t.position[1] - 1], tile.texture, tile.type) for t in line] for line in level]
+        return level
