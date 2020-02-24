@@ -2,7 +2,8 @@ from ursina import *
 from ursina.input_handler import held_keys
 from visualizer.util import *
 import numpy as np
-from assets import *
+from visualizer.assets import *
+from visualizer.FileReader import *
 
 class Controller():
     speed_cap = 2
@@ -31,6 +32,9 @@ class Controller():
                 self.entities.append(Entity(model="cube", texture=tile.texture,scale = self.scale,position=(self.scale*tile.x,self.scale*tile.y,0)))
 
     def start(self):
-        assets.load_ground_textures()
-        self.build_from_array()
+        load_ground_textures()
+
+        reader = FileReader("visualizer/test_file.txt")
+
+        self.build_from_array(reader.read())
         self.app.run()
