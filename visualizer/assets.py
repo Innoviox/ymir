@@ -15,8 +15,8 @@ class Theme(Enum):
 def load_ground_textures():
     for theme in Theme:
         for typ in GroundType:
-            file = f"assets/tiles/{theme.name.lower()}/{typ.name.lower()}.png"
-            name = f"textures/{theme.name.lower()}_{typ.name.lower()}.png"
+            file = f"visualizer/assets/tiles/{theme.name.lower()}/{typ.name.lower()}.png"
+            name = f"visualizer/textures/{theme.name.lower()}_{typ.name.lower()}.png"
             copyfile(file, name)
             # print(load_texture(name, file))
 

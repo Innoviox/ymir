@@ -34,7 +34,7 @@ class Controller():
     def start(self):
         load_ground_textures()
 
-        reader = FileReader("test_file.txt")
+        reader = FileReader("visualizer/test_file.txt")
 
         self.build_from_array(reader.read())
         self.app.run()
