@@ -22,10 +22,12 @@ def load_ground_textures():
 
 def texture(c: str, typ: GroundType, theme: Theme=None) -> str:
     '''
+    Return the string representing the location of the proper texture file.
     Tile mappings:
     A -> Ground
       -> Background.
     '''
+    # pick a random theme if none is specified
     if theme is None:
         theme = choice(list(Theme))
 
