@@ -1,6 +1,7 @@
 from visualizer import assets
-from visualizer.assets import GroundType
+from visualizer.assets import GroundType, Theme
 from visualizer.tile import *
+from random import choice
 
 tile_map = {
     'O': TileType.AIR,
@@ -19,21 +20,22 @@ class FileReader():
     '''
     def read(self):
         level = []
+        theme = choice(list(Theme))
         with open(self.file_name,'r') as f:
             lines = f.readlines()
             for y,line in enumerate(lines):
                 level.append([])
-                for x,tile in enumerate(line):
+                for x,tile in enumerate(line.strip()):
                     if y > 0 and level[y-1][x].type == TileType.AIR:
                         type = GroundType.TOP
                     elif x > 0 and level[y][x-1].type == TileType.AIR:
                         type = GroundType.LEFT
                     else:
                         type = GroundType.BOTTOM
-                    level[y].append(Tile([x,y], assets.texture(tile, type), tile_map[tile]))
+                    level[y].append(Tile([x,y], assets.texture(tile, type, theme=theme), tile_map[tile]))
                     if x < len(line) - 1 and level[y][x - 1].type == TileType.GROUND and level[y][x].type == TileType.AIR:
-                        level[y][x-1].assets.texture = assets.texture(tile,GroundType.RIGHT)
+                        level[y][x-1].texture = assets.texture(tile,GroundType.RIGHT, theme=theme)
 
         #flip the ys
-        level = [[Tile([t.x,len(level) - t.position[1] - 1], tile.assets.texture, tile.type) for t in line] for line in level]
+        level = [[Tile([t.position[0],len(level) - t.position[1] - 1], t.texture, t.type) for t in line] for line in level]
         return level

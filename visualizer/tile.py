@@ -12,3 +12,11 @@ class Tile():
         self.position = position
         self.texture = texture
         self.type = type
+
+    @property
+    def x(self):
+        return self.position[0]
+
+    @property
+    def y(self):
+        return self.position[1]
