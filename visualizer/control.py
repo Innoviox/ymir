@@ -1,6 +1,6 @@
 from ursina import *
 from ursina.input_handler import held_keys
-from Util import *
+from visualizer.util import *
 import numpy as np
 
 class Controller():
@@ -12,7 +12,6 @@ class Controller():
 
     def process_input(self):
         self.player.input = self.dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
-        print(self.player.input)
     def update(self):
         self.process_input()
         self.player.position += self.player.velocity
