@@ -40,4 +40,10 @@ class Controller():
         reader = FileReader("visualizer/test_file.txt")
 
         self.build_from_array(reader.read())
+
+        input_handler.bind('right arrow', 'd')
+        input_handler.bind('left arrow', 'a')
+        input_handler.bind('up arrow', 'w')
+        input_handler.bind('down arrow', 's')
+
         self.app.run()
