@@ -24,7 +24,7 @@ class Controller():
     def update(self):
         self.process_input()
         self.player.update_position_velocity(self.dt)
-        console.log(player)
+        print(player)
         self.player.update_render()
 
     def build_from_array(self, array):
