@@ -1,3 +1,6 @@
+'''
+Create a 'Tile' object with type and (x,y) location. 
+'''
 from enum import Enum
 from ursina import *
 

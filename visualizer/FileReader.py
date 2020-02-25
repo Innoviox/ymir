@@ -1,3 +1,6 @@
+'''
+Read a level file, decode it into the necessary rendered tile objects.
+'''
 from visualizer import assets
 from visualizer.assets import GroundType, Theme
 from visualizer.tile import *
@@ -14,7 +17,7 @@ class FileReader():
     def __init__(self, file_name):
         self.file_name = file_name
     '''
-    returns 2D array with tiles
+    returns 2D array of Tiles
     '''
     def read(self):
         level = []

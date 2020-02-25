@@ -1,3 +1,7 @@
+'''
+Get asset files from the disk, turn them into actually useful Ursina entities.
+Also, enums.
+'''
 from enum   import Enum
 from random import choice
 from ursina import load_texture, compress_textures

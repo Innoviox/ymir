@@ -1,3 +1,7 @@
+'''
+Create a 'Player' object that stores all of the necessary physics-y info
+(and rendering crap). Also the animation state, eventually?
+'''
 import numpy as np
 from visualizer.util import *
 

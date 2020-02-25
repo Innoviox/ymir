@@ -1,3 +1,7 @@
+'''
+Central hub of the code, basically. Calls the necessary functions to 
+render the scene, get input, move the player, etc. 
+'''
 from ursina import *
 from ursina.input_handler import held_keys
 
@@ -9,14 +13,14 @@ from visualizer.FileReader import *
 
 class Controller():
     dt = .1
-    scale = .5
+    scale = 1
 
     def __init__(self):
         self.app = Ursina()
         self.entities = []
 
         camera.orthographic = True
-        camera.fov = 20
+        camera.fov = 25
 
     def process_input(self):
         self.player.input = self.dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
@@ -24,7 +28,6 @@ class Controller():
     def update(self):
         self.process_input()
         self.player.update_position_velocity(self.dt)
-        print(self.player)
         self.player.update_render()
 
     def build_from_array(self, array):
