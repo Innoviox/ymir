@@ -1,4 +1,5 @@
 import numpy as np
+from visualizer.util import *
 
 class Player():
     def __init__(self, position, model):
