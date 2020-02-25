@@ -8,7 +8,6 @@ from visualizer.assets import *
 from visualizer.FileReader import *
 
 class Controller():
-    speed_cap = 10
     dt = .1
     scale = .5
 
@@ -24,11 +23,9 @@ class Controller():
 
     def update(self):
         self.process_input()
-        self.player.position += self.player.velocity * self.dt
-        self.player.velocity += -self.player.velocity / self.speed_cap * self.dt
-        if mag(self.player.velocity + self.player.input) < self.speed_cap:
-            self.player.velocity += self.player.input
-        self.player.update()
+        self.player.update_position_velocity(self.dt)
+        console.log(player)
+        self.player.update_render()
 
     def build_from_array(self, array):
         for y,row in enumerate(array):
@@ -48,5 +45,4 @@ class Controller():
         input_handler.bind('left arrow', 'a')
         input_handler.bind('up arrow', 'w')
         input_handler.bind('down arrow', 's')
-
         self.app.run()
