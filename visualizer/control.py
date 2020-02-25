@@ -6,14 +6,17 @@ from visualizer.assets import *
 from visualizer.FileReader import *
 
 class Controller():
-    speed_cap = 2
+    speed_cap = 10
     dt = .1
-    scale = .4
+    scale = 1
 
     def __init__(self, player):
         self.player = player
         self.app = Ursina()
         self.entities = []
+
+        camera.orthographic = True
+        camera.fov = 20
 
     def process_input(self):
         self.player.input = self.dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
