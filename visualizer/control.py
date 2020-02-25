@@ -10,7 +10,7 @@ from visualizer.FileReader import *
 class Controller():
     speed_cap = 10
     dt = .1
-    scale = 1
+    scale = .5
 
     def __init__(self):
         self.app = Ursina()
@@ -24,8 +24,8 @@ class Controller():
 
     def update(self):
         self.process_input()
-        self.player.position += self.player.velocity
-        self.player.velocity += -self.player.velocity / self.speed_cap
+        self.player.position += self.player.velocity * self.dt
+        self.player.velocity += -self.player.velocity / self.speed_cap * self.dt
         if mag(self.player.velocity + self.player.input) < self.speed_cap:
             self.player.velocity += self.player.input
         self.player.update()
