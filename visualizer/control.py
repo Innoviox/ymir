@@ -36,7 +36,6 @@ class Controller():
         self.process_input()
         self.player.update_position_velocity(dt)
         self.player.update_render()
-        print(self.player_colliding())
 
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):

@@ -20,6 +20,6 @@ class Player():
         
     def update_position_velocity(self, dt):
         self.position += self.velocity * dt
-        self.velocity += -self.velocity / self.speed_cap * dt
+        self.velocity += -self.velocity / self.speed_cap * dt * 10
         if mag(self.velocity + self.input) < self.speed_cap:
             self.velocity += self.input
