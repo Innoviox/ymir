@@ -15,8 +15,8 @@ scale = 1
 dt = .1
 
 h, w = window.size
-OFFSET_X = -15
-OFFSET_Y = -10
+OFFSET_X = 0
+OFFSET_Y = 0
 del h, w
 
 class Controller():
@@ -25,7 +25,7 @@ class Controller():
         self.entities = []
         self.tile_array = []
         camera.orthographic = True
-        camera.fov = 25
+        camera.fov = 20
 
         # window.fullscreen = True
 
@@ -36,10 +36,11 @@ class Controller():
         self.process_input()
         self.player.update_position_velocity(dt)
         self.player.update_render()
+        self.player.update_collisions(self.player_colliding(),self.tile_array)
 
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
-        collided_tiles = list(filter(lambda x: inside(self.player, x), get_nearby_ground_tiles(self.player.position, self.tile_array)))
+        collided_tiles = list(filter(lambda x: inside(self.player.position, x), get_nearby_ground_tiles(self.player.position, self.tile_array)))
         return collided_tiles
 
     def build_from_array(self, array):

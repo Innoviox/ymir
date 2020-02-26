@@ -10,3 +10,5 @@ def update():
 
 def start():
     controller.start()
+
+start()
