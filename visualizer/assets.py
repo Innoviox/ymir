@@ -14,9 +14,14 @@ class GroundType(Enum):
     TOP = 1
     LEFT = 2
     RIGHT = 3
+    NONE = 4
 
-    def file_name(self):
-        return ["Center", "Mid", "Left", "Right"][self.value]
+    def file_name(self, typ):
+        if typ == "Ground":
+            return ["Center", "Mid", "Left", "Right"][self.value]
+        elif typ == "Water":
+            return ["", "Top_mid"][self.value]
+
 
 class Theme(Enum):
     CASTLE, DIRT, GRASS, SAND, SNOW, STONE = range(6)
@@ -45,7 +50,7 @@ def texture(c: TileType, typ: GroundType, theme: Theme=None) -> str:
         theme = choice(list(Theme))
 
     if c == TileType.GROUND:
-        return f"{theme.name.lower()}{typ.file_name()}"
+        return f"{theme.name.lower()}{typ.file_name('Ground')}"
     elif c == TileType.START:
         return "door_openMid"
     elif c == TileType.END:
@@ -54,3 +59,5 @@ def texture(c: TileType, typ: GroundType, theme: Theme=None) -> str:
         return "door_openTop"
     elif c == TileType.END_TOP:
         return "door_closedTop"
+    elif c == TileType.WATER:
+        return f"liquidWater{typ.file_name('Water')}"

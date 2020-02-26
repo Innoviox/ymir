@@ -14,6 +14,11 @@ from visualizer.FileReader import *
 scale = 1
 dt = .1
 
+h, w = window.size
+OFFSET_X = -15
+OFFSET_Y = -10
+del h, w
+
 class Controller():
     def __init__(self):
         self.app = Ursina()
@@ -46,7 +51,7 @@ class Controller():
                 self.entities.append(Entity(model="cube",
                                             texture=tile.texture,
                                             scale=scale,
-                                            position=(scale * tile.x, scale * tile.y, 0)))
+                                            position=(OFFSET_X + scale * tile.x, OFFSET_Y + scale * tile.y, 0)))
                 if tile.type == TileType.START:
                     self.starting_tile = tile
                 if tile.type == TileType.END:
