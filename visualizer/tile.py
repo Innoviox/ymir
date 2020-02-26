@@ -22,6 +22,9 @@ class Tile():
     def x(self):
         return self.position[0]
 
+    def __repr__(self):
+        return str(self.type) + " at " + str(self.position)
+
     @property
     def y(self):
         return self.position[1]

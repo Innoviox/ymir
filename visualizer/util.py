@@ -33,7 +33,8 @@ def point_inside(point, tile):
 
 # gets tiles near a location (in a 2x2)
 def get_nearby_ground_tiles(position, tile_array):
-    position /= control.scale
-    return list(filter(lambda x: x.type == TileType.GROUND, [tile_array[int(position[1])][int(position[0])],
-                                                             tile_array[int(position[1]) + 1][int(position[0])]
-        , tile_array[int(position[1])][int(position[0]) + 1], tile_array[int(position[1]) + 1][int(position[0]) + 1]]))
+    temp_position = position / control.scale
+    temp_position[1] = len(tile_array) - temp_position[1] - 1
+    return list(filter(lambda x: x.type == TileType.GROUND, [tile_array[int(temp_position[1])][int(temp_position[0])],
+                                                    tile_array[int(temp_position[1]) + 1][int(temp_position[0])]
+        , tile_array[int(temp_position[1])][int(temp_position[0]) + 1], tile_array[int(temp_position[1]) + 1][int(temp_position[0]) + 1]]))
