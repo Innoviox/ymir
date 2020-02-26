@@ -64,10 +64,11 @@ class Controller():
     def load_level(self, level_file_name):
         reader = FileReader(level_file_name)
         self.build_from_array(reader.read())
+        print(self.starting_tile.position)
         self.player.position = np.array(self.starting_tile.position, dtype='float64')
 
     def start(self):
-        self.player = Player(position=[],
+        self.player = Player(position=None,
                              entity=Entity(model="cube", color=color.blue, scale=1))
         camera.parent = self.player.entity
         camera.add_script(SmoothFollow(target=self.player.entity, offset=camera_offset, speed=camera_speed))
