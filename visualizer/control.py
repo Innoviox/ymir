@@ -22,7 +22,7 @@ class Controller():
         camera.orthographic = True
         camera.fov = 25
 
-        window.fullscreen = True
+        # window.fullscreen = True
 
     def process_input(self):
         self.player.input = dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
@@ -42,6 +42,7 @@ class Controller():
         self.tile_array = array
         for y, row in enumerate(array):
             for x, tile in enumerate(row):
+                if tile.texture is None: continue
                 self.entities.append(Entity(model="cube",
                                             texture=tile.texture,
                                             scale=scale,
@@ -52,7 +53,6 @@ class Controller():
                     self.ending_tile = tile
 
     def start(self):
-        load_ground_textures()
         reader = FileReader("visualizer/test_file.txt")
         self.build_from_array(reader.read())
         self.player = Player(np.array(self.starting_tile.position, dtype='float64'),
