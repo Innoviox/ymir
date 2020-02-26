@@ -22,6 +22,8 @@ class Controller():
         camera.orthographic = True
         camera.fov = 25
 
+        window.fullscreen = True
+
     def process_input(self):
         self.player.input = self.dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
 
