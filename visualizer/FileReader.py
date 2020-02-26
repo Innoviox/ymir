@@ -10,7 +10,9 @@ tile_map = {
     'O': TileType.AIR,
     'A': TileType.GROUND,
     'S': TileType.START,
-    'E': TileType.END
+    'E': TileType.END,
+    's': TileType.START_TOP,
+    'e': TileType.END_TOP
 }
 
 class FileReader():

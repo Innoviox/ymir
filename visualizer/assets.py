@@ -7,6 +7,7 @@ from random import choice
 from ursina import load_texture, compress_textures
 from shutil import copyfile
 from visualizer.tile import TileType
+from functools import lru_cache
 
 class GroundType(Enum):
     BOTTOM = 0
@@ -14,16 +15,26 @@ class GroundType(Enum):
     LEFT = 2
     RIGHT = 3
 
+    def file_name(self):
+        return ["Center", "Mid", "Left", "Right"][self.value]
+
 class Theme(Enum):
-    BLUE, BROWN, CASTLE, CHOCO, DIRT, GRASS, GREEN, METAL, PURPLE, SAND, SNOW, TUNDRA, YELLOW = range(13)
+    CASTLE, DIRT, GRASS, SAND, SNOW, STONE = range(6)
 
 def load_ground_textures():
-    for theme in Theme:
-        for typ in GroundType:
-            file = f"visualizer/assets/tiles/{theme.name.lower()}/{typ.name.lower()}.png"
-            name = f"visualizer/textures/{theme.name.lower()}_{typ.name.lower()}.png"
-            copyfile(file, name)
-            # print(load_texture(name, file))
+    # DON'T CALL THIS METHOD
+    return
+    # for theme in Theme:
+    #     for typ in GroundType:
+    #         file = f"visualizer/assets/tiles/{theme.name.lower()}/{typ.name.lower()}.png"
+    #         name = f"visualizer/textures/{theme.name.lower()}_{typ.name.lower()}.png"
+    #         copyfile(file, name)
+    #         # print(load_texture(name, file))
+
+@lru_cache(maxsize=None)
+def _load_texture(file):
+    load_texture(file, "visualizer/"+file)
+    return file
 
 def texture(c: TileType, typ: GroundType, theme: Theme=None) -> str:
     '''
@@ -34,4 +45,12 @@ def texture(c: TileType, typ: GroundType, theme: Theme=None) -> str:
         theme = choice(list(Theme))
 
     if c == TileType.GROUND:
-        return f"{theme.name.lower()}_{typ.name.lower()}"
+        return f"{theme.name.lower()}{typ.file_name()}"
+    elif c == TileType.START:
+        return "door_openMid"
+    elif c == TileType.END:
+        return "door_closedMid"
+    elif c == TileType.START_TOP:
+        return "door_openTop"
+    elif c == TileType.END_TOP:
+        return "door_closedTop"
