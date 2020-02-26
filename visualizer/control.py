@@ -35,6 +35,7 @@ class Controller():
     def build_from_array(self, array):
         for y,row in enumerate(array):
             for x,tile in enumerate(row):
+                if tile.texture is None: continue
                 self.entities.append(Entity(model="cube", 
                     texture=tile.texture,
                     scale = self.scale,
