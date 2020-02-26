@@ -13,6 +13,9 @@ from visualizer.FileReader import *
 
 scale = 1
 dt = .1
+camera_fov = 20
+camera_offset = [0,1,-30]
+camera_speed = 2
 
 h, w = window.size
 OFFSET_X = -15
@@ -25,7 +28,7 @@ class Controller():
         self.entities = []
         self.tile_array = []
         camera.orthographic = True
-        camera.fov = 20
+        camera.fov = camera_fov
 
         # window.fullscreen = True
 
@@ -62,6 +65,8 @@ class Controller():
         self.build_from_array(reader.read())
         self.player = Player(np.array(self.starting_tile.position, dtype='float64'),
                              Entity(model="cube", color=color.blue, scale=1))
+        camera.parent = self.player.entity
+        camera.add_script(SmoothFollow(target=self.player.entity, offset=camera_offset, speed=camera_speed))
         input_handler.bind('right arrow', 'd')
         input_handler.bind('left arrow', 'a')
         input_handler.bind('up arrow', 'w')
