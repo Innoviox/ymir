@@ -4,10 +4,11 @@ Create a 'Player' object that stores all of the necessary physics-y info
 '''
 import numpy as np
 from visualizer.util import *
-
+from math import sqrt
 
 class Player():
     def __init__(self, position, model):
+        self.can_jump = True
         self.position = position
         self.model = model
         self.input = [0, 0]
@@ -36,6 +37,7 @@ class Player():
             else: #horizantally connected tiles, snap vertically
                 if tile.y < self.position[1] < tile.y + control.scale:
                     self.position[1] = tile.y + control.scale
+                    self.can_jump = True
                 elif tile.y < self.position[1] + control.scale < tile.y + control.scale:
                     self.position[1] = tile.y - control.scale
                 self.velocity[1] = 0
@@ -52,6 +54,7 @@ class Player():
             if tile.y < self.position[1] < tile.y + control.scale:
                 self.position[1] = tile.y + control.scale
                 self.velocity[1] = 0
+                self.can_jump = True
             elif tile.y < self.position[1] + control.scale < tile.y + control.scale:
                 self.position[1] = tile.y - control.scale
                 self.velocity[1] = 0
@@ -66,6 +69,16 @@ class Player():
 
     def update_position_velocity(self, dt):
         self.position += self.velocity * dt
-        self.velocity += -self.velocity / self.speed_cap * dt * 10
-        if mag(self.velocity + self.input) < self.speed_cap:
-            self.velocity += self.input
+        self.velocity += -self.velocity / self.speed_cap * dt * 3
+        self.velocity[1] += control.gravity * dt
+
+        if self.can_jump and self.input[1] > 0:
+            self.input[1] = self.speed_cap/3
+            self.velocity[1] += self.input[1]
+            self.can_jump = False
+        else:
+            if self.input[1] > 0:
+                self.input[1] = 0
+        
+        if self.velocity[0] + self.input[0] < self.speed_cap:
+            self.velocity[0] += self.input[0]

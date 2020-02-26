@@ -13,6 +13,7 @@ from visualizer.FileReader import *
 
 scale = 1
 dt = .1
+gravity = -.5
 
 h, w = window.size
 OFFSET_X = 0
