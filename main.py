@@ -1,1 +1,3 @@
-from visualizer import main
+from visualizer.main import update, start
+
+start()
