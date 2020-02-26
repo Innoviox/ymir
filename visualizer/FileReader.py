@@ -12,7 +12,8 @@ tile_map = {
     'S': TileType.START,
     'E': TileType.END,
     's': TileType.START_TOP,
-    'e': TileType.END_TOP
+    'e': TileType.END_TOP,
+    'W': TileType.WATER
 }
 
 class FileReader():
@@ -29,12 +30,19 @@ class FileReader():
             for y,line in enumerate(lines):
                 level.append([])
                 for x,tile in enumerate(line.strip()):
-                    if y > 0 and level[y-1][x].type != TileType.GROUND:
-                        type = GroundType.TOP
-                    # elif x > 0 and level[y][x-1].type != TileType.GROUND:
-                    #     type = GroundType.LEFT
-                    else:
-                        type = GroundType.BOTTOM
+                    type = GroundType.NONE
+                    if tile == 'A':
+                        if y > 0 and level[y-1][x].type != TileType.GROUND:
+                            type = GroundType.TOP
+                        # elif x > 0 and level[y][x-1].type != TileType.GROUND:
+                        #     type = GroundType.LEFT
+                        else:
+                            type = GroundType.BOTTOM
+                    elif tile == 'W':
+                        if y > 0 and level[y-1][x].type != TileType.WATER:
+                            type = GroundType.TOP # todo - should be watertype - make more general enum?
+                        else:
+                            type = GroundType.BOTTOM
                     level[y].append(Tile([x,y], 
                         assets.texture(tile_map[tile], type, theme=theme), 
                         tile_map[tile]))

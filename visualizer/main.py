@@ -8,4 +8,5 @@ controller = Controller()
 def update():
     controller.update()
 
-controller.start()
+def start():
+    controller.start()

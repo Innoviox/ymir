@@ -11,6 +11,7 @@ class TileType(Enum):
     END = 4
     START_TOP = 5
     END_TOP = 6
+    WATER = 7
 
 class Tile():
     def __init__(self, position, texture, type):
