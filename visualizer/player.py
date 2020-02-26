@@ -6,17 +6,17 @@ import numpy as np
 from visualizer.util import *
 
 class Player():
-    def __init__(self, position, model):
+    def __init__(self, position, entity):
         self.position = position
-        self.model = model
+        self.entity = entity
         self.input = [0,0]
         self.velocity = np.array([0,0],dtype='float64')
         self.friction = 0.1 # value between 0 and 1; larger means more friction
 
     def update_render(self):
-        self.model.x = self.position[0]
-        self.model.y = self.position[1]
-        self.model.z = -1
+        self.entity.x = self.position[0]
+        self.entity.y = self.position[1]
+        self.entity.z = -1
         
     def update_position_velocity(self, dt):
         self.position += self.velocity * dt
