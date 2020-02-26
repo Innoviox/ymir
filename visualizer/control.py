@@ -36,13 +36,12 @@ class Controller():
         for y,row in enumerate(array):
             for x,tile in enumerate(row):
                 if tile.texture is None: continue
-                self.entities.append(Entity(model="cube", 
+                self.entities.append(Entity(model="cube",
                     texture=tile.texture,
                     scale = self.scale,
                     position=(self.scale*tile.x,self.scale*tile.y,0)))
 
     def start(self):
-        load_ground_textures()
         reader = FileReader("visualizer/test_file.txt")
         self.build_from_array(reader.read())
         self.player = Player(np.array([0,0],dtype='float64'),
