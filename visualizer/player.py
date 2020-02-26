@@ -16,7 +16,8 @@ class Player():
     def update_render(self):
         self.model.x = self.position[0]
         self.model.y = self.position[1]
-
+        self.model.z = -1
+        
     def update_position_velocity(self, dt):
         self.position += self.velocity * dt
         self.velocity += -self.velocity / self.speed_cap * dt
