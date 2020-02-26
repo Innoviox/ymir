@@ -11,6 +11,7 @@ import numpy as np
 from visualizer.assets import *
 from visualizer.FileReader import *
 
+
 class Controller():
     dt = .1
     scale = 1
@@ -33,19 +34,24 @@ class Controller():
         self.player.update_render()
 
     def build_from_array(self, array):
-        for y,row in enumerate(array):
-            for x,tile in enumerate(row):
-                self.entities.append(Entity(model="cube", 
-                    texture=tile.texture,
-                    scale = self.scale,
-                    position=(self.scale*tile.x,self.scale*tile.y,0)))
+        for y, row in enumerate(array):
+            for x, tile in enumerate(row):
+                self.entities.append(Entity(model="cube",
+                                            texture=tile.texture,
+                                            scale=self.scale,
+                                            position=(self.scale * tile.x, self.scale * tile.y, 0)))
+                if tile.type == TileType.START:
+                    self.starting_tile = tile
+                if tile.type == TileType.END:
+                    self.ending_tile = tile
 
+    
     def start(self):
         load_ground_textures()
         reader = FileReader("visualizer/test_file.txt")
         self.build_from_array(reader.read())
-        self.player = Player(np.array([0,0],dtype='float64'),
-	Entity(model="cube",color=color.blue,scale=1))
+        self.player = Player(np.array(self.starting_tile.position, dtype='float64'),
+                             Entity(model="cube", color=color.blue, scale=1))
         input_handler.bind('right arrow', 'd')
         input_handler.bind('left arrow', 'a')
         input_handler.bind('up arrow', 'w')
