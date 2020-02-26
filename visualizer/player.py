@@ -16,7 +16,7 @@ class Player():
     def update_render(self):
         self.entity.x = self.position[0]
         self.entity.y = self.position[1]
-        self.entity.z = -1
+        self.entity.z = -1 # render on top of everything else
         
     def update_position_velocity(self, dt):
         self.position += self.velocity * dt

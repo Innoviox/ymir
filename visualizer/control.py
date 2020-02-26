@@ -60,15 +60,20 @@ class Controller():
                 if tile.type == TileType.END:
                     self.ending_tile = tile
 
-    def start(self):
-        reader = FileReader("visualizer/test_file.txt")
+
+    def load_level(self, level_file_name):
+        reader = FileReader(level_file_name)
         self.build_from_array(reader.read())
-        self.player = Player(np.array(self.starting_tile.position, dtype='float64'),
-                             Entity(model="cube", color=color.blue, scale=1))
+        self.player.position = np.array(self.starting_tile.position, dtype='float64')
+
+    def start(self):
+        self.player = Player(position=[],
+                             entity=Entity(model="cube", color=color.blue, scale=1))
         camera.parent = self.player.entity
         camera.add_script(SmoothFollow(target=self.player.entity, offset=camera_offset, speed=camera_speed))
         input_handler.bind('right arrow', 'd')
         input_handler.bind('left arrow', 'a')
         input_handler.bind('up arrow', 'w')
         input_handler.bind('down arrow', 's')
+        self.load_level("visualizer/test_file.txt")
         self.app.run()
