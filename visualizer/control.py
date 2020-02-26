@@ -52,7 +52,8 @@ class Controller():
                 self.entities.append(Entity(model="cube",
                                             texture=tile.texture,
                                             scale=scale,
-                                            position=(OFFSET_X + scale * tile.x, OFFSET_Y + scale * tile.y, 0)))
+                                            position=(round(OFFSET_X + scale * tile.x),
+                                                      round(OFFSET_Y + scale * tile.y), 0)))
                 if tile.type == TileType.START:
                     self.starting_tile = tile
                 if tile.type == TileType.END:
