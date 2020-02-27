@@ -16,10 +16,11 @@ dt = .1
 camera_fov = 20
 camera_offset = [0,1,-30]
 camera_speed = 2
+gravity = -.5
 
 h, w = window.size
-OFFSET_X = -15
-OFFSET_Y = -10
+OFFSET_X = 0
+OFFSET_Y = 0
 del h, w
 
 class Controller():
@@ -29,6 +30,7 @@ class Controller():
         self.tile_array = []
         camera.orthographic = True
         camera.fov = camera_fov
+        window.borderless = False 
 
         # window.fullscreen = True
 
@@ -39,10 +41,11 @@ class Controller():
         self.process_input()
         self.player.update_position_velocity(dt)
         self.player.update_render()
+        self.player.update_collisions(self.player_colliding(),self.tile_array)
 
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
-        collided_tiles = list(filter(lambda x: inside(self.player, x), get_nearby_ground_tiles(self.player.position, self.tile_array)))
+        collided_tiles = list(filter(lambda x: inside(self.player.position, x), get_nearby_ground_tiles(self.player.position, self.tile_array)))
         return collided_tiles
 
     def build_from_array(self, array):
@@ -65,10 +68,11 @@ class Controller():
         reader = FileReader(level_file_name)
         self.build_from_array(reader.read())
         print(self.starting_tile.position)
-        self.player.position = np.array(self.starting_tile.position, dtype='float64')
+        self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0,2])
+        print(self.player.position)
 
     def start(self):
-        self.player = Player(position=None,
+        self.player = Player(position=np.array([0,2], dtype='float64'),
                              entity=Entity(model="cube", color=color.blue, scale=1))
         camera.parent = self.player.entity
         camera.add_script(SmoothFollow(target=self.player.entity, offset=camera_offset, speed=camera_speed))
