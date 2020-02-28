@@ -15,7 +15,7 @@ class Player():
         self.velocity = np.array([0, 0], dtype='float64')
         self.friction = 0.1 # value between 0 and 1; larger means more friction
         self.horizontal_speed = 10.0
-        self.jump_speed = 1.0
+        self.jump_speed = 2.0
 
     def update_render(self):
         self.entity.x = self.position[0]
@@ -44,37 +44,50 @@ class Player():
                     self.position[1] = tile.y - control.scale
                 self.velocity[1] = 0
 
-        elif len(tiles) == 3: # snap player to the "missing" tile
-            missing_tile = list(filter(lambda x: not x in tiles, get_nearby_tiles(self.position,tile_array)))[0]
-            self.position=missing_tile.position
-            self.velocity = np.array([0, 0], dtype='float64')
+        # elif len(tiles) == 3: # snap player to the "missing" tile
+        #     missing_tile = list(filter(lambda x: not x in tiles, get_nearby_tiles(self.position,tile_array)))[0]
+        #     self.position=missing_tile.position
+        #     self.velocity = np.array([0, 0], dtype='float64')
 
         else:
             # position snapping, only if a single tile is collided, this will be buggy
             tile = tiles[0]
-            # vertical position snapping
-            if tile.y < self.position[1] < tile.y + control.scale:
-                self.position[1] = tile.y + control.scale
-                self.velocity[1] = 0
-                self.can_jump = True
-            elif tile.y < self.position[1] + control.scale < tile.y + control.scale:
-                self.position[1] = tile.y - control.scale
-                self.velocity[1] = 0
+            try:
+                horiz_time = min(abs(self.position[0] - tile.x - control.scale)
+                                , abs(self.position[0] + control.scale - tile.x)) / abs(self.velocity[0])
+            except:
+                horiz_time = 1000
+            try:
+                vert_time = min(abs(self.position[1] - tile.y - control.scale)
+                                , abs(self.position[1] + control.scale - tile.y)) / abs(self.velocity[1])
+            except:
+                vert_time = 1000
 
-            # horizontal position snapping
-            if tile.x < self.position[0] < tile.x + control.scale:
-                self.position[0] = tile.x + control.scale
-                self.velocity[0] = 0
-            elif tile.x < self.position[0] + control.scale < tile.x + control.scale:
-                self.position[0] = tile.x - control.scale
-                self.velocity[0] = 0
+            if vert_time < horiz_time:
+                # vertical position snapping
+                if tile.y < self.position[1] < tile.y + control.scale:
+                    self.position[1] = tile.y + control.scale
+                    self.velocity[1] = 0
+                    #hit the ground
+                    self.can_jump = True
+                elif tile.y < self.position[1] + control.scale < tile.y + control.scale:
+                    self.position[1] = tile.y - control.scale
+                    self.velocity[1] = 0
+            else:
+                # horizontal position snapping
+                if tile.x < self.position[0] < tile.x + control.scale:
+                    self.position[0] = tile.x + control.scale
+                    self.velocity[0] = 0
+                elif tile.x < self.position[0] + control.scale < tile.x + control.scale:
+                    self.position[0] = tile.x - control.scale
+                    self.velocity[0] = 0
 
     def update_position_velocity(self, dt):
         self.position += self.velocity * dt
         self.velocity[0] += self.input[0] * self.horizontal_speed * dt # slow down due to friction
         self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
         self.velocity[1] += control.gravity * dt
-        print("velocity:", self.velocity, "input:", self.input, "position:", self.position)
+        # print("velocity:", self.velocity, "input:", self.input, "position:", self.position)
 
         if self.can_jump and self.input[1] > 0:
             self.velocity[1] += self.jump_speed

@@ -39,9 +39,13 @@ class Controller():
 
     def update(self):
         self.process_input()
+
+
+        #TODO Die correctly with death cam
         self.player.update_position_velocity(dt)
         self.player.update_render()
         self.player.update_collisions(self.player_colliding(),self.tile_array)
+
 
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
@@ -67,9 +71,7 @@ class Controller():
     def load_level(self, level_file_name):
         reader = FileReader(level_file_name)
         self.build_from_array(reader.read())
-        print(self.starting_tile.position)
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0,2])
-        print(self.player.position)
 
     def start(self):
         self.player = Player(position=np.array([0,2], dtype='float64'),

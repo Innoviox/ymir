@@ -8,8 +8,7 @@ def mag(a):
 
 
 # Tells if an entity (anything with an ordered pair position vector) is inside the given tile
-def inside(position, tile):
-    density = 10
+def inside(position, tile, density = 10):
     for i in range(0, density):
         if point_inside([position[0] + control.scale * i / density, position[1]], tile):
             return True
