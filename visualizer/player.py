@@ -59,7 +59,7 @@ class Player():
                 self.position[1] = tile.y - control.scale
                 self.velocity[1] = 0
 
-            #horizantal position snapping
+            #horizontal position snapping
             if tile.x < self.position[0] < tile.x + control.scale:
                 self.position[0] = tile.x + control.scale
                 self.velocity[0] = 0
@@ -79,6 +79,6 @@ class Player():
         else:
             if self.input[1] > 0:
                 self.input[1] = 0
-        
+
         if self.velocity[0] + self.input[0] < self.speed_cap:
             self.velocity[0] += self.input[0]
