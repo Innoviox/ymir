@@ -39,11 +39,6 @@ class Controller():
 
     def update(self):
         self.process_input()
-
-
-        if self.player.position[1] < 0:
-            self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
-
         self.player.update_position_velocity(dt)
         try:
             self.player.update_render()
