@@ -26,16 +26,6 @@ class GroundType(Enum):
 class Theme(Enum):
     CASTLE, DIRT, GRASS, SAND, SNOW, STONE = range(6)
 
-def load_ground_textures():
-    # DON'T CALL THIS METHOD
-    return
-    # for theme in Theme:
-    #     for typ in GroundType:
-    #         file = f"visualizer/assets/tiles/{theme.name.lower()}/{typ.name.lower()}.png"
-    #         name = f"visualizer/textures/{theme.name.lower()}_{typ.name.lower()}.png"
-    #         copyfile(file, name)
-    #         # print(load_texture(name, file))
-
 @lru_cache(maxsize=None)
 def _load_texture(file):
     load_texture(file, "visualizer/"+file)
