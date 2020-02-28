@@ -4,6 +4,20 @@ Create a 'Tile' object with type and (x,y) location.
 from enum import Enum
 from ursina import *
 
+texture_map = [
+    "grassCenter",
+    None,
+    "door_openMid",
+    "door_closedMid",
+    "door_openTop",
+    "door_closedTop",
+    "liquidWater",
+    "grassMid",
+    "liquidWaterTop_mid"
+]
+
+tile_map = 'AOSEseWaw'
+
 class TileType(Enum):
     GROUND = 1
     AIR = 2
@@ -16,17 +30,11 @@ class TileType(Enum):
     WATER_TOP = 9
 
     def texture(self):
-        return [
-            "grassCenter",
-            None,
-            "door_openMid",
-            "door_closedMid",
-            "door_openTop",
-            "door_closedTop",
-            "liquidWater",
-            "grassMid",
-            "liquidWaterTop_mid"
-        ][self.value - 1]
+        return texture_map[self.value - 1]
+
+    @classmethod
+    def from_tile(cls, t):
+        return cls._value2member_map_[tile_map.index(t) + 1]
 
     def is_ground(self): return self.value in [1, 8]
     def is_water(self): return self.value in [7, 9]
@@ -34,8 +42,8 @@ class TileType(Enum):
 class Tile():
     def __init__(self, position, typ):
         self.position = position
-        self.texture = typ.texture()
         self.type = typ
+        self.texture = self.type.texture()
 
     @property
     def x(self):

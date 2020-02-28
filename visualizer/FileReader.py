@@ -4,18 +4,6 @@ Read a level file, decode it into the necessary rendered tile objects.
 from visualizer.tile import *
 from random import choice
 
-tile_map = {
-    'O': TileType.AIR,
-    'A': TileType.GROUND,
-    'a': TileType.GROUND_TOP,
-    'S': TileType.START,
-    'E': TileType.END,
-    's': TileType.START_TOP,
-    'e': TileType.END_TOP,
-    'W': TileType.WATER,
-    'w': TileType.WATER_TOP
-}
-
 class FileReader():
     def __init__(self, file_name):
         self.file_name = file_name
@@ -37,7 +25,7 @@ class FileReader():
                     elif tile == 'W':
                         if y > 0 and not level[y-1][x].type.is_water():
                             tile = tile.lower()
-                    level[y].append(Tile([x,y], tile_map[tile]))
+                    level[y].append(Tile([x,y], TileType.from_tile(tile)))
                     # if x < len(line) - 1 and level[y][x - 1].type == TileType.GROUND and level[y][x].type != TileType.GROUND:
                     #     level[y][x-1].texture = assets.texture(tile_map[tile],GroundType.RIGHT, theme=theme)
 
