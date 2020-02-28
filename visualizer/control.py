@@ -8,7 +8,6 @@ from ursina.input_handler import held_keys
 from visualizer.player import Player
 from visualizer.util import *
 import numpy as np
-from visualizer.assets import *
 from visualizer.FileReader import *
 import os
 

@@ -1,8 +1,6 @@
 '''
 Read a level file, decode it into the necessary rendered tile objects.
 '''
-from visualizer import assets
-from visualizer.assets import GroundType, Theme
 from visualizer.tile import *
 from random import choice
 
