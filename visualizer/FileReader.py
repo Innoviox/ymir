@@ -9,11 +9,13 @@ from random import choice
 tile_map = {
     'O': TileType.AIR,
     'A': TileType.GROUND,
+    'a': TileType.GROUND_TOP,
     'S': TileType.START,
     'E': TileType.END,
     's': TileType.START_TOP,
     'e': TileType.END_TOP,
-    'W': TileType.WATER
+    'W': TileType.WATER,
+    'w': TileType.WATER_TOP
 }
 
 class FileReader():
@@ -24,31 +26,23 @@ class FileReader():
     '''
     def read(self):
         level = []
-        theme = Theme.GRASS
         with open(self.file_name,'r') as f:
             lines = f.readlines()
             for y,line in enumerate(lines):
                 level.append([])
                 for x,tile in enumerate(line.strip()):
-                    type = GroundType.NONE
                     if tile == 'A':
-                        if y > 0 and level[y-1][x].type != TileType.GROUND:
-                            type = GroundType.TOP
+                        if y > 0 and not level[y-1][x].type.is_ground():
+                            tile = tile.lower()
                         # elif x > 0 and level[y][x-1].type != TileType.GROUND:
                         #     type = GroundType.LEFT
-                        else:
-                            type = GroundType.BOTTOM
                     elif tile == 'W':
-                        if y > 0 and level[y-1][x].type != TileType.WATER:
-                            type = GroundType.TOP # todo - should be watertype - make more general enum?
-                        else:
-                            type = GroundType.BOTTOM
-                    level[y].append(Tile([x,y], 
-                        assets.texture(tile_map[tile], type, theme=theme), 
-                        tile_map[tile]))
+                        if y > 0 and not level[y-1][x].type.is_water():
+                            tile = tile.lower()
+                    level[y].append(Tile([x,y], tile_map[tile]))
                     # if x < len(line) - 1 and level[y][x - 1].type == TileType.GROUND and level[y][x].type != TileType.GROUND:
                     #     level[y][x-1].texture = assets.texture(tile_map[tile],GroundType.RIGHT, theme=theme)
 
         #flip the ys
-        level = [[Tile([t.position[0],len(level) - t.position[1] - 1], t.texture, t.type) for t in line] for line in level]
+        level = [[Tile([t.position[0],len(level) - t.position[1] - 1], t.type) for t in line] for line in level]
         return level
