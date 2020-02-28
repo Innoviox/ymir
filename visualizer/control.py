@@ -26,7 +26,6 @@ del h, w
 class Controller():
     def __init__(self):
         self.app = Ursina()
-        self.entities = []
         self.tile_array = []
         camera.orthographic = True
         camera.fov = camera_fov
@@ -47,6 +46,10 @@ class Controller():
             if self.player.position[1] < 1:
                 self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
 
+        for i in self.tile_array:
+            for j in i:
+                j.update()
+
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
         collided_tiles = list(filter(lambda x: inside(self.player.position, x), get_nearby_ground_tiles(self.player.position, self.tile_array)))
@@ -57,11 +60,11 @@ class Controller():
         for y, row in enumerate(array):
             for x, tile in enumerate(row):
                 if tile.texture is None: continue
-                self.entities.append(Entity(model="cube",
-                                            texture=tile.texture,
-                                            scale=scale,
-                                            position=(round(OFFSET_X + scale * tile.x),
-                                                      round(OFFSET_Y + scale * tile.y), 0)))
+                tile.entity = Entity(model="cube",
+                                     texture=tile.texture,
+                                     scale=scale,
+                                     position=(round(OFFSET_X + scale * tile.x),
+                                               round(OFFSET_Y + scale * tile.y), 0))
                 if tile.type == TileType.START:
                     self.starting_tile = tile
                 if tile.type == TileType.END:

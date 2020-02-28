@@ -13,10 +13,11 @@ texture_map = [
     "door_closedTop",
     "liquidWater",
     "grassMid",
-    "liquidWaterTop_mid"
+    "liquidWaterTop_mid",
+    "grassHalf"
 ]
 
-tile_map = 'AOSEseWaw'
+tile_map = 'AOSEseWawM'
 
 class TileType(Enum):
     GROUND = 1
@@ -28,6 +29,7 @@ class TileType(Enum):
     WATER = 7
     GROUND_TOP = 8
     WATER_TOP = 9
+    MOVING = 10
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -36,7 +38,7 @@ class TileType(Enum):
     def from_tile(cls, t):
         return cls._value2member_map_[tile_map.index(t) + 1]
 
-    def is_ground(self): return self.value in [1, 8]
+    def is_ground(self): return self.value in [1, 8, 10]
     def is_water(self): return self.value in [7, 9]
 
 class Tile():
@@ -44,6 +46,10 @@ class Tile():
         self.position = position
         self.type = typ
         self.texture = self.type.texture()
+        self.entity = None
+
+    def update(self):
+        if not self.entity: return
 
     @property
     def x(self):
@@ -55,3 +61,22 @@ class Tile():
     @property
     def y(self):
         return self.position[1]
+
+class MovingTile(Tile):
+    def __init__(self, position, typ):
+        super().__init__(position, typ)
+        self.cycle_length = 50
+        self.curr = 0
+        self.speed = 0.1
+        # todo: self.direction
+
+    def update(self):
+        super().update()
+
+        self.entity.x += self.speed
+
+        self.curr += 1
+        if self.curr % self.cycle_length == 0:
+            self.curr = 0
+            self.speed = -self.speed
+
