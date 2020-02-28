@@ -10,6 +10,7 @@ from visualizer.util import *
 import numpy as np
 from visualizer.assets import *
 from visualizer.FileReader import *
+import os
 
 scale = 1
 dt = .1

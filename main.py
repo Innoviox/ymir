@@ -1,3 +1,6 @@
-from visualizer.main import update, start
+import os
+os.chdir('visualizer')
 
+from visualizer.main import update, start
+os.chdir('..')
 start()
