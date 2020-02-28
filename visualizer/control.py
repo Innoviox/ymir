@@ -41,11 +41,16 @@ class Controller():
         self.process_input()
 
 
-        #TODO Die correctly with death cam
-        self.player.update_position_velocity(dt)
-        self.player.update_render()
-        self.player.update_collisions(self.player_colliding(),self.tile_array)
+        if self.player.position[1] < 0:
+            self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
 
+        self.player.update_position_velocity(dt)
+        try:
+            self.player.update_render()
+            self.player.update_collisions(self.player_colliding(),self.tile_array)
+        except:
+            if self.player.position[1] < 1:
+                self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
 
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
