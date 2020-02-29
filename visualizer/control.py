@@ -48,7 +48,7 @@ class Controller():
 
         for y, i in enumerate(self.tile_array):
             for x, j in enumerate(i):
-                j.update(self.tile_array, self.player)
+                j.update()
 
 
     #returns the ground tiles collided with, or an empty list for no collisions
@@ -61,6 +61,7 @@ class Controller():
         for y, row in enumerate(array):
             for x, tile in enumerate(row):
                 if tile.texture is None: continue
+                tile.controller = self
                 tile.entity = Entity(model="quad",
                                      texture=tile.texture,
                                      scale=scale,

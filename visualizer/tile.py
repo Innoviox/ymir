@@ -52,18 +52,19 @@ class TileType(Enum):
         return TileType.from_tile(tile_map[self.value - 1].swapcase())
 
 class Tile():
-    def __init__(self, position, typ):
+    def __init__(self, position, typ, controller):
         self.position = position
         self.type = typ
         self.texture = self.type.texture()
         self.entity = None
+        self.controller = controller
 
     def load(self, new_type):
         self.type = new_type
         self.texture = self.type.texture()
         self.entity.texture = self.texture
 
-    def update(self, tiles, player): pass
+    def update(self): pass
 
     @property
     def x(self):
@@ -77,29 +78,29 @@ class Tile():
         return self.position[1]
 
 class HorizontalMovingTile(Tile):
-    def __init__(self, position, typ):
-        super().__init__(position, typ)
+    def __init__(self, position, typ, controller):
+        super().__init__(position, typ, controller)
         self.speed = 0.1
 
-    def update(self, tiles, player):
-        super().update(tiles, player)
+    def update(self):
+        super().update()
 
         self.entity.x += self.speed
 
         px, py = int(self.entity.x), int(self.entity.y)
 
-        if tiles[py][px + bool(self.speed > 0)].type.is_ground(): # todo: moving platforms can't collide with other moving platforms
+        if self.controller.tile_arraye[py][px + bool(self.speed > 0)].type.is_ground(): # todo: moving platforms can't collide with other moving platforms
             self.speed = -self.speed
 
 class CheckpointTile(Tile):
-    def __init__(self, position, typ):
-        super().__init__(position, typ)
+    def __init__(self, position, typ, c):
+        super().__init__(position, typ, c)
 
-    def update(self, tiles, player):
-        super().update(tiles, player)
+    def update(self):
+        super().update()
 
         if self.type == TileType.CHECKPOINT:
-            if int(player.entity.x) == int(self.entity.x) and int(player.entity.y) == int(self.entity.y):
+            if int(self.controller.player.entity.x) == int(self.entity.x) and int(self.controller.player.entity.y) == int(self.entity.y):
                 print("checkpoint found")
                 self.load(self.type.toggle())
 
