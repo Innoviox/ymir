@@ -48,7 +48,7 @@ class Controller():
 
         for i in self.tile_array:
             for j in i:
-                j.update()
+                j.update(self.tile_array)
 
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):

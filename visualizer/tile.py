@@ -38,7 +38,8 @@ class TileType(Enum):
     def from_tile(cls, t):
         return cls._value2member_map_[tile_map.index(t) + 1]
 
-    def is_ground(self): return self.value in [1, 8, 10]
+    # todo: make better
+    def is_ground(self, moving=True): return self.value in [1, 8] or (moving and self.value in [10])
     def is_water(self): return self.value in [7, 9]
 
 class Tile():
@@ -48,8 +49,7 @@ class Tile():
         self.texture = self.type.texture()
         self.entity = None
 
-    def update(self):
-        if not self.entity: return
+    def update(self, tiles): pass
 
     @property
     def x(self):
@@ -62,21 +62,20 @@ class Tile():
     def y(self):
         return self.position[1]
 
-class MovingTile(Tile):
+class HorizontalMovingTile(Tile):
     def __init__(self, position, typ):
         super().__init__(position, typ)
         self.cycle_length = 50
         self.curr = 0
         self.speed = 0.1
-        # todo: self.direction
 
-    def update(self):
-        super().update()
+    def update(self, tiles):
+        super().update(tiles)
 
         self.entity.x += self.speed
 
-        self.curr += 1
-        if self.curr % self.cycle_length == 0:
-            self.curr = 0
+        px, py = int(self.entity.x), int(self.entity.y)
+
+        if tiles[py][px + bool(self.speed > 0)].type.is_ground(moving=False): # todo: moving platforms can't collide with other moving platforms
             self.speed = -self.speed
 

@@ -27,7 +27,7 @@ class FileReader():
                             tile = tile.lower()
 
                     if tile == 'M':
-                        level[y].append(MovingTile([x, y], TileType.from_tile(tile)))
+                        level[y].append(HorizontalMovingTile([x, y], TileType.from_tile(tile)))
                     else:
                         level[y].append(Tile([x,y], TileType.from_tile(tile)))
                     # if x < len(line) - 1 and level[y][x - 1].type == TileType.GROUND and level[y][x].type != TileType.GROUND:
