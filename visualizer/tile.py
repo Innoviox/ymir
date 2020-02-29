@@ -14,10 +14,13 @@ texture_map = [
     "liquidWater",
     "grassMid",
     "liquidWaterTop_mid",
-    "grassHalf"
+    "grassHalf",
+    "flagGreen_down",
+    "flagGreen_up",
+    "spikesHigh"
 ]
 
-tile_map = 'AOSEseWawM'
+tile_map = 'AOSEseWawMcCP'
 
 class TileType(Enum):
     GROUND = 1
@@ -30,6 +33,9 @@ class TileType(Enum):
     GROUND_TOP = 8
     WATER_TOP = 9
     MOVING = 10
+    CHECKPOINT = 11
+    CHECKPOINT_ON = 12
+    SPIKES = 13
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -42,12 +48,20 @@ class TileType(Enum):
     def is_ground(self): return self.value in [1, 8]
     def is_water(self): return self.value in [7, 9]
 
+    def toggle(self):
+        return TileType.from_tile(tile_map[self.value - 1].swapcase())
+
 class Tile():
     def __init__(self, position, typ):
         self.position = position
         self.type = typ
         self.texture = self.type.texture()
         self.entity = None
+
+    def load(self, new_type):
+        self.type = new_type
+        self.texture = self.type.texture()
+        self.entity.texture = self.texture
 
     def update(self, tiles): pass
 

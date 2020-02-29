@@ -46,9 +46,13 @@ class Controller():
             if self.player.position[1] < 1:
                 self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
 
-        for i in self.tile_array:
-            for j in i:
+        for y, i in enumerate(self.tile_array):
+            for x, j in enumerate(i):
                 j.update(self.tile_array)
+                if j.type == TileType.CHECKPOINT:
+                    if int(self.player.entity.x) == int(j.entity.x) and int(self.player.entity.y) == int(j.entity.y):
+                        print("checkpoint found")
+                        j.load(j.type.toggle())
 
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
@@ -60,7 +64,7 @@ class Controller():
         for y, row in enumerate(array):
             for x, tile in enumerate(row):
                 if tile.texture is None: continue
-                tile.entity = Entity(model="cube",
+                tile.entity = Entity(model="quad",
                                      texture=tile.texture,
                                      scale=scale,
                                      position=(round(OFFSET_X + scale * tile.x),
@@ -85,5 +89,5 @@ class Controller():
         input_handler.bind('left arrow', 'a')
         input_handler.bind('up arrow', 'w')
         input_handler.bind('down arrow', 's')
-        self.load_level("visualizer/test_file.txt")
+        self.load_level("visualizer/test_file_2.txt")
         self.app.run()
