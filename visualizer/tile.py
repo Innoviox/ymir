@@ -63,7 +63,7 @@ class Tile():
         self.texture = self.type.texture()
         self.entity.texture = self.texture
 
-    def update(self, tiles): pass
+    def update(self, tiles, player): pass
 
     @property
     def x(self):
@@ -79,12 +79,10 @@ class Tile():
 class HorizontalMovingTile(Tile):
     def __init__(self, position, typ):
         super().__init__(position, typ)
-        self.cycle_length = 50
-        self.curr = 0
         self.speed = 0.1
 
-    def update(self, tiles):
-        super().update(tiles)
+    def update(self, tiles, player):
+        super().update(tiles, player)
 
         self.entity.x += self.speed
 
@@ -93,3 +91,16 @@ class HorizontalMovingTile(Tile):
         if tiles[py][px + bool(self.speed > 0)].type.is_ground(): # todo: moving platforms can't collide with other moving platforms
             self.speed = -self.speed
 
+class CheckpointTile(Tile):
+    def __init__(self, position, typ):
+        super().__init__(position, typ)
+
+    def update(self, tiles, player):
+        super().update(tiles, player)
+
+        if self.type == TileType.CHECKPOINT:
+            if int(player.entity.x) == int(self.entity.x) and int(player.entity.y) == int(self.entity.y):
+                print("checkpoint found")
+                self.load(self.type.toggle())
+
+tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile}

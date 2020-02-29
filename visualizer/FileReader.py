@@ -25,11 +25,7 @@ class FileReader():
                     elif tile == 'W':
                         if y > 0 and not level[y-1][x].type.is_water():
                             tile = tile.lower()
-
-                    if tile == 'M':
-                        level[y].append(HorizontalMovingTile([x, y], TileType.from_tile(tile)))
-                    else:
-                        level[y].append(Tile([x,y], TileType.from_tile(tile)))
+                    level[y].append(tile_classes.get(tile, Tile)([x, y], TileType.from_tile(tile)))
                     # if x < len(line) - 1 and level[y][x - 1].type == TileType.GROUND and level[y][x].type != TileType.GROUND:
                     #     level[y][x-1].texture = assets.texture(tile_map[tile],GroundType.RIGHT, theme=theme)
 

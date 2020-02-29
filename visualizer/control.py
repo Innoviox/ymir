@@ -48,11 +48,8 @@ class Controller():
 
         for y, i in enumerate(self.tile_array):
             for x, j in enumerate(i):
-                j.update(self.tile_array)
-                if j.type == TileType.CHECKPOINT:
-                    if int(self.player.entity.x) == int(j.entity.x) and int(self.player.entity.y) == int(j.entity.y):
-                        print("checkpoint found")
-                        j.load(j.type.toggle())
+                j.update(self.tile_array, self.player)
+
 
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
