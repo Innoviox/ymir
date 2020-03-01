@@ -17,7 +17,7 @@ texture_map = [
     "grassHalfMid",
     "flagGreen_down",
     "flagGreen_up",
-    "spikesHigh",
+    "spikes",
     "grassHalfLeft",
     "grassHalfRight"
 ]
@@ -95,7 +95,7 @@ class HorizontalMovingTile(Tile):
 
         px, py = int(self.entity.x), int(self.entity.y)
 
-        if self.controller.tile_array[py][px + self.offset[self.speed > 0]].type.is_ground(): # todo: moving platforms can't collide with other moving platforms
+        if self.controller.tile_array[py][px + self.offset[self.speed > 0]].type.is_ground():
             self.speed = -self.speed
 
     def set_offset(self, offset, total):
