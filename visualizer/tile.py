@@ -14,13 +14,15 @@ texture_map = [
     "liquidWater",
     "grassMid",
     "liquidWaterTop_mid",
-    "grassHalf",
+    "grassHalfMid",
     "flagGreen_down",
     "flagGreen_up",
-    "spikesHigh"
+    "spikesHigh",
+    "grassHalfLeft",
+    "grassHalfRight"
 ]
 
-tile_map = 'AOSEseWawMcCP'
+tile_map = 'AOSEseWawMcCPN,'
 
 class TileType(Enum):
     GROUND = 1
@@ -36,6 +38,8 @@ class TileType(Enum):
     CHECKPOINT = 11
     CHECKPOINT_ON = 12
     SPIKES = 13
+    MOVING_LEFT = 14
+    MOVING_RIGHT = 15
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -62,7 +66,8 @@ class Tile():
     def load(self, new_type):
         self.type = new_type
         self.texture = self.type.texture()
-        self.entity.texture = self.texture
+        if self.entity:
+            self.entity.texture = self.texture
 
     def update(self): pass
 
@@ -81,6 +86,7 @@ class HorizontalMovingTile(Tile):
     def __init__(self, position, typ, controller):
         super().__init__(position, typ, controller)
         self.speed = 0.1
+        self.offset = [0, 1]
 
     def update(self):
         super().update()
@@ -89,8 +95,15 @@ class HorizontalMovingTile(Tile):
 
         px, py = int(self.entity.x), int(self.entity.y)
 
-        if self.controller.tile_array[py][px + bool(self.speed > 0)].type.is_ground(): # todo: moving platforms can't collide with other moving platforms
+        if self.controller.tile_array[py][px + self.offset[self.speed > 0]].type.is_ground(): # todo: moving platforms can't collide with other moving platforms
             self.speed = -self.speed
+
+    def set_offset(self, offset, total):
+        if total == 1:
+            return
+
+        self.load(TileType.from_tile(f"N{'M' * (total - 2)},"[offset]))
+        self.offset = [-offset, total - offset]
 
 class CheckpointTile(Tile):
     def __init__(self, position, typ, c):
