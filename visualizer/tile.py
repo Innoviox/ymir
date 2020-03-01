@@ -89,7 +89,7 @@ class HorizontalMovingTile(Tile):
 
         px, py = int(self.entity.x), int(self.entity.y)
 
-        if self.controller.tile_arraye[py][px + bool(self.speed > 0)].type.is_ground(): # todo: moving platforms can't collide with other moving platforms
+        if self.controller.tile_array[py][px + bool(self.speed > 0)].type.is_ground(): # todo: moving platforms can't collide with other moving platforms
             self.speed = -self.speed
 
 class CheckpointTile(Tile):
