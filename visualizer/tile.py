@@ -58,9 +58,9 @@ class TileType(Enum):
         return TileType.from_tile(tile_map[self.value - 1].swapcase())
 
 class Tile():
-    def __init__(self, position, typ, controller, hitbox = []):
+    def __init__(self, position, typ, controller, hitbox = [0.0, 0.0, 1.0, 1.0]):
         self.position = position
-        self.hitbox = hitbox
+        self.hitbox = hitbox[:]
 
         self.type = typ
         self.texture = self.type.texture()
@@ -86,9 +86,17 @@ class Tile():
     def y(self):
         return self.position[1]
 
-class HorizontalMovingTile(Tile):
-    def __init__(self, position, typ, controller):
-        super().__init__(position, typ, controller)
+def HitboxTile(hitbox):
+    class _T(Tile):
+        def __init__(self, *args):
+            super().__init__(*args)
+            self.hitbox = hitbox
+    return _T
+
+class HorizontalMovingTile(HitboxTile([0.0, 0.0, 1.0, 0.5])):
+    def __init__(self, *args):
+        super().__init__(*args)
+
         self.speed = 0.1
         self.offset = [0, 1]
 
@@ -115,9 +123,6 @@ class HorizontalMovingTile(Tile):
         self.offset = [-offset, total - offset]
 
 class CheckpointTile(Tile):
-    def __init__(self, position, typ, c):
-        super().__init__(position, typ, c)
-
     def update(self):
         super().update()
 
@@ -126,4 +131,6 @@ class CheckpointTile(Tile):
                 self.load(self.type.toggle())
                 self.controller.starting_tile = self
 
-tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile}
+SpikesTile = HitboxTile([0.0, 0.5, 1.0, 1.0])
+
+tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile}
