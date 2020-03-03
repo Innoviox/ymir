@@ -23,11 +23,9 @@ class Player():
         self.entity.z = -1 # render on top of everything else
 
     def update_collisions(self, tiles, tile_array):
-
         # no tiles adjacent to player, so no collisions
         if len(tiles) == 0:
             return
-
         # two tiles adjacent to player;  
         if len(tiles) == 2:
             tile = tiles[0]
@@ -45,13 +43,12 @@ class Player():
                 elif tile.y < self.position[1] + control.scale < tile.y + control.scale:
                     self.position[1] = tile.y - control.scale
                 self.velocity[1] = 0
-
         # elif len(tiles) == 3: # snap player to the "missing" tile
         #     missing_tile = list(filter(lambda x: not x in tiles, get_nearby_tiles(self.position,tile_array)))[0]
         #     self.position=missing_tile.position
         #     self.velocity = np.array([0, 0], dtype='float64')
 
-        else:
+        else: # 1 tile adjacent to the player
             # position snapping, only if a single tile is collided, this will be buggy
             tile = tiles[0]
             try:
