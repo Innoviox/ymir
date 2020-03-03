@@ -53,14 +53,33 @@ class TileType(Enum):
     # todo: make better
     def is_ground(self): return self.value in [1, 8]
     def is_water(self): return self.value in [7, 9]
+    def collides(self):
+        return self.is_ground() or self.value in [13]
 
     def toggle(self):
         return TileType.from_tile(tile_map[self.value - 1].swapcase())
 
+
+class Hitbox():
+    def __init__(self, hb):
+        self._hb = hb[:]
+
+    @property
+    def min_x(self): return self._hb[0]
+
+    @property
+    def min_y(self): return self._hb[1]
+
+    @property
+    def max_x(self): return self._hb[2]
+
+    @property
+    def max_y(self): return self._hb[3]
+
 class Tile():
-    def __init__(self, position, typ, controller, hitbox = [0.0, 0.0, 1.0, 1.0]):
+    def __init__(self, position, typ, controller, hitbox = [0.0, 0.0, 1.0, 1.0]): # hitbox: min-x, min-y, max-x, max-y
         self.position = position
-        self.hitbox = hitbox[:]
+        self.hitbox = Hitbox(hitbox[:])
 
         self.type = typ
         self.texture = self.type.texture()
@@ -89,11 +108,11 @@ class Tile():
 def HitboxTile(hitbox):
     class _T(Tile):
         def __init__(self, *args):
-            super().__init__(*args)
-            self.hitbox = hitbox
+            super().__init__(*args, hitbox=hitbox)
+
     return _T
 
-class HorizontalMovingTile(HitboxTile([0.0, 0.0, 1.0, 0.5])):
+class HorizontalMovingTile(HitboxTile([0.0, 0.5, 1.0, 1.0])):
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -131,6 +150,6 @@ class CheckpointTile(Tile):
                 self.load(self.type.toggle())
                 self.controller.starting_tile = self
 
-SpikesTile = HitboxTile([0.0, 0.5, 1.0, 1.0])
+SpikesTile = HitboxTile([0.0, 0.0, 1.0, 0.5])
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile}

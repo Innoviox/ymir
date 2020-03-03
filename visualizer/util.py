@@ -48,4 +48,4 @@ def get_nearby_tiles(position, tile_array):
 
 def get_nearby_ground_tiles(position, tile_array):
     """Get all the adjacent tiles that are of type 'ground' (not air tiles)."""
-    return list(filter(lambda x: x.type.is_ground(), get_nearby_tiles(position, tile_array)))
+    return list(filter(lambda x: x.type.collides(), get_nearby_tiles(position, tile_array)))
