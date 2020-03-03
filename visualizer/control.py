@@ -45,9 +45,11 @@ class Controller():
         try:
             self.player.update_render()
             self.player.update_collisions(self.player_colliding(), self.tile_array)
-        except:
+        except Exception as e:
             if self.player.position[1] < 1:
                 self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
+            else:
+                raise e
 
         add = len(self.moving_tiles) == 0
 
