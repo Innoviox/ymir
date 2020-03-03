@@ -115,9 +115,9 @@ def HitboxTile(hitbox):
 
     return _T
 
-class HorizontalMovingTile(HitboxTile([0.0, 0.5, 1.0, 1.0])):
+class HorizontalMovingTile(Tile):
     def __init__(self, *args):
-        super().__init__(*args)
+        super().__init__(*args, hitbox=[0.0, 0.25, 1.0, 1.0])
 
         self.speed = 0.1
         self.offset = [0, 1]
@@ -127,7 +127,7 @@ class HorizontalMovingTile(HitboxTile([0.0, 0.5, 1.0, 1.0])):
 
         if not self.controller.player.on_moving_tile and util.inside(self.controller.player.position + [0,-.1], self):
             self.controller.player.position[0] += self.speed
-            self.controller.player.on_moving_tile = True
+            self.controller.player.on_moving_tile = True # todo: fix jolting?
 
         self.entity.x += self.speed
         self.position[0] += self.speed

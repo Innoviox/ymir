@@ -62,7 +62,6 @@ class Controller():
                 j.update()
 
     def die(self):
-        # time.sleep(1)
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
         # todo: camera shift, slowdown, killcam?, say "crushed" or "shot" ala ROR1
 
