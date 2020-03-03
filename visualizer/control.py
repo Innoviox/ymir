@@ -36,6 +36,7 @@ class Controller():
         # window.fullscreen = True
 
     def process_input(self):
+        """Key player keyboard (WASD) input, store in player.input."""
         self.player.input = dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
 
     def update(self):
@@ -64,6 +65,7 @@ class Controller():
         return collided_tiles
 
     def build_from_array(self, array):
+        """Given a tile array, create the entities necessary for game rendering."""
         self.tile_array = array
         for y, row in enumerate(array):
             for x, tile in enumerate(row):
@@ -80,6 +82,7 @@ class Controller():
                     self.ending_tile = tile
 
     def load_level(self, level_file_name):
+        """Start a level from a file. Initialize player position, etc."""
         reader = FileReader(level_file_name)
         self.build_from_array(reader.read())
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
