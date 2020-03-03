@@ -15,7 +15,7 @@ texture_map = [
     "grassMid",
     "liquidWaterTop_mid",
     "grassHalfMid",
-    "flagGreen_down",
+    "flagPole",
     "flagGreen_up",
     "spikes",
     "grassHalfLeft",
