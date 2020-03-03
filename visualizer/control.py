@@ -47,9 +47,12 @@ class Controller():
             self.player.update_collisions(self.player_colliding(), self.tile_array)
         except Exception as e:
             if self.player.position[1] < 1:
-                self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
+                self.die()
             else:
                 raise e
+
+        if self.player.position[1] < 0:
+            self.die()
 
         add = len(self.moving_tiles) == 0
 
@@ -58,6 +61,10 @@ class Controller():
                 if add and isinstance(j, HorizontalMovingTile):
                     self.moving_tiles.append(j)
                 j.update()
+
+    def die(self):
+        self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
+        # todo: camera shift, slowdown, killcam?, say "crushed" or "shot" ala ROR1
 
     # returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):

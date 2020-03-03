@@ -123,7 +123,7 @@ class CheckpointTile(Tile):
 
         if self.type == TileType.CHECKPOINT:
             if int(self.controller.player.entity.x) == int(self.entity.x) and int(self.controller.player.entity.y) == int(self.entity.y):
-                print("checkpoint found")
                 self.load(self.type.toggle())
+                self.controller.starting_tile = self
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile}
