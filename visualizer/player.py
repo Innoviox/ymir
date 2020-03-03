@@ -14,7 +14,7 @@ class Player():
         self.entity = entity
         self.input = [0, 0]
         self.velocity = np.array([0, 0], dtype='float64')
-        self.friction = 0.0# value between 0 and 1; larger means more friction
+        self.friction = 0.1# value between 0 and 1; larger means more friction
         self.horizontal_speed = 10.0
         self.jump_speed = 2.0
         self.on_moving_tile = False
@@ -100,8 +100,7 @@ class Player():
         self.on_moving_tile = False
         self.position += self.velocity * dt
         self.velocity[0] += self.input[0] * self.horizontal_speed * dt # slow down due to friction
-        if self.can_jump: #only apply horizontal friction if on the ground
-            self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
+        self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
         self.velocity[1] += control.gravity * dt
         # print("velocity:", self.velocity, "input:", self.input, "position:", self.position)
 
