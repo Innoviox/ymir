@@ -4,6 +4,8 @@ Create a 'Tile' object with type and (x,y) location.
 from enum import Enum
 from ursina import *
 
+from visualizer import util
+from visualizer.util import *
 texture_map = [
     "grassCenter",
     None,
@@ -56,8 +58,10 @@ class TileType(Enum):
         return TileType.from_tile(tile_map[self.value - 1].swapcase())
 
 class Tile():
-    def __init__(self, position, typ, controller):
+    def __init__(self, position, typ, controller, hitbox = []):
         self.position = position
+        self.hitbox = hitbox
+
         self.type = typ
         self.texture = self.type.texture()
         self.entity = None
@@ -91,7 +95,12 @@ class HorizontalMovingTile(Tile):
     def update(self):
         super().update()
 
+        if not self.controller.player.on_moving_tile and util.inside(self.controller.player.position + [0,-.1], self):
+            self.controller.player.position[0] += self.speed
+            self.controller.player.on_moving_tile = True
+
         self.entity.x += self.speed
+        self.position[0] += self.speed
 
         px, py = int(self.entity.x), int(self.entity.y)
 

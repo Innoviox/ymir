@@ -8,13 +8,14 @@ from ursina.input_handler import held_keys
 from visualizer.player import Player
 from visualizer.util import *
 import numpy as np
+from visualizer.tile import *
 from visualizer.FileReader import *
 import os
 
 scale = 1
 dt = .1
 camera_fov = 20
-camera_offset = [0,1,-30]
+camera_offset = [0, 1, -30]
 camera_speed = 2
 gravity = -.9
 
@@ -23,14 +24,15 @@ OFFSET_X = 0
 OFFSET_Y = 0
 del h, w
 
+
 class Controller():
     def __init__(self):
         self.app = Ursina()
         self.tile_array = []
         camera.orthographic = True
         camera.fov = camera_fov
-        window.borderless = False 
-
+        window.borderless = False
+        self.moving_tiles = []
         # window.fullscreen = True
 
     def process_input(self):
@@ -41,19 +43,24 @@ class Controller():
         self.player.update_position_velocity(dt)
         try:
             self.player.update_render()
-            self.player.update_collisions(self.player_colliding(),self.tile_array)
+            self.player.update_collisions(self.player_colliding(), self.tile_array)
         except:
             if self.player.position[1] < 1:
                 self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
 
+        add = len(self.moving_tiles) == 0
+
         for y, i in enumerate(self.tile_array):
             for x, j in enumerate(i):
+                if add and isinstance(j, HorizontalMovingTile):
+                    self.moving_tiles.append(j)
                 j.update()
 
-
-    #returns the ground tiles collided with, or an empty list for no collisions
+    # returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
-        collided_tiles = list(filter(lambda x: inside(self.player.position, x), get_nearby_ground_tiles(self.player.position, self.tile_array)))
+        ground_tiles = get_nearby_ground_tiles(self.player.position, self.tile_array)
+        ground_tiles.extend(self.moving_tiles)
+        collided_tiles = list(filter(lambda x: inside(self.player.position, x), ground_tiles))
         return collided_tiles
 
     def build_from_array(self, array):
@@ -72,14 +79,13 @@ class Controller():
                 if tile.type == TileType.END:
                     self.ending_tile = tile
 
-
     def load_level(self, level_file_name):
         reader = FileReader(level_file_name)
         self.build_from_array(reader.read())
-        self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0,2])
+        self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
 
     def start(self):
-        self.player = Player(position=np.array([0,2], dtype='float64'),
+        self.player = Player(position=np.array([0, 2], dtype='float64'),
                              entity=Entity(model="cube", color=color.blue, scale=1))
         camera.parent = self.player.entity
         camera.add_script(SmoothFollow(target=self.player.entity, offset=camera_offset, speed=camera_speed))
