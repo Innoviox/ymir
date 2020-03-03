@@ -42,14 +42,8 @@ class Controller():
     def update(self):
         self.process_input()
         self.player.update_position_velocity(dt)
-        try:
-            self.player.update_render()
-            self.player.update_collisions(self.player_colliding(), self.tile_array)
-        except Exception as e:
-            if self.player.position[1] < 1:
-                self.die()
-            else:
-                raise e
+        self.player.update_render()
+        self.player.update_collisions(self.player_colliding(), self.tile_array)
 
         if self.player.position[1] < 0:
             self.die()
