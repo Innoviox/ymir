@@ -10,7 +10,7 @@ from visualizer.util import *
 import numpy as np
 from visualizer.tile import *
 from visualizer.FileReader import *
-import os
+import os, time
 
 scale = 1
 dt = .1
@@ -43,7 +43,12 @@ class Controller():
         self.process_input()
         self.player.update_position_velocity(dt)
         self.player.update_render()
-        self.player.update_collisions(self.player_colliding(), self.tile_array)
+
+        colliding_tiles = list(self.player.update_collisions(self.player_colliding(), self.tile_array))
+        if any(i.type.deadly() for i in colliding_tiles):
+            # input("hello ")
+            # time.sleep(0.1)
+            self.die()
 
         if self.player.position[1] < 0:
             self.die()
@@ -57,6 +62,7 @@ class Controller():
                 j.update()
 
     def die(self):
+        time.sleep(1)
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
         # todo: camera shift, slowdown, killcam?, say "crushed" or "shot" ala ROR1
 

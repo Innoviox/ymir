@@ -32,22 +32,30 @@ class Player():
         if len(tiles) == 2:
             tile = tiles[0]
             # vertically stacked tiles, snap horizontally
+            chg = True
             if tiles[0].x == tiles[1].x:
                 if tile.x + tile.hitbox.min_x < self.position[0] < tile.x + tile.hitbox.max_x:
                     self.position[0] = tile.x + tile.hitbox.max_x
-                    self.velocity[0] = 0
                 elif tile.x + tile.hitbox.min_x < self.position[0] + tile.hitbox.max_x < tile.x + tile.hitbox.max_x:
                     self.position[0] = tile.x - tile.hitbox.max_x
+                else:
+                    chg = False
+                if chg:
                     self.velocity[0] = 0
             else: # horizantally connected tiles, snap vertically
                 if tile.y + tile.hitbox.min_y < self.position[1] < tile.y + tile.hitbox.max_y:
                     self.position[1] = tile.y + tile.hitbox.max_y
                     self.can_jump = True
-                    self.velocity[1] = 0
                 elif tile.y + tile.hitbox.min_y < self.position[1] + tile.hitbox.max_y < tile.y + tile.hitbox.max_y:
+                    # print("b")
                     self.position[1] = tile.y - tile.hitbox.max_y
+                else:
+                    chg = False
+                if chg:
                     self.velocity[1] = 0
 
+            if chg:
+                yield tile
 
         else:
             tile = tiles[0]

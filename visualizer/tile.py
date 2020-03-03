@@ -55,6 +55,9 @@ class TileType(Enum):
     def is_water(self): return self.value in [7, 9]
     def collides(self):
         return self.is_ground() or self.value in [13]
+    def deadly(self):
+        return self.value in [13]
+
 
     def toggle(self):
         return TileType.from_tile(tile_map[self.value - 1].swapcase())
@@ -150,6 +153,6 @@ class CheckpointTile(Tile):
                 self.load(self.type.toggle())
                 self.controller.starting_tile = self
 
-SpikesTile = HitboxTile([0.0, 0.0, 1.0, 0.5])
+SpikesTile = HitboxTile([0.0, 0, 1.0, 0.25])
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile}
