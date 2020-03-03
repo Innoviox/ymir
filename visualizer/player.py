@@ -24,9 +24,11 @@ class Player():
 
     def update_collisions(self, tiles, tile_array):
 
+        # no tiles adjacent to player, so no collisions
         if len(tiles) == 0:
             return
 
+        # two tiles adjacent to player;  
         if len(tiles) == 2:
             tile = tiles[0]
             # vertically stacked tiles, snap horizontally
@@ -36,7 +38,7 @@ class Player():
                 elif tile.x < self.position[0] + control.scale < tile.x + control.scale:
                     self.position[0] = tile.x - control.scale
                 self.velocity[0] = 0
-            else: # horizantally connected tiles, snap vertically
+            else: # horizontally connected tiles, snap vertically
                 if tile.y < self.position[1] < tile.y + control.scale:
                     self.position[1] = tile.y + control.scale
                     self.can_jump = True
@@ -84,13 +86,12 @@ class Player():
 
     def update_position_velocity(self, dt):
         self.position += self.velocity * dt
-        self.velocity[0] += self.input[0] * self.horizontal_speed * dt # slow down due to friction
+        self.velocity[0] += self.input[0] * self.horizontal_speed * dt # change due to player input
         self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
         self.velocity[1] += control.gravity * dt
-        # print("velocity:", self.velocity, "input:", self.input, "position:", self.position)
 
         if self.can_jump and self.input[1] > 0:
-            self.velocity[1] += self.jump_speed
+            self.velocity[1] += self.jump_speed # jump!
             self.can_jump = False
         else:
             if self.input[1] > 0:

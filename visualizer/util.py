@@ -7,8 +7,10 @@ def mag(a):
     return math.sqrt(sum([x * x for x in a]))
 
 
-# Tells if an entity (anything with an ordered pair position vector) is inside the given tile
 def inside(position, tile, density = 10):
+    """Tells if an entity (anything with an ordered pair position vector) is inside the given tile.
+    Works by testing the boundary points of the one by one box with the bottom left corner 
+    in the specified position.""" 
     for i in range(0, density):
         if point_inside([position[0] + control.scale * i / density, position[1]], tile):
             return True
@@ -22,9 +24,8 @@ def inside(position, tile, density = 10):
             return True
     return False
 
-
-# tells if a position is inside a tile
 def point_inside(point, tile):
+    """Tells if a position is inside a tile."""
     if tile.x < point[0] < tile.x + control.scale and tile.y < point[1] < tile.y + control.scale:
         return True
     return False
