@@ -8,8 +8,8 @@ from ursina.input_handler import held_keys
 from visualizer.player import Player
 from visualizer.util import *
 import numpy as np
-from visualizer.assets import *
 from visualizer.FileReader import *
+import os
 
 scale = 1
 dt = .1
@@ -26,7 +26,6 @@ del h, w
 class Controller():
     def __init__(self):
         self.app = Ursina()
-        self.entities = []
         self.tile_array = []
         camera.orthographic = True
         camera.fov = camera_fov
@@ -47,6 +46,11 @@ class Controller():
             if self.player.position[1] < 1:
                 self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
 
+        for y, i in enumerate(self.tile_array):
+            for x, j in enumerate(i):
+                j.update()
+
+
     #returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
         collided_tiles = list(filter(lambda x: inside(self.player.position, x), get_nearby_ground_tiles(self.player.position, self.tile_array)))
@@ -57,11 +61,12 @@ class Controller():
         for y, row in enumerate(array):
             for x, tile in enumerate(row):
                 if tile.texture is None: continue
-                self.entities.append(Entity(model="cube",
-                                            texture=tile.texture,
-                                            scale=scale,
-                                            position=(round(OFFSET_X + scale * tile.x),
-                                                      round(OFFSET_Y + scale * tile.y), 0)))
+                tile.controller = self
+                tile.entity = Entity(model="quad",
+                                     texture=tile.texture,
+                                     scale=scale,
+                                     position=(round(OFFSET_X + scale * tile.x),
+                                               round(OFFSET_Y + scale * tile.y), 0))
                 if tile.type == TileType.START:
                     self.starting_tile = tile
                 if tile.type == TileType.END:
@@ -82,5 +87,5 @@ class Controller():
         input_handler.bind('left arrow', 'a')
         input_handler.bind('up arrow', 'w')
         input_handler.bind('down arrow', 's')
-        self.load_level("visualizer/test_file.txt")
+        self.load_level("visualizer/test_file_2.txt")
         self.app.run()

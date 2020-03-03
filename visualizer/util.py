@@ -39,6 +39,4 @@ def get_nearby_tiles(position, tile_array):
 
 # gets tiles near a location (in a 2x2)
 def get_nearby_ground_tiles(position, tile_array):
-    temp_position = position / control.scale
-    temp_position[1] = len(tile_array) - temp_position[1] - 1
-    return list(filter(lambda x: x.type == TileType.GROUND, get_nearby_tiles(position, tile_array)))
+    return list(filter(lambda x: x.type.is_ground(), get_nearby_tiles(position, tile_array)))
