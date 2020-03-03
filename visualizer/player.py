@@ -48,17 +48,17 @@ class Player():
         #     self.position=missing_tile.position
         #     self.velocity = np.array([0, 0], dtype='float64')
 
-        else: # 1 tile adjacent to the player
+        else: # only 1 tile adjacent to the player
             # position snapping, only if a single tile is collided, this will be buggy
             tile = tiles[0]
             try:
-                horiz_time = min(abs(self.position[0] - tile.x - control.scale)
-                                , abs(self.position[0] + control.scale - tile.x)) / abs(self.velocity[0])
+                horiz_time = min(abs(self.position[0] - tile.x - control.scale),
+                    abs(self.position[0] + control.scale - tile.x)) / abs(self.velocity[0])
             except:
                 horiz_time = 1000
             try:
-                vert_time = min(abs(self.position[1] - tile.y - control.scale)
-                                , abs(self.position[1] + control.scale - tile.y)) / abs(self.velocity[1])
+                vert_time = min(abs(self.position[1] - tile.y - control.scale),
+                    abs(self.position[1] + control.scale - tile.y)) / abs(self.velocity[1])
             except:
                 vert_time = 1000
 
