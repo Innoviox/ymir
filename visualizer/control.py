@@ -16,7 +16,7 @@ dt = .1
 camera_fov = 20
 camera_offset = [0,1,-30]
 camera_speed = 2
-gravity = -.5
+gravity = -.9
 
 h, w = window.size
 OFFSET_X = 0
