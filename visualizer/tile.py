@@ -126,9 +126,10 @@ class HorizontalMovingTile(Tile):
     def update(self):
         super().update()
 
-        if not self.controller.player.on_moving_tile and util.inside(self.controller.player.position + [0,-.1], self):
-            self.controller.player.position[0] += self.speed
-            self.controller.player.on_moving_tile = True # todo: fix jolting?
+        for entity in self.controller.sprites:
+            if not entity.on_moving_tile and util.inside(entity.position + [0,-.1], self):
+                entity.position[0] += self.speed
+                entity.on_moving_tile = True # todo: fix jolting?
 
         self.entity.x += self.speed
         self.position[0] += self.speed
