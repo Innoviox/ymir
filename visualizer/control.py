@@ -42,7 +42,7 @@ class Controller():
         colliding_tiles = list(self.player.update_collisions(self.player_colliding(), self.tile_array))
         if any(i.type.deadly() for i in colliding_tiles):
             # input("hello ")
-            time.sleep(0.1)
+            # time.sleep(0.1)
             self.die()
 
         if self.player.position[1] < 0:
