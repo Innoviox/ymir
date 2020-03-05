@@ -34,26 +34,9 @@ class Player():
             # vertically stacked tiles, snap horizontally
             chg = True
             if tiles[0].x == tiles[1].x:
-                if tile.x + tile.hitbox.min_x < self.position[0] < tile.x + tile.hitbox.max_x:
-                    self.position[0] = tile.x + tile.hitbox.max_x
-                elif tile.x + tile.hitbox.min_x < self.position[0] + tile.hitbox.max_x < tile.x + tile.hitbox.max_x:
-                    self.position[0] = tile.x - tile.hitbox.max_x
-                else:
-                    chg = False
-                if chg:
-                    self.velocity[0] = 0
+                chg = collide(self, tiles[0], x=True)
             else: # horizantally connected tiles, snap vertically
-                if tile.y + tile.hitbox.min_y < self.position[1] < tile.y + tile.hitbox.max_y:
-                    self.position[1] = tile.y + tile.hitbox.max_y
-                    self.can_jump = True
-                elif tile.y + tile.hitbox.min_y < self.position[1] + tile.hitbox.max_y < tile.y + tile.hitbox.max_y:
-                    # print("b")
-                    self.position[1] = tile.y - tile.hitbox.max_y
-                else:
-                    chg = False
-                if chg:
-                    self.velocity[1] = 0
-
+                chg = collide(self, tiles[0], x=False)
             if chg:
                 yield tile
 
@@ -71,40 +54,18 @@ class Player():
                                 , abs(self.position[1] + control.scale - tile.y)) / abs(self.velocity[1])
             except:
                 vert_time = 1000
+            chg = True
             if vert_time == horiz_time:
-                if tile.y < self.position[1] < tile.y + control.scale:
-                    self.position[1] = tile.y + control.scale
-                    self.velocity[1] = 0
-                    #hit the ground
-                    self.can_jump = True
-                elif tile.y < self.position[1] + control.scale < tile.y + control.scale:
-                    self.position[1] = tile.y - control.scale
-                    self.velocity[1] = 0
-
-                if tile.x < self.position[0] < tile.x + control.scale:
-                    self.position[0] = tile.x + control.scale
-                    self.velocity[0] = 0
-                elif tile.x < self.position[0] + control.scale < tile.x + control.scale:
-                    self.position[0] = tile.x - control.scale
-                    self.velocity[0] = 0
+                chg = collide(self, tile, x=False)
+                chg = collide(self, tile, x=True)
             elif vert_time < horiz_time:
                 # vertical position snapping
-                if tile.y < self.position[1] < tile.y + control.scale:
-                    self.position[1] = tile.y + control.scale
-                    self.velocity[1] = 0
-                    #hit the ground
-                    self.can_jump = True
-                elif tile.y < self.position[1] + control.scale < tile.y + control.scale:
-                    self.position[1] = tile.y - control.scale
-                    self.velocity[1] = 0
+                chg = collide(self, tile, x=False)
             else:
                 # horizontal position snapping
-                if tile.x < self.position[0] < tile.x + control.scale:
-                    self.position[0] = tile.x + control.scale
-                    self.velocity[0] = 0
-                elif tile.x < self.position[0] + control.scale < tile.x + control.scale:
-                    self.position[0] = tile.x - control.scale
-                    self.velocity[0] = 0
+                chg = collide(self, tile, x=True)
+            if chg:
+                yield tile
 
     def update_position_velocity(self, dt):
         self.on_moving_tile = False
