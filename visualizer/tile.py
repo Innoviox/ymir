@@ -78,9 +78,10 @@ class Hitbox():
 
     @property
     def max_y(self): return self._hb[3]
+HITBOX=[0.0, 0.0, 1.0, 1.0]
 
 class Tile():
-    def __init__(self, position, typ, controller, hitbox = [0.0, 0.0, 1.0, 1.0]): # hitbox: min-x, min-y, max-x, max-y
+    def __init__(self, position, typ, controller, hitbox=HITBOX): # hitbox: min-x, min-y, max-x, max-y
         self.position = position
         self.hitbox = Hitbox(hitbox[:])
 
@@ -117,7 +118,7 @@ def HitboxTile(hitbox):
 
 class HorizontalMovingTile(Tile):
     def __init__(self, *args):
-        super().__init__(*args, hitbox=[0.0, 0.25, 1.0, 1.0])
+        super().__init__(*args, hitbox=[0.0, 0.5, 1.0, 1.0])
 
         self.speed = 0.1
         self.offset = [0, 1]
