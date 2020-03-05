@@ -3,7 +3,6 @@ Central hub of the code, basically. Calls the necessary functions to
 render the scene, get input, move the player, etc. 
 '''
 from ursina import *
-from ursina.input_handler import held_keys
 
 from visualizer.player import Player
 from visualizer.util import *
@@ -33,16 +32,12 @@ class Controller():
         camera.fov = camera_fov
         window.borderless = False
         self.moving_tiles = []
+        self.sprites = []
         # window.fullscreen = True
 
-    def process_input(self):
-        """Key player keyboard (WASD) input, store in player.input."""
-        self.player.input = dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
-
     def update(self):
-        self.process_input()
-        self.player.update_position_velocity(dt)
-        self.player.update_render()
+        for sprite in self.sprites:
+            sprite.update(dt)
 
         colliding_tiles = list(self.player.update_collisions(self.player_colliding(), self.tile_array))
         if any(i.type.deadly() for i in colliding_tiles):
@@ -104,5 +99,8 @@ class Controller():
         input_handler.bind('left arrow', 'a')
         input_handler.bind('up arrow', 'w')
         input_handler.bind('down arrow', 's')
+
+        self.sprites.append(self.player)
+
         self.load_level("visualizer/test_file_2.txt")
         self.app.run()
