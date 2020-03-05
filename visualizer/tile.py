@@ -60,9 +60,15 @@ class TileType(Enum):
     def deadly(self):
         return self.value in [13]
 
-
     def toggle(self):
-        return TileType.from_tile(tile_map[self.value - 1].swapcase())
+        return TileType.from_tile(self.char.swapcase())
+
+    def animatable(self):
+        return self.value in [3, 4, 5, 6]
+
+    @property
+    def char(self):
+        return tile_map[self.value - 1]
 
 class Hitbox():
     def __init__(self, hb):
@@ -91,24 +97,42 @@ class Tile():
         self.entity = None
         self.controller = controller
 
+        self.anim_dir = [-1, 1][self.type.char.isupper()]
+        self.anim_frame = 0
+        self.animating = True
+        self.anim_every = 1
+        self.anim_step = 0
+
     def load(self, new_type):
         self.type = new_type
         self.texture = self.type.texture()
         if self.entity:
             self.entity.texture = self.texture
 
-    def update(self): pass
+    def update(self):
+        if self.type.animatable() and self.animating:
+            self.anim_step += 1
+            if self.anim_step % self.anim_every == 0:
+                self.anim_toggle()
 
     @property
     def x(self):
         return self.position[0]
+    @property
+    def y(self):
+        return self.position[1]
 
     def __repr__(self):
         return str(self.type) + " at " + str(self.position)
 
-    @property
-    def y(self):
-        return self.position[1]
+    def anim_toggle(self): # note: toggleanims go from upper -> lower
+        self.anim_frame += 1
+        if self.anim_frame == 70:
+            self.load(self.type.toggle())
+            self.animating = False
+        else:
+            t = tile_map[self.type.value - 1]
+            self.entity.texture = f"{TEXTURES[t.upper()]}_to_{TEXTURES[t.lower()]}_slice_{self.anim_frame}"
 
 def HitboxTile(hitbox):
     class _T(Tile):

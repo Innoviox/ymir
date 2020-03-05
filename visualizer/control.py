@@ -59,7 +59,7 @@ class Controller():
     def die(self):
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
         # todo: camera shift, slowdown, killcam?, say "crushed" or "shot" ala ROR1
-
+        # todo: particle explosion animation
     # returns the ground tiles collided with, or an empty list for no collisions
     def player_colliding(self):
         ground_tiles = get_nearby_ground_tiles(self.player.position, self.tile_array)

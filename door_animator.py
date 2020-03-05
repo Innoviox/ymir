@@ -17,4 +17,6 @@ def animate(from_file, to_file, slice_width):
 
         width += slice_width
 
-animate("door_openMid", "door_closedMid", 5)
+animate("door_openTop", "door_closedTop", 1)
+animate("door_openMid", "door_closedMid", 1)
+
