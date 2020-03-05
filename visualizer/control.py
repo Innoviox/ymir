@@ -47,7 +47,7 @@ class Controller():
         colliding_tiles = list(self.player.update_collisions(self.player_colliding(), self.tile_array))
         if any(i.type.deadly() for i in colliding_tiles):
             # input("hello ")
-            # time.sleep(0.1)
+            time.sleep(0.1)
             self.die()
 
         if self.player.position[1] < 0:
@@ -86,8 +86,10 @@ class Controller():
                                                round(OFFSET_Y + scale * tile.y), 0))
                 if tile.type == TileType.START:
                     self.starting_tile = tile
-                if tile.type == TileType.END:
+                elif tile.type == TileType.END:
                     self.ending_tile = tile
+                elif tile.type == TileType.SPIKES:
+                    tile.set_direction()
 
     def load_level(self, level_file_name):
         """Start a level from a file. Initialize player position, etc."""

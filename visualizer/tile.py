@@ -154,6 +154,29 @@ class CheckpointTile(Tile):
                 self.load(self.type.toggle())
                 self.controller.starting_tile = self
 
-SpikesTile = HitboxTile([0.0, 0, 1.0, 0.25])
+spikes_hitboxes = [
+    [0.1, 0, 0.9, 0.25],
+    [0.1, 0.75, 0.9, 1],
+    [0.75, 0.1, 1, 0.9],
+    [0, 0.1, 0.25, 0.9]
+]
+
+class SpikesTile(Tile):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+    def set_direction(self):
+        l = len(self.controller.tile_array)
+        for (hb, (dx, dy), rot) in zip(spikes_hitboxes,
+                                  [[0, -1], [0, 1], [1, 0], [-1, 0]],
+                                   [0, 180, 270, 90]):
+            nx, ny = self.position[0] + dx, l - (self.position[1] + dy) - 1
+            if 0 <= ny < l and \
+                0 <= nx < len(self.controller.tile_array[ny]) and \
+                self.controller.tile_array[ny][nx].type.is_ground():
+                self.hitbox = Hitbox(hb)
+                self.entity.rotation_z = rot
+                return
+
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile}
