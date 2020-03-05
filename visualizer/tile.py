@@ -6,25 +6,27 @@ from ursina import *
 
 from visualizer import util
 from visualizer.util import *
-texture_map = [
-    "grassCenter",
-    None,
-    "door_openMid",
-    "door_closedMid",
-    "door_openTop",
-    "door_closedTop",
-    "liquidWater",
-    "grassMid",
-    "liquidWaterTop_mid",
-    "grassHalfMid",
-    "flagPole",
-    "flagGreen_up",
-    "spikes",
-    "grassHalfLeft",
-    "grassHalfRight"
-]
 
-tile_map = 'AOSEseWawMcCPN,'
+TEXTURES = {
+    'A': 'grassCenter',
+    'O': None,
+    'S': 'door_openMid',
+    's': 'door_closedMid',
+    'E': 'door_openTop',
+    'e': 'door_closedTop',
+    'W': 'liquidWater',
+    'a': 'grassMid',
+    'w': 'liquidWaterTop_mid',
+    'M': 'grassHalfMid',
+    'c': 'flagPole',
+    'C': 'flagGreen_up',
+    'P': 'spikes',
+    'N': 'grassHalfLeft',
+    ',': 'grassHalfRight'
+}
+
+texture_map = list(TEXTURES.values())
+tile_map = ''.join(TEXTURES.keys())
 
 class TileType(Enum):
     GROUND = 1
@@ -61,7 +63,6 @@ class TileType(Enum):
 
     def toggle(self):
         return TileType.from_tile(tile_map[self.value - 1].swapcase())
-
 
 class Hitbox():
     def __init__(self, hb):
