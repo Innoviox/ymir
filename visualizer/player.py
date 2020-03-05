@@ -13,12 +13,13 @@ from ursina.input_handler import held_keys
 class Player(Sprite):
 
     def update(self,dt):
-        super().update(dt)
         self.process_input(dt)
+        super().update(dt)
+
 
     def process_input(self,dt):
         """Key player keyboard (WASD) input, store in player.input."""
-        self.player.input = dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
+        self.input = dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
 
     def update_position_velocity(self, dt):
         super().update_position_velocity(dt)
