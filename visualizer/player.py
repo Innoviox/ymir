@@ -5,8 +5,6 @@ Create a 'Player' object that stores all of the necessary physics-y info
 import numpy as np
 
 from visualizer.sprite import Sprite
-from visualizer.util import *
-from math import sqrt
 from ursina.input_handler import held_keys
 
 #TODO get crushed

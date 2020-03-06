@@ -2,14 +2,9 @@
 Central hub of the code, basically. Calls the necessary functions to 
 render the scene, get input, move the player, etc. 
 '''
-from ursina import *
-
 from visualizer.player import Player
-from visualizer.util import *
 import numpy as np
-from visualizer.tile import *
 from visualizer.FileReader import *
-import os, time
 
 scale = 1
 dt = .1

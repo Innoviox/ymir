@@ -1,9 +1,6 @@
 '''
 Create a 'Tile' object with type and (x,y) location. 
 '''
-from enum import Enum
-from ursina import *
-
 from visualizer import util
 from visualizer.util import *
 
@@ -140,7 +137,7 @@ class Tile():
     def __repr__(self):
         return str(self.type).split(".")[1]# + " at " + str(self.position)
 
-    def anim_toggle(self): # note: toggleanims go from upper -> lower
+    def anim_toggle(self): # note: toggleanim files go from upper -> lower
         self.anim_frame += 1
         if self.anim_frame == 70:
             self.load(self.type.toggle())
@@ -217,10 +214,7 @@ class SpikesTile(Tile):
         super().__init__(*args)
 
     def set_direction(self):
-        l = len(self.controller.tile_array)
-        for (hb, direction, rot) in zip(spikes_hitboxes,
-                                  Direction,
-                                   [0, 180, 270, 90]):
+        for (hb, direction, rot) in zip(spikes_hitboxes, Direction, [0, 180, 270, 90]):
             if self.controller.next_is_ground(self, direction):
                 self.hitbox = Hitbox(hb)
                 self.entity.rotation_z = rot

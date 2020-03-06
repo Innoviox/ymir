@@ -2,7 +2,6 @@
 Read a level file, decode it into the necessary rendered tile objects.
 '''
 from visualizer.tile import *
-from random import choice
 
 class FileReader():
     def __init__(self, file_name):
