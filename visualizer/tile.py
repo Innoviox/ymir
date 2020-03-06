@@ -24,7 +24,9 @@ TEXTURES = {
     'N': 'grassHalfLeft',
     ',': 'grassHalfRight',
     'K': 'keyBlue',
-    'L': 'lockBlue'
+    'L': 'lockBlue',
+    ';': 'keyRed',
+    "'": 'lockRed'
 }
 
 texture_map = list(TEXTURES.values())
@@ -48,6 +50,8 @@ class TileType(Enum):
     MOVING_RIGHT = 15
     KEY_BLUE = 16
     LOCK_BLUE = 17
+    KEY_RED = 18
+    LOCK_RED = 19
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -61,7 +65,7 @@ class TileType(Enum):
     def is_water(self): return self.value in [7, 9]
 
     def collides(self):
-        return self.is_ground() or self.value in [11, 13, 16, 17]
+        return self.is_ground() or self.value in [11, 13, 16, 17, 18, 19]
 
     def deadly(self):
         return self.value in [13]
@@ -222,4 +226,5 @@ class SpikesTile(Tile):
         self.controller.die()
         return False
 
-tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile, 'K': KeyTile}
+tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
+                'K': KeyTile, ';': KeyTile}
