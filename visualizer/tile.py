@@ -183,6 +183,7 @@ class HorizontalMovingTile(Tile):
             if not entity.on_moving_tile and util.inside(entity.position + [0,-.1], self):
                 entity.position[0] += self.speed
                 entity.on_moving_tile = True
+                # print(self.controller.next_tile(entity, Direction.LEFT))
 
     def set_offset(self, offset, total):
         if total == 1:
@@ -216,13 +217,12 @@ class SpikesTile(Tile):
 
     def set_direction(self):
         l = len(self.controller.tile_array)
-        for (hb, (dx, dy), rot) in zip(spikes_hitboxes,
-                                  [[0, -1], [0, 1], [1, 0], [-1, 0]],
+        for (hb, direction, rot) in zip(spikes_hitboxes,
+                                  Direction,
                                    [0, 180, 270, 90]):
-            nx, ny = self.position[0] + dx, l - (self.position[1] + dy) - 1
-            if 0 <= ny < l and \
-                0 <= nx < len(self.controller.tile_array[ny]) and \
-                self.controller.tile_array[ny][nx].type.is_ground():
+            # nx, ny = self.position[0] + dx, l - (self.position[1] + dy) - 1
+            tile = self.controller.next_tile(self, direction)
+            if tile and tile.type.is_ground():
                 self.hitbox = Hitbox(hb)
                 self.entity.rotation_z = rot
                 return

@@ -39,7 +39,7 @@ class Controller():
         for sprite in self.sprites:
             sprite.update(dt)
 
-        self.player.update_collisions(self.player_colliding(), self.tile_array)
+        self.player_collide()
 
         if self.player.position[1] < 0:
             self.die()
@@ -51,6 +51,9 @@ class Controller():
                 if add and isinstance(j, HorizontalMovingTile):
                     self.moving_tiles.append(j)
                 j.update()
+
+    def player_collide(self):
+        self.player.update_collisions(self.player_colliding(), self.tile_array)
 
     def die(self):
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
@@ -108,3 +111,9 @@ class Controller():
             for t in row:
                 if t.type.value == typ.value + 1:
                     t.hide()
+
+    def next_tile(self, tile, direction):
+        l = len(self.tile_array)
+        px, py = int(tile.position[0]) + direction.dx, l - (int(tile.position[1]) + direction.dy) - 1
+        if 0 <= py < l and 0 <= px < len(self.tile_array[py]):
+            return self.tile_array[py][px]

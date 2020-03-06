@@ -1,7 +1,21 @@
 import math
 from visualizer import control
-from visualizer.tile import TileType
+from enum import Enum
 
+class Direction(Enum):
+    UP, DOWN, RIGHT, LEFT = range(4)
+
+    @property
+    def diff(self):
+        return [[0, -1], [0, 1], [1, 0], [-1, 0]][self.value]
+
+    @property
+    def dx(self):
+        return self.diff[0]
+
+    @property
+    def dy(self):
+        return self.diff[1]
 
 def mag(a):
     """Returns the magnitude of an array, interpreted as a numeric vector.""" 
