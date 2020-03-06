@@ -5,6 +5,7 @@ render the scene, get input, move the player, etc.
 from visualizer.player import Player
 import numpy as np
 from visualizer.FileReader import *
+from ursina import *
 
 scale = 1
 dt = .1
