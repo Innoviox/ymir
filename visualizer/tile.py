@@ -174,7 +174,7 @@ class HorizontalMovingTile(Tile):
             self.speed = -self.speed
 
         for entity in self.controller.sprites:
-            if not entity.on_moving_tile and util.inside(entity.position + [0, -.1], self)
+            if not entity.on_moving_tile and util.inside(entity.position + [0, -.1], self):
                 entity.position[0] += self.speed
                 entity.on_moving_tile = self
 
