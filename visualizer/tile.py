@@ -23,7 +23,8 @@ TEXTURES = {
     'K': 'keyBlue',
     'L': 'lockBlue',
     ';': 'keyRed',
-    "'": 'lockRed'
+    "'": 'lockRed',
+    'Q': 'slicer'
 }
 
 texture_map = list(TEXTURES.values())
@@ -49,6 +50,7 @@ class TileType(Enum):
     LOCK_BLUE = 17
     KEY_RED = 18
     LOCK_RED = 19
+    SLICER = 20
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -62,10 +64,10 @@ class TileType(Enum):
     def is_water(self): return self.value in [7, 9]
 
     def collides(self):
-        return self.is_ground() or self.value in [11, 13, 16, 17, 18, 19]
+        return self.is_ground() or self.value in [11, 13, 16, 17, 18, 19, 20]
 
     def deadly(self):
-        return self.value in [13]
+        return self.value in [13, 20]
 
     def toggle(self):
         return TileType.from_tile(self.char.swapcase())
@@ -209,7 +211,12 @@ spikes_hitboxes = [
     [0, 0.1, 0.15, 0.9]
 ]
 
-class SpikesTile(Tile):
+class DeadlyTile(Tile):
+    def collide(self):
+        self.controller.die()
+        return False
+
+class SpikesTile(DeadlyTile):
     def __init__(self, *args):
         super().__init__(*args)
 
@@ -220,9 +227,10 @@ class SpikesTile(Tile):
                 self.entity.rotation_z = rot
                 return
 
-    def collide(self):
-        self.controller.die()
-        return False
+class SlicerTile(HorizontalMovingTile, DeadlyTile):
+    def update(self):
+        super().update()
+        self.entity.rotation_z += self.speed * 20
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
-                'K': KeyTile, ';': KeyTile}
+                'K': KeyTile, ';': KeyTile, 'Q': SlicerTile}
