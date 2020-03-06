@@ -57,7 +57,7 @@ class Controller():
         self.player.update_collisions(self.player_colliding(), self.tile_array)
 
     def die(self):
-        self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
+        self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 0])
         # todo: camera shift, slowdown, killcam?, say "crushed" or "shot" ala ROR1
         # todo: particle explosion animation
     # returns the ground tiles collided with, or an empty list for no collisions

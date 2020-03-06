@@ -119,6 +119,8 @@ class Tile():
         if self.entity and texture:
             self.entity.texture = self.texture
 
+    def load_toggle(self): self.load(self.type.toggle())
+
     def update(self):
         if self.type.animatable() and self.animating:
             self.anim_step += 1
@@ -191,7 +193,8 @@ class HorizontalMovingTile(Tile):
 
 class CheckpointTile(Tile):
     def collide(self):
-        self.load(self.type.toggle())
+        self.load_toggle()
+        self.controller.starting_tile.load_toggle()
         self.controller.starting_tile = self
         return False
 
