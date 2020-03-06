@@ -194,7 +194,8 @@ class HorizontalMovingTile(Tile):
 class CheckpointTile(Tile):
     def collide(self):
         self.load_toggle()
-        self.controller.starting_tile.load_toggle()
+        if isinstance(self.controller.starting_tile, CheckpointTile):
+            self.controller.starting_tile.load_toggle()
         self.controller.starting_tile = self
         return False
 

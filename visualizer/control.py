@@ -105,6 +105,8 @@ class Controller():
         self.sprites.append(self.player)
 
         self.load_level("visualizer/test_file_2.txt")
+        self.die() # to respawn player
+
         self.app.run()
 
     def unlock(self, typ):
