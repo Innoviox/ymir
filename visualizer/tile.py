@@ -61,7 +61,7 @@ class TileType(Enum):
     def is_water(self): return self.value in [7, 9]
 
     def collides(self):
-        return self.is_ground() or self.value in [13, 16, 17]
+        return self.is_ground() or self.value in [11, 13, 16, 17]
 
     def deadly(self):
         return self.value in [13]
@@ -185,13 +185,10 @@ class HorizontalMovingTile(Tile):
         self.offset = [-offset, total - offset]
 
 class CheckpointTile(Tile):
-    def update(self):
-        super().update()
-
-        if self.type == TileType.CHECKPOINT:
-            if int(self.controller.player.entity.x) == int(self.entity.x) and int(self.controller.player.entity.y) == int(self.entity.y):
-                self.load(self.type.toggle())
-                self.controller.starting_tile = self
+    def collide(self):
+        self.load(self.type.toggle())
+        self.controller.starting_tile = self
+        return False
 
 class KeyTile(Tile):
     def collide(self):
