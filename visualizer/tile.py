@@ -226,6 +226,6 @@ class SpikesTile(Tile):
 
     def collide(self):
         self.controller.die()
-        return True
+        return False
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile, 'K': KeyTile}
