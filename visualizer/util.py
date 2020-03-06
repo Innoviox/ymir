@@ -22,7 +22,7 @@ def mag(a):
     return math.sqrt(sum([x * x for x in a]))
 
 
-def inside(position, tile, density = 10):
+def inside(position, tile, density = 10): # todo: transparency
     """Tells if an entity (anything with an ordered pair position vector) is inside the given tile.
     Works by testing the boundary points of the one by one box with the bottom left corner 
     in the specified position.""" 
@@ -41,10 +41,8 @@ def inside(position, tile, density = 10):
 
 def point_inside(point, tile):
     """Tells if a position is inside a tile."""
-    if tile.x + tile.hitbox.min_x < point[0] < tile.x + tile.hitbox.max_x and \
-            tile.y + tile.hitbox.min_y < point[1] < tile.y + tile.hitbox.max_y:
-        return True
-    return False
+    return tile.x + tile.hitbox.min_x < point[0] < tile.x + tile.hitbox.max_x and \
+            tile.y + tile.hitbox.min_y < point[1] < tile.y + tile.hitbox.max_y
 
 
 def get_nearby_tiles(position, tile_array):

@@ -23,7 +23,6 @@ class Sprite(ABC):
             return
 
         if len(tiles) == 2:
-            tile = tiles[0]
             # vertically stacked tiles, snap horizontally
             if tiles[0].x == tiles[1].x:
                 collide(self, tiles[0], x=True)
@@ -31,28 +30,31 @@ class Sprite(ABC):
                 collide(self, tiles[0], x=False)
 
         else:
-            tile = tiles[0]
             # position snapping, only if a single tile is collided, this will be buggy
-
-            try:
-                horiz_time = min(abs(self.position[0] - tile.x - control.scale)
-                                , abs(self.position[0] + control.scale - tile.x)) / abs(self.velocity[0])
-            except:
-                horiz_time = 1000
-            try:
-                vert_time = min(abs(self.position[1] - tile.y - control.scale)
-                                , abs(self.position[1] + control.scale - tile.y)) / abs(self.velocity[1])
-            except:
-                vert_time = 1000
-            if vert_time == horiz_time:
-                collide(self, tile, x=False)
-                collide(self, tile, x=True)
-            elif vert_time < horiz_time:
-                # vertical position snapping
-                collide(self, tile, x=False)
-            else:
-                # horizontal position snapping
-                collide(self, tile, x=True)
+            for tile in tiles:
+                try:
+                    v = self.velocity[0]
+                    if self.on_moving_tile:
+                        v = self.on_moving_tile.speed * 10
+                    horiz_time = min(abs(self.position[0] - tile.x - control.scale)
+                                    , abs(self.position[0] + control.scale - tile.x)) / abs(v)
+                except:
+                    horiz_time = 1000
+                try:
+                    vert_time = min(abs(self.position[1] - tile.y - control.scale)
+                                    , abs(self.position[1] + control.scale - tile.y)) / abs(self.velocity[1])
+                except:
+                    vert_time = 1000
+                # print(tiles, self.position, tile.position, self.velocity, vert_time, horiz_time)
+                if vert_time == horiz_time:
+                    collide(self, tile, x=False)
+                    collide(self, tile, x=True)
+                elif vert_time < horiz_time:
+                    # vertical position snapping
+                    collide(self, tile, x=False)
+                else:
+                    # horizontal position snapping
+                    collide(self, tile, x=True)
 
     #abstract please overwrite me
     @abstractmethod

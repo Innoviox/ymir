@@ -132,7 +132,7 @@ class Tile():
         return self.position[1]
 
     def __repr__(self):
-        return str(self.type) + " at " + str(self.position)
+        return str(self.type).split(".")[1]# + " at " + str(self.position)
 
     def anim_toggle(self): # note: toggleanims go from upper -> lower
         self.anim_frame += 1
@@ -170,20 +170,16 @@ class HorizontalMovingTile(Tile):
         self.entity.x += self.speed
         self.position[0] += self.speed
 
-        l = len(self.controller.tile_array)
-        px, py = int(self.position[0]), l - int(self.position[1]) - 1
-        px += self.offset[self.speed > 0]
-
-        if 0 <= py < l and \
-            0 <= px < len(self.controller.tile_array[py]) and \
-                self.controller.tile_array[py][px].type.is_ground():
+        if self.controller.next_is_ground(self, [self.offset[self.speed > 0], 0]):
             self.speed = -self.speed
 
         for entity in self.controller.sprites:
-            if not entity.on_moving_tile and util.inside(entity.position + [0,-.1], self):
-                entity.position[0] += self.speed
-                entity.on_moving_tile = True
-                # print(self.controller.next_tile(entity, Direction.LEFT))
+            if not entity.on_moving_tile:
+                colliding = util.inside(entity.position + [0, -.1], self)
+                if colliding:
+                    entity.position[0] += self.speed
+                    # entity.velocity[0] += self.speed * 10
+                    entity.on_moving_tile = self
 
     def set_offset(self, offset, total):
         if total == 1:
@@ -220,9 +216,7 @@ class SpikesTile(Tile):
         for (hb, direction, rot) in zip(spikes_hitboxes,
                                   Direction,
                                    [0, 180, 270, 90]):
-            # nx, ny = self.position[0] + dx, l - (self.position[1] + dy) - 1
-            tile = self.controller.next_tile(self, direction)
-            if tile and tile.type.is_ground():
+            if self.controller.next_is_ground(self, direction):
                 self.hitbox = Hitbox(hb)
                 self.entity.rotation_z = rot
                 return

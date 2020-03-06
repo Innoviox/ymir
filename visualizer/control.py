@@ -36,10 +36,11 @@ class Controller():
         # window.fullscreen = True
 
     def update(self):
+        self.player_collide()
+
         for sprite in self.sprites:
             sprite.update(dt)
 
-        self.player_collide()
 
         if self.player.position[1] < 0:
             self.die()
@@ -113,7 +114,17 @@ class Controller():
                     t.hide()
 
     def next_tile(self, tile, direction):
+        if isinstance(direction, Direction):
+            dx, dy = direction.diff
+        else:
+            dx, dy = direction
+
         l = len(self.tile_array)
-        px, py = int(tile.position[0]) + direction.dx, l - (int(tile.position[1]) + direction.dy) - 1
+        px, py = int(tile.position[0] + dx), l - (int(tile.position[1] + dy)) - 1
+
         if 0 <= py < l and 0 <= px < len(self.tile_array[py]):
             return self.tile_array[py][px]
+
+    def next_is_ground(self, tile, direction):
+        n = self.next_tile(tile, direction)
+        return n and n.type.is_ground()
