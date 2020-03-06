@@ -27,7 +27,8 @@ def inside(position, tile, density = 10):
 
 def point_inside(point, tile):
     """Tells if a position is inside a tile."""
-    if tile.x < point[0] < tile.x + control.scale and tile.y < point[1] < tile.y + control.scale:
+    if tile.x + tile.hitbox.min_x < point[0] < tile.x + tile.hitbox.max_x and \
+            tile.y + tile.hitbox.min_y < point[1] < tile.y + tile.hitbox.max_y:
         return True
     return False
 

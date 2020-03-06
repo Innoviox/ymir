@@ -19,7 +19,6 @@ class Sprite(ABC):
         self.entity.z = -1 # render on top of everything else
 
     def update_collisions(self, tiles, tile_array):
-
         if len(tiles) == 0:
             return
 

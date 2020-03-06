@@ -143,9 +143,12 @@ class Tile():
             t = tile_map[self.type.value - 1]
             self.entity.texture = f"{TEXTURES[t.upper()]}_to_{TEXTURES[t.lower()]}_slice_{self.anim_frame}"
 
-    def hide(self):
+    def hide(self, now=False):
         self.type = TileType.AIR
-        self.entity.fade_out()
+        if now:
+            self.entity.hide()
+        else:
+            self.entity.fade_out()
 
 def HitboxTile(hitbox):
     class _T(Tile):
@@ -197,7 +200,7 @@ class CheckpointTile(Tile):
 class KeyTile(Tile):
     def collide(self):
         self.controller.unlock(self.type)
-        self.hide()
+        self.hide(now=True)
         return False
 
 spikes_hitboxes = [
