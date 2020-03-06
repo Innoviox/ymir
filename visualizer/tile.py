@@ -143,6 +143,10 @@ class Tile():
             t = tile_map[self.type.value - 1]
             self.entity.texture = f"{TEXTURES[t.upper()]}_to_{TEXTURES[t.lower()]}_slice_{self.anim_frame}"
 
+    def hide(self):
+        self.load(TileType.AIR)
+        self.entity.hide()
+
 def HitboxTile(hitbox):
     class _T(Tile):
         def __init__(self, *args):
@@ -193,8 +197,7 @@ class CheckpointTile(Tile):
 class KeyTile(Tile):
     def collide(self):
         self.controller.unlock(self.type)
-        self.load(TileType.AIR)
-        self.entity.hide()
+        self.hide()
 
         return False
 

@@ -107,5 +107,4 @@ class Controller():
         for row in self.tile_array:
             for t in row:
                 if t.type.value == typ.value + 1:
-                    t.load(TileType.AIR)
-                    t.entity.hide()
+                    t.hide()
