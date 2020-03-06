@@ -167,11 +167,6 @@ class HorizontalMovingTile(Tile):
     def update(self):
         super().update()
 
-        for entity in self.controller.sprites:
-            if not entity.on_moving_tile and util.inside(entity.position + [0,-.1], self):
-                entity.position[0] += self.speed
-                entity.on_moving_tile = True # todo: fix jolting?
-
         self.entity.x += self.speed
         self.position[0] += self.speed
 
@@ -183,6 +178,11 @@ class HorizontalMovingTile(Tile):
             0 <= px < len(self.controller.tile_array[py]) and \
                 self.controller.tile_array[py][px].type.is_ground():
             self.speed = -self.speed
+
+        for entity in self.controller.sprites:
+            if not entity.on_moving_tile and util.inside(entity.position + [0,-.1], self):
+                entity.position[0] += self.speed
+                entity.on_moving_tile = True
 
     def set_offset(self, offset, total):
         if total == 1:
