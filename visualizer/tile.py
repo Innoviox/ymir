@@ -22,7 +22,9 @@ TEXTURES = {
     'C': 'flagGreen_up',
     'P': 'spikes',
     'N': 'grassHalfLeft',
-    ',': 'grassHalfRight'
+    ',': 'grassHalfRight',
+    'K': 'keyBlue',
+    'L': 'lockBlue'
 }
 
 texture_map = list(TEXTURES.values())
@@ -44,6 +46,8 @@ class TileType(Enum):
     SPIKES = 13
     MOVING_LEFT = 14
     MOVING_RIGHT = 15
+    KEY_BLUE = 16
+    LOCK_BLUE = 17
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -55,8 +59,10 @@ class TileType(Enum):
     # todo: make better
     def is_ground(self): return self.value in [1, 8]
     def is_water(self): return self.value in [7, 9]
+
     def collides(self):
-        return self.is_ground() or self.value in [13]
+        return self.is_ground() or self.value in [13, 16, 17]
+
     def deadly(self):
         return self.value in [13]
 
@@ -99,7 +105,7 @@ class Tile():
 
         self.anim_dir = [-1, 1][self.type.char.isupper()]
         self.anim_frame = 0
-        self.animating = True
+        self.animating = False
         self.anim_every = 1
         self.anim_step = 0
 
@@ -114,6 +120,9 @@ class Tile():
             self.anim_step += 1
             if self.anim_step % self.anim_every == 0:
                 self.anim_toggle()
+
+    def collide(self):
+        return True  # if this method is called, then self.type.collides()
 
     @property
     def x(self):
@@ -159,9 +168,13 @@ class HorizontalMovingTile(Tile):
         self.entity.x += self.speed
         self.position[0] += self.speed
 
-        px, py = int(self.entity.x), int(self.entity.y)
+        l = len(self.controller.tile_array)
+        px, py = int(self.position[0]), l - int(self.position[1]) - 1
+        px += self.offset[self.speed > 0]
 
-        if self.controller.tile_array[py][px + self.offset[self.speed > 0]].type.is_ground():
+        if 0 <= py < l and \
+            0 <= px < len(self.controller.tile_array[py]) and \
+                self.controller.tile_array[py][px].type.is_ground():
             self.speed = -self.speed
 
     def set_offset(self, offset, total):
@@ -179,6 +192,14 @@ class CheckpointTile(Tile):
             if int(self.controller.player.entity.x) == int(self.entity.x) and int(self.controller.player.entity.y) == int(self.entity.y):
                 self.load(self.type.toggle())
                 self.controller.starting_tile = self
+
+class KeyTile(Tile):
+    def collide(self):
+        self.controller.unlock(self.type)
+        self.load(TileType.AIR)
+        self.entity.hide()
+
+        return False
 
 spikes_hitboxes = [
     [0.1, 0, 0.9, 0.25],
@@ -204,5 +225,8 @@ class SpikesTile(Tile):
                 self.entity.rotation_z = rot
                 return
 
+    def collide(self):
+        self.controller.die()
+        return True
 
-tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile}
+tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile, 'K': KeyTile}

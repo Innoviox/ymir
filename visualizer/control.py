@@ -39,11 +39,7 @@ class Controller():
         for sprite in self.sprites:
             sprite.update(dt)
 
-        colliding_tiles = list(self.player.update_collisions(self.player_colliding(), self.tile_array))
-        if any(i.type.deadly() for i in colliding_tiles):
-            # input("hello ")
-            # time.sleep(0.1)
-            self.die()
+        self.player.update_collisions(self.player_colliding(), self.tile_array)
 
         if self.player.position[1] < 0:
             self.die()
@@ -106,3 +102,10 @@ class Controller():
 
         self.load_level("visualizer/test_file_2.txt")
         self.app.run()
+
+    def unlock(self, typ):
+        for row in self.tile_array:
+            for t in row:
+                if t.type.value == typ.value + 1:
+                    t.load(TileType.AIR)
+                    t.entity.hide()

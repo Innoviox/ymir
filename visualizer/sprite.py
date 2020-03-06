@@ -26,13 +26,10 @@ class Sprite(ABC):
         if len(tiles) == 2:
             tile = tiles[0]
             # vertically stacked tiles, snap horizontally
-            chg = True
             if tiles[0].x == tiles[1].x:
-                chg = collide(self, tiles[0], x=True)
+                collide(self, tiles[0], x=True)
             else: # horizantally connected tiles, snap vertically
-                chg = collide(self, tiles[0], x=False)
-            if chg:
-                yield tile
+                collide(self, tiles[0], x=False)
 
         else:
             tile = tiles[0]
@@ -48,18 +45,15 @@ class Sprite(ABC):
                                 , abs(self.position[1] + control.scale - tile.y)) / abs(self.velocity[1])
             except:
                 vert_time = 1000
-            chg = True
             if vert_time == horiz_time:
-                chg = collide(self, tile, x=False)
-                chg = collide(self, tile, x=True)
+                collide(self, tile, x=False)
+                collide(self, tile, x=True)
             elif vert_time < horiz_time:
                 # vertical position snapping
-                chg = collide(self, tile, x=False)
+                collide(self, tile, x=False)
             else:
                 # horizontal position snapping
-                chg = collide(self, tile, x=True)
-            if chg:
-                yield tile
+                collide(self, tile, x=True)
 
     #abstract please overwrite me
     @abstractmethod

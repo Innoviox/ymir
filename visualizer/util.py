@@ -54,21 +54,32 @@ def collide(p, t, x=True):
     chg = True
     if x:
         if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
-            p.position[0] = t.x + t.hitbox.max_x
+            if t.collide():
+                p.position[0] = t.x + t.hitbox.max_x
+            else:
+                chg = False
         elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
-            p.position[0] = t.x - t.hitbox.max_x
+            if t.collide():
+                p.position[0] = t.x - t.hitbox.max_x
+            else:
+                chg = False
         else:
             chg = False
         if chg:
             p.velocity[0] = 0
     else:
         if t.y + t.hitbox.min_y < p.position[1] < t.y + t.hitbox.max_y:
-            p.position[1] = t.y + t.hitbox.max_y
-            p.can_jump = True
+            if t.collide():
+                p.position[1] = t.y + t.hitbox.max_y
+                p.can_jump = True
+            else:
+                chg = False
         elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
-            p.position[1] = t.y - t.hitbox.max_y
+            if t.collide():
+                p.position[1] = t.y - t.hitbox.max_y
+            else:
+                chg = False
         else:
             chg = False
         if chg:
             p.velocity[1] = 0
-    return chg
