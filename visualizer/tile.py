@@ -109,10 +109,10 @@ class Tile():
         self.anim_every = 1
         self.anim_step = 0
 
-    def load(self, new_type):
+    def load(self, new_type, texture=True):
         self.type = new_type
         self.texture = self.type.texture()
-        if self.entity:
+        if self.entity and texture:
             self.entity.texture = self.texture
 
     def update(self):
@@ -144,7 +144,7 @@ class Tile():
             self.entity.texture = f"{TEXTURES[t.upper()]}_to_{TEXTURES[t.lower()]}_slice_{self.anim_frame}"
 
     def hide(self):
-        self.load(TileType.AIR)
+        self.type = TileType.AIR
         self.entity.fade_out()
 
 def HitboxTile(hitbox):
