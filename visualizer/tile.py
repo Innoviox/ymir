@@ -145,7 +145,7 @@ class Tile():
 
     def hide(self):
         self.load(TileType.AIR)
-        self.entity.hide()
+        self.entity.fade_out()
 
 def HitboxTile(hitbox):
     class _T(Tile):
@@ -202,7 +202,7 @@ class KeyTile(Tile):
 
 spikes_hitboxes = [
     [0.1, 0, 0.9, 0.25],
-    [0.0, 0.75, 0.9, 1],
+    [0.1, 0.75, 0.9, 1],
     [0.85, 0.1, 1, 0.9],
     [0, 0.1, 0.15, 0.9]
 ]
