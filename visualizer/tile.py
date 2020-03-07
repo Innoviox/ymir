@@ -236,28 +236,28 @@ max_slicer_speed = 0.5
 class SlicerTile(HorizontalMovingTile, DeadlyTile):
     def __init__(self, *args):
         super().__init__(*args)
-        self.use = Direction.RIGHT
+        self.current_direction = Direction.RIGHT
         self.total = None
 
     def setup(self):
         super().setup()
         self.total = self.controller.next_ground(self, Direction.RIGHT)[0] + \
                      self.controller.next_ground(self, Direction.LEFT)[0]
-        
+
     def update(self):
         super().update()
 
         self.entity.rotation_z += self.speed * 20
 
         # speed is based on a quadratic curve - https://www.desmos.com/calculator/nclkc46nsd
-        dist = self.controller.next_ground(self, self.use)[0]
+        dist = self.controller.next_ground(self, self.current_direction)[0]
         self.speed = -(max_slicer_speed / ((self.total / 2) ** 2)) * dist * (dist - self.total) + 0.01
 
-        if self.use == Direction.LEFT:
+        if self.current_direction == Direction.LEFT:
             self.speed = -self.speed
 
         if dist < 0.2:
-            self.use = self.use.flip()
+            self.current_direction = self.current_direction.flip()
 
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
