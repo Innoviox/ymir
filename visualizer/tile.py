@@ -155,6 +155,9 @@ class Tile():
         else:
             self.entity.fade_out()
 
+    def setup(self):
+        ...
+
 def HitboxTile(hitbox):
     class _T(Tile):
         def __init__(self, *args):
@@ -220,17 +223,42 @@ class SpikesTile(DeadlyTile):
     def __init__(self, *args):
         super().__init__(*args)
 
-    def set_direction(self):
+    def setup(self):
+        super().setup()
         for (hb, direction, rot) in zip(spikes_hitboxes, Direction, [0, 180, 270, 90]):
             if self.controller.next_is_ground(self, direction):
                 self.hitbox = Hitbox(hb)
                 self.entity.rotation_z = rot
                 return
 
+
+max_slicer_speed = 0.5
 class SlicerTile(HorizontalMovingTile, DeadlyTile):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.use = Direction.RIGHT
+        self.total = None
+
+    def setup(self):
+        super().setup()
+        self.total = self.controller.next_ground(self, Direction.RIGHT)[0] + \
+                     self.controller.next_ground(self, Direction.LEFT)[0]
+        
     def update(self):
         super().update()
+
         self.entity.rotation_z += self.speed * 20
+
+        # speed is based on a quadratic curve - https://www.desmos.com/calculator/nclkc46nsd
+        dist = self.controller.next_ground(self, self.use)[0]
+        self.speed = -(max_slicer_speed / ((self.total / 2) ** 2)) * dist * (dist - self.total) + 0.01
+
+        if self.use == Direction.LEFT:
+            self.speed = -self.speed
+
+        if dist < 0.2:
+            self.use = self.use.flip()
+
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
                 'K': KeyTile, ';': KeyTile, 'Q': SlicerTile}

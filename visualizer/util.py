@@ -17,6 +17,11 @@ class Direction(Enum):
     def dy(self):
         return self.diff[1]
 
+    def flip(self):
+        if self.value % 2 == 0:
+            return Direction._value2member_map_[self.value + 1]
+        return Direction._value2member_map_[self.value - 1]
+
 def mag(a):
     """Returns the magnitude of an array, interpreted as a numeric vector.""" 
     return math.sqrt(sum([x * x for x in a]))

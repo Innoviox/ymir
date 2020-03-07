@@ -79,8 +79,8 @@ class Controller():
                     self.starting_tile = tile
                 elif tile.type == TileType.END:
                     self.ending_tile = tile
-                elif tile.type == TileType.SPIKES:
-                    tile.set_direction()
+
+                tile.setup()
 
     def load_level(self, level_file_name):
         """Start a level from a file. Initialize player position, etc."""
@@ -111,6 +111,11 @@ class Controller():
                 if t.type.value == typ.value + 1:
                     t.hide()
 
+    def tile_at(self, x, y):
+        x, y = int(x), int(y)
+        if 0 <= y < len(self.tile_array) and 0 <= x < len(self.tile_array[y]):
+            return self.tile_array[y][x]
+
     def next_tile(self, tile, direction):
         if isinstance(direction, Direction):
             dx, dy = direction.diff
@@ -120,9 +125,19 @@ class Controller():
         l = len(self.tile_array)
         px, py = int(tile.position[0] + dx), l - (int(tile.position[1] + dy)) - 1
 
-        if 0 <= py < l and 0 <= px < len(self.tile_array[py]):
-            return self.tile_array[py][px]
+        return self.tile_at(px, py)
 
     def next_is_ground(self, tile, direction):
         n = self.next_tile(tile, direction)
         return n and n.type.is_ground()
+
+    def next_ground(self, tile, direction):
+        curr = list(map(int, tile.position))
+        while True:
+            t = self.tile_at(*curr)
+            if not t or t.type.is_ground():
+                break
+
+            curr[0] += direction.dx
+            curr[1] += direction.dy
+        return [abs(tile.position[0] - curr[0]) - 1, abs(tile.position[1] - curr[1]) - 1]
