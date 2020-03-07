@@ -171,6 +171,7 @@ class HorizontalMovingTile(Tile):
 
         self.speed = 0.1
         self.offset = [0, 1]
+        self.carry_with = True
 
     def update(self):
         super().update()
@@ -181,10 +182,11 @@ class HorizontalMovingTile(Tile):
         if self.controller.next_is_ground(self, [self.offset[self.speed > 0], 0]):
             self.speed = -self.speed
 
-        for entity in self.controller.sprites:
-            if not entity.on_moving_tile and util.inside(entity.position + [0, -.1], self):
-                entity.position[0] += self.speed
-                entity.on_moving_tile = self
+        if self.carry_with:
+            for entity in self.controller.sprites:
+                if not entity.on_moving_tile and util.inside(entity.position + [0, -.1], self):
+                    entity.position[0] += self.speed
+                    entity.on_moving_tile = self
 
     def set_offset(self, offset, total):
         if total == 1:
@@ -238,6 +240,7 @@ class SlicerTile(HorizontalMovingTile, DeadlyTile):
         super().__init__(*args)
         self.current_direction = Direction.RIGHT
         self.total = None
+        self.carry_with = False
 
     def setup(self):
         super().setup()
