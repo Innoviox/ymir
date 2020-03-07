@@ -20,3 +20,12 @@ def animate(from_file, to_file, slice_width):
 animate("door_openTop", "door_closedTop", 1)
 animate("door_openMid", "door_closedMid", 1)
 
+def fix(file):
+    img = Image.open(file + ".png")
+    out = Image.new('RGBA', (70, 70), (0, 0, 0, 0))
+
+    new_h = round(img.height * (70 / img.width))
+    x = img.crop((0, 0, img.width, img.height)).resize((70, new_h))
+
+    out.paste(x, (0, 70 - new_h, 70, 70))
+    out.save(file+"_fixed.png")
