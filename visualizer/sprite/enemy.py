@@ -16,7 +16,6 @@ class BasicEnemy(Enemy):
 
         super().__init__(*args, **kwargs)
 
-
     def update(self, dt):
         super().update(dt)
         self.velocity[0] = self.speed
@@ -30,12 +29,13 @@ class BasicEnemy(Enemy):
             self.speed = -self.speed
 
 class Slime(BasicEnemy):
-    def __init__(self, *args):
-        super().__init__(*args, speed=-0.2)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs, speed=-0.2)
 
 class Buzzard(BasicEnemy):
-    def __init__(self, *args):
-        super().__init__(*args, speed=-0.2, gravity=False)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs, speed=-0.2, gravity=False)
+        self.animator.anim_every = 10
 
 enemies = {
     'G': Slime,

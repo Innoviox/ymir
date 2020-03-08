@@ -5,7 +5,7 @@ from collections import defaultdict
 from ursina import load_texture
 
 class Sprite(ABC):
-    def __init__(self, position, entity, gravity=True):
+    def __init__(self, position, entity, gravity=True, anim_texture=None):
         self.can_jump = True
         self.position = np.array(position,dtype = 'float64')
         self.entity = entity
@@ -14,7 +14,8 @@ class Sprite(ABC):
         self.horizontal_speed = 10.0
         self.jump_speed = 2.0
         self.on_moving_tile = False
-        self.animator = None
+
+        self.animator = Animator(self, anim_texture) if anim_texture else None
         self.gravity = gravity
 
     def update_render(self):
@@ -88,7 +89,7 @@ class Animator:
         self.anim_step = 0
         self.anim_frame = 1
         self.base_texture = base_texture
-        self.animating = False
+        self.animating = True
         self.anim_dir = 1
         self.cycle = cycle
 

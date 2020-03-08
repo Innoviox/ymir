@@ -276,8 +276,7 @@ class SlicerTile(HorizontalMovingTile, DeadlyTile):
 
 class EnemyTile(Tile):
     def setup(self):
-        e = enemy.enemies[self.type.char](self.position, self.entity)
-        e.set_animator(self.texture)
+        e = enemy.enemies[self.type.char](self.position, self.entity, anim_texture=self.texture)
 
         self.controller.sprites.append(e)
 

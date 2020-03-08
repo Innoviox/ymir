@@ -65,7 +65,7 @@ class Controller():
             for x, tile in enumerate(row):
                 if tile.texture is None:
                     continue
-                    
+
                 tile.controller = self
                 tile.entity = Entity(model="quad",
                                      texture=tile.texture,
