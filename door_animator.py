@@ -28,4 +28,4 @@ def fix(file):
     x = img.crop((0, 0, img.width, img.height)).resize((70, new_h))
 
     out.paste(x, (0, 70 - new_h, 70, 70))
-    out.save(file+"_fixed.png")
+    out.save(file+".png")
