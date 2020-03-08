@@ -22,14 +22,14 @@ class Sprite(ABC):
         if len(tiles) == 0:
             return
 
-        collided = True
+        collided = []
 
         if len(tiles) == 2:
             # vertically stacked tiles, snap horizontally
             if tiles[0].x == tiles[1].x:
-                collided &= collide(self, tiles[0], x=True)
-            else: # horizantally connected tiles, snap vertically
-                collided &= collide(self, tiles[0], x=False)
+                collided.append(collide(self, tiles[0], x=True))
+            else: # horizontally connected tiles, snap vertically
+                collided.append(collide(self, tiles[0], x=False))
             return collided
 
         else:
@@ -50,14 +50,14 @@ class Sprite(ABC):
                     vert_time = 1000
                 # print(tiles, self.position, tile.position, self.velocity, vert_time, horiz_time)
                 if vert_time == horiz_time:
-                    collided &= collide(self, tile, x=False)
-                    collided &= collide(self, tile, x=True)
+                    collided.append(collide(self, tile, x=False))
+                    collided.append(collide(self, tile, x=True))
                 elif vert_time < horiz_time:
                     # vertical position snapping
-                    collided &= collide(self, tile, x=False)
+                    collided.append(collide(self, tile, x=False))
                 else:
                     # horizontal position snapping
-                    collided &= collide(self, tile, x=True)
+                    collided.append(collide(self, tile, x=True))
         return collided
 
     #abstract please overwrite me

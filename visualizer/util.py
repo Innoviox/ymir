@@ -70,15 +70,18 @@ def get_nearby_ground_tiles(position, tile_array):
 
 def collide(p, t, x=True):
     chg = True
+    direction = None
     if x:
         if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
             if t.collide(p):
                 p.position[0] = t.x + t.hitbox.max_x
+                direction = Direction.LEFT
             else:
                 chg = False
         elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
             if t.collide(p):
                 p.position[0] = t.x - t.hitbox.max_x
+                direction = Direction.RIGHT
             else:
                 chg = False
         else:
@@ -90,15 +93,17 @@ def collide(p, t, x=True):
             if t.collide(p):
                 p.position[1] = t.y + t.hitbox.max_y
                 p.can_jump = True
+                direction = Direction.DOWN
             else:
                 chg = False
         elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
             if t.collide(p):
                 p.position[1] = t.y - t.hitbox.max_y
+                direction = Direction.UP
             else:
                 chg = False
         else:
             chg = False
         if chg:
             p.velocity[1] = 0
-    return chg
+    return direction
