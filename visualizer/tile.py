@@ -27,8 +27,8 @@ TEXTURES = {
     ';': 'keyRed',
     "'": 'lockRed',
     'Q': 'slicer',
-    'G': 'slime_1',
-    'B': 'enemyFlying_1'
+    'G': 'slime',
+    'B': 'flyFly'
 }
 
 texture_map = list(TEXTURES.values())
@@ -276,7 +276,10 @@ class SlicerTile(HorizontalMovingTile, DeadlyTile):
 
 class EnemyTile(Tile):
     def setup(self):
-        self.controller.sprites.append(enemy.enemies[self.type.char](self.position, self.entity))
+        e = enemy.enemies[self.type.char](self.position, self.entity)
+        e.set_animator(self.texture)
+
+        self.controller.sprites.append(e)
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
                 'K': KeyTile, ';': KeyTile,

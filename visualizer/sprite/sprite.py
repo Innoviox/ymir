@@ -77,6 +77,10 @@ class Sprite(ABC):
         if self.gravity:
             self.velocity[1] += control.gravity * dt
 
+    def set_animator(self, texture):
+        self.animator = Animator(self, texture)
+        self.animator.start()
+
 class Animator:
     def __init__(self, sprite, base_texture, anim_every=10, cycle=True):
         self.sprite = sprite

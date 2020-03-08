@@ -14,8 +14,6 @@ class Slime(Enemy):
     def __init__(self, *args):
         super().__init__(*args)
         self.speed = -0.2
-        self.animator = Animator(self, "slime")
-        self.animator.start()
 
     def update(self, dt):
         super().update(dt)
@@ -36,8 +34,6 @@ class Buzzard(Enemy):
     def __init__(self, *args):
         super().__init__(*args, gravity=False)
         self.speed = -0.0
-        self.animator = Animator(self, "enemyFlying")
-        self.animator.start()
 
     def update(self, dt):
         super().update(dt)
