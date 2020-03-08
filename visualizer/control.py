@@ -6,6 +6,7 @@ from visualizer.sprite import Player
 import numpy as np
 from visualizer.file_reader import *
 from ursina import *
+from visualizer.tile import Hitbox, HITBOX
 
 scale = 1
 dt = .1
@@ -27,6 +28,7 @@ class Controller():
         camera.orthographic = True
         camera.fov = camera_fov
         window.borderless = False
+        window.color = color.white
         self.moving_tiles = []
         self.sprites = []
         # window.fullscreen = True
@@ -55,6 +57,7 @@ class Controller():
     def sprite_colliding (self, sprite):
         ground_tiles = get_nearby_ground_tiles(sprite.position, self.tile_array, player=isinstance(sprite, Player))
         ground_tiles.extend(self.moving_tiles)
+        # ground_tiles.extend(filter(lambda i: i is not sprite, self.sprites))
         collided_tiles = list(filter(lambda x: inside(sprite.position, x), ground_tiles))
         return collided_tiles
 
@@ -78,6 +81,9 @@ class Controller():
                     self.ending_tile = tile
 
                 tile.setup()
+
+        for s in self.sprites:
+            s.hitbox = Hitbox(HITBOX[:])
 
     def load_level(self, level_file_name):
         """Start a level from a file. Initialize player position, etc."""

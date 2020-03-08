@@ -16,6 +16,8 @@ class BasicEnemy(Enemy):
 
         super().__init__(*args, **kwargs)
 
+        self.entity.double_sided = True
+
     def update(self, dt):
         super().update(dt)
         self.velocity[0] = self.speed
@@ -23,10 +25,14 @@ class BasicEnemy(Enemy):
     def update_collisions(self, tiles, tile_array):
         collided = super().update_collisions(tiles, tile_array)
 
-        if Direction.LEFT in collided:
+        if Direction.LEFT in collided or Direction.RIGHT in collided:
             self.speed = -self.speed
-        elif Direction.RIGHT in collided:
-            self.speed = -self.speed
+            self.entity.rotation_y += 180
+
+    def die(self):
+        self.animator.kill()
+        self.entity.fade_out(duration=2)
+
 
 class Slime(BasicEnemy):
     def __init__(self, *args, **kwargs):
@@ -34,7 +40,7 @@ class Slime(BasicEnemy):
 
 class Buzzard(BasicEnemy):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, speed=-0.2, gravity=False)
+        super().__init__(*args, **kwargs, speed=0.2, gravity=False)
         self.animator.anim_every = 10
 
 enemies = {

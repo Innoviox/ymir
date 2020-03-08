@@ -82,6 +82,17 @@ class Sprite(ABC):
         self.animator = Animator(self, texture)
         self.animator.start()
 
+    @property
+    def x(self):
+        return self.entity.x
+
+    @property
+    def y(self):
+        return self.entity.y
+
+    def collide(self, tile):
+        return True
+
 class Animator:
     def __init__(self, sprite, base_texture, anim_every=10, cycle=True):
         self.sprite = sprite
@@ -122,3 +133,7 @@ class Animator:
 
     def stop(self):
         self.animating = False
+
+    def kill(self):
+        self.stop()
+        self.sprite.entity.texture = f"{self.base_texture}_dead"
