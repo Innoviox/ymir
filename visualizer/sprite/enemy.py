@@ -10,16 +10,15 @@ class Enemy(Sprite, ABC):
     def update(self,dt):
         super().update(dt)
 
-class Slime(Enemy):
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.speed = -0.2
+class BasicEnemy(Enemy):
+    def __init__(self, *args, **kwargs):
+        self.speed = kwargs.pop("speed") or 0.1
+
+        super().__init__(*args, **kwargs)
+
 
     def update(self, dt):
         super().update(dt)
-
-    def update_position_velocity(self, dt):
-        super().update_position_velocity(dt)
         self.velocity[0] = self.speed
 
     def update_collisions(self, tiles, tile_array):
@@ -30,13 +29,13 @@ class Slime(Enemy):
         elif Direction.RIGHT in collided:
             self.speed = -self.speed
 
-class Buzzard(Enemy):
+class Slime(BasicEnemy):
     def __init__(self, *args):
-        super().__init__(*args, gravity=False)
-        self.speed = -0.0
+        super().__init__(*args, speed=-0.2)
 
-    def update(self, dt):
-        super().update(dt)
+class Buzzard(BasicEnemy):
+    def __init__(self, *args):
+        super().__init__(*args, speed=-0.2, gravity=False)
 
 enemies = {
     'G': Slime,
