@@ -28,7 +28,7 @@ TEXTURES = {
     "'": 'lockRed',
     'Q': 'slicer',
     'G': 'slime',
-    'B': 'flyFly'
+    'B': 'enemyFlying'
 }
 
 texture_map = list(TEXTURES.values())
