@@ -3,6 +3,8 @@ Create a 'Tile' object with type and (x,y) location.
 '''
 from visualizer import util
 from visualizer.util import *
+from visualizer import enemy
+from visualizer.player import Player
 
 TEXTURES = {
     'A': 'grassCenter',
@@ -24,7 +26,8 @@ TEXTURES = {
     'L': 'lockBlue',
     ';': 'keyRed',
     "'": 'lockRed',
-    'Q': 'slicer'
+    'Q': 'slicer',
+    'G': 'slime_1'
 }
 
 texture_map = list(TEXTURES.values())
@@ -51,6 +54,7 @@ class TileType(Enum):
     KEY_RED = 18
     LOCK_RED = 19
     SLICER = 20
+    SLIME = 21
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -106,11 +110,12 @@ class Tile():
         self.entity = None
         self.controller = controller
 
-        self.anim_dir = [-1, 1][self.type.char.isupper()]
-        self.anim_frame = 0
-        self.animating = False
-        self.anim_every = 1
-        self.anim_step = 0
+        # self.animator = Animator(self, f"{TEXTURES[t.upper()]}_to_{TEXTURES[t.lower()]}_slice_")
+        # self.anim_dir = [-1, 1][self.type.char.isupper()]
+        # self.anim_frame = 0
+        # self.animating = False
+        # self.anim_every = 1
+        # self.anim_step = 0
 
     def load(self, new_type, texture=True):
         self.type = new_type
@@ -121,12 +126,13 @@ class Tile():
     def load_toggle(self): self.load(self.type.toggle())
 
     def update(self):
-        if self.type.animatable() and self.animating:
-            self.anim_step += 1
-            if self.anim_step % self.anim_every == 0:
-                self.anim_toggle()
+        ...
+        # if self.type.animatable() and self.animating:
+        #     self.anim_step += 1
+        #     if self.anim_step % self.anim_every == 0:
+        #         self.anim_toggle()
 
-    def collide(self):
+    def collide(self, tile):
         return True  # if this method is called, then self.type.collides()
 
     @property
@@ -140,13 +146,14 @@ class Tile():
         return str(self.type).split(".")[1]# + " at " + str(self.position)
 
     def anim_toggle(self): # note: toggleanim files go from upper -> lower
-        self.anim_frame += 1
-        if self.anim_frame == 70:
-            self.load(self.type.toggle())
-            self.animating = False
-        else:
-            t = tile_map[self.type.value - 1]
-            self.entity.texture = f"{TEXTURES[t.upper()]}_to_{TEXTURES[t.lower()]}_slice_{self.anim_frame}"
+        ...
+        # self.anim_frame += 1
+        # if self.anim_frame == 70:
+        #     self.load(self.type.toggle())
+        #     self.animating = False
+        # else:
+        #     t = tile_map[self.type.value - 1]
+        #     self.entity.texture = f"{self.anim_frame}"
 
     def hide(self, now=False):
         self.type = TileType.AIR
@@ -196,7 +203,9 @@ class HorizontalMovingTile(Tile):
         self.offset = [-offset, total - offset]
 
 class CheckpointTile(Tile):
-    def collide(self):
+    def collide(self, tile):
+        if not isinstance(tile, Player):
+            return False # todo: collide with nonplayer? (eg drop a box on it)
         self.load_toggle()
         if isinstance(self.controller.starting_tile, CheckpointTile):
             self.controller.starting_tile.load_toggle()
@@ -204,7 +213,9 @@ class CheckpointTile(Tile):
         return False
 
 class KeyTile(Tile):
-    def collide(self):
+    def collide(self, tile):
+        if not isinstance(tile, Player):
+            return False
         self.controller.unlock(self.type)
         self.hide(now=True)
         return False
@@ -217,7 +228,9 @@ spikes_hitboxes = [
 ]
 
 class DeadlyTile(Tile):
-    def collide(self):
+    def collide(self, tile):
+        if not isinstance(tile, Player):
+            return False
         self.controller.die()
         return False
 
@@ -262,6 +275,11 @@ class SlicerTile(HorizontalMovingTile, DeadlyTile):
         if dist < 0.2:
             self.current_direction = self.current_direction.flip()
 
+class EnemyTile(Tile):
+    def setup(self):
+        self.controller.sprites.append(enemy.enemies[self.type.char](self.position, self.entity))
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
-                'K': KeyTile, ';': KeyTile, 'Q': SlicerTile}
+                'K': KeyTile, ';': KeyTile,
+                'Q': SlicerTile,
+                'G': EnemyTile}

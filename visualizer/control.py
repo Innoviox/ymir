@@ -32,11 +32,9 @@ class Controller():
         # window.fullscreen = True
 
     def update(self):
-        self.player_collide()
-
         for sprite in self.sprites:
+            sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
             sprite.update(dt)
-
 
         if self.player.position[1] < 0:
             self.die()
@@ -49,18 +47,15 @@ class Controller():
                     self.moving_tiles.append(j)
                 j.update()
 
-    def player_collide(self):
-        self.player.update_collisions(self.player_colliding(), self.tile_array)
-
     def die(self):
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 0])
         # todo: camera shift, slowdown, killcam?, say "crushed" or "shot" ala ROR1
         # todo: particle explosion animation
     # returns the ground tiles collided with, or an empty list for no collisions
-    def player_colliding(self):
-        ground_tiles = get_nearby_ground_tiles(self.player.position, self.tile_array)
+    def sprite_colliding (self, sprite):
+        ground_tiles = get_nearby_ground_tiles(sprite.position, self.tile_array)
         ground_tiles.extend(self.moving_tiles)
-        collided_tiles = list(filter(lambda x: inside(self.player.position, x), ground_tiles))
+        collided_tiles = list(filter(lambda x: inside(sprite.position, x), ground_tiles))
         return collided_tiles
 
     def build_from_array(self, array):
