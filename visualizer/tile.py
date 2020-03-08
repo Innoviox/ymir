@@ -27,7 +27,8 @@ TEXTURES = {
     ';': 'keyRed',
     "'": 'lockRed',
     'Q': 'slicer',
-    'G': 'slime_1'
+    'G': 'slime_1',
+    'B': 'enemyFlying_1'
 }
 
 texture_map = list(TEXTURES.values())
@@ -55,6 +56,7 @@ class TileType(Enum):
     LOCK_RED = 19
     SLICER = 20
     SLIME = 21
+    BUZZARD = 22
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -279,4 +281,4 @@ class EnemyTile(Tile):
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
                 'K': KeyTile, ';': KeyTile,
                 'Q': SlicerTile,
-                'G': EnemyTile}
+                'G': EnemyTile, 'B': EnemyTile}

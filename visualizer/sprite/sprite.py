@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 
 class Sprite(ABC):
-    def __init__(self, position, entity):
+    def __init__(self, position, entity, gravity=True):
         self.can_jump = True
         self.position = np.array(position,dtype = 'float64')
         self.entity = entity
@@ -14,6 +14,7 @@ class Sprite(ABC):
         self.jump_speed = 2.0
         self.on_moving_tile = False
         self.animator = None
+        self.gravity = gravity
 
     def update_render(self):
         self.entity.x = self.position[0]
@@ -65,12 +66,15 @@ class Sprite(ABC):
     def update(self,dt):
         self.update_position_velocity(dt)
         self.update_render()
+        if self.animator:
+            self.animator.update()
 
     def update_position_velocity(self, dt):
         self.on_moving_tile = False
         self.position += self.velocity * dt
         self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
-        self.velocity[1] += control.gravity * dt
+        if self.gravity:
+            self.velocity[1] += control.gravity * dt
 
 class Animator:
     def __init__(self, sprite, base_texture, max_frames, anim_every=10, cycle=True):

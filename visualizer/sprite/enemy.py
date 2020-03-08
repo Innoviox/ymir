@@ -1,6 +1,6 @@
 import numpy as np
 
-from visualizer.sprite import Sprite, Animator
+from .sprite import Sprite, Animator
 from visualizer.util import *
 from math import sqrt
 from abc import ABC, abstractmethod
@@ -19,7 +19,6 @@ class Slime(Enemy):
 
     def update(self, dt):
         super().update(dt)
-        self.animator.update()
 
     def update_position_velocity(self, dt):
         super().update_position_velocity(dt)
@@ -33,7 +32,17 @@ class Slime(Enemy):
         elif Direction.RIGHT in collided:
             self.speed = -self.speed
 
+class Buzzard(Enemy):
+    def __init__(self, *args):
+        super().__init__(*args, gravity=False)
+        self.speed = -0.0
+        self.animator = Animator(self, "enemyFlying", 3)
+        self.animator.start()
+
+    def update(self, dt):
+        super().update(dt)
 
 enemies = {
-    'G': Slime
+    'G': Slime,
+    'B': Buzzard
 }
