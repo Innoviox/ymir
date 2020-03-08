@@ -71,7 +71,8 @@ class Sprite(ABC):
         self.velocity[1] += control.gravity * dt
 
     def flip(self):
-        self.entity.rotation = (0, -90, 0)
+        print(self.entity.rotation)
+        # self.entity.rotation = (90, 0, 0)
 
 class Animator:
     def __init__(self, sprite, base_texture, max_frames, anim_every=10, cycle=True):

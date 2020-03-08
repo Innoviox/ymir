@@ -68,10 +68,10 @@ class TileType(Enum):
     def is_water(self): return self.value in [7, 9]
 
     def collides(self):
-        return self.is_ground()
+        return self.is_ground() or self.value in [17, 19]
 
     def player_collides(self):
-        return self.value in [11, 13, 16, 17, 18, 19, 20]
+        return self.value in [11, 13, 16, 18, 20]
 
     def deadly(self):
         return self.value in [13, 20]

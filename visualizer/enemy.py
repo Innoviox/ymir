@@ -13,7 +13,7 @@ class Enemy(Sprite, ABC):
 class Slime(Enemy):
     def __init__(self, *args):
         super().__init__(*args)
-        self.speed = -0.1
+        self.speed = -0.2
         self.animator = Animator(self, "slime", 2)
         self.animator.start()
 
