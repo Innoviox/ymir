@@ -68,7 +68,10 @@ class TileType(Enum):
     def is_water(self): return self.value in [7, 9]
 
     def collides(self):
-        return self.is_ground() or self.value in [11, 13, 16, 17, 18, 19, 20]
+        return self.is_ground()
+
+    def player_collides(self):
+        return self.value in [11, 13, 16, 17, 18, 19, 20]
 
     def deadly(self):
         return self.value in [13, 20]
@@ -204,8 +207,6 @@ class HorizontalMovingTile(Tile):
 
 class CheckpointTile(Tile):
     def collide(self, tile):
-        if not isinstance(tile, Player):
-            return False # todo: collide with nonplayer? (eg drop a box on it)
         self.load_toggle()
         if isinstance(self.controller.starting_tile, CheckpointTile):
             self.controller.starting_tile.load_toggle()
@@ -214,8 +215,6 @@ class CheckpointTile(Tile):
 
 class KeyTile(Tile):
     def collide(self, tile):
-        if not isinstance(tile, Player):
-            return False
         self.controller.unlock(self.type)
         self.hide(now=True)
         return False
@@ -229,8 +228,6 @@ spikes_hitboxes = [
 
 class DeadlyTile(Tile):
     def collide(self, tile):
-        if not isinstance(tile, Player):
-            return False
         self.controller.die()
         return False
 

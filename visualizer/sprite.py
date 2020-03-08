@@ -12,6 +12,7 @@ class Sprite(ABC):
         self.horizontal_speed = 10.0
         self.jump_speed = 2.0
         self.on_moving_tile = False
+        self.animator = None
 
     def update_render(self):
         self.entity.x = self.position[0]
@@ -19,19 +20,16 @@ class Sprite(ABC):
         self.entity.z = -1 # render on top of everything else
 
     def update_collisions(self, tiles, tile_array):
-        if len(tiles) == 0:
-            return
-
         collided = []
 
-        if len(tiles) == 2:
+        if len(tiles) == 0:
+            pass
+        elif len(tiles) == 2:
             # vertically stacked tiles, snap horizontally
             if tiles[0].x == tiles[1].x:
                 collided.append(collide(self, tiles[0], x=True))
             else: # horizontally connected tiles, snap vertically
                 collided.append(collide(self, tiles[0], x=False))
-            return collided
-
         else:
             # position snapping, only if a single tile is collided, this will be buggy
             for tile in tiles:
@@ -71,6 +69,9 @@ class Sprite(ABC):
         self.position += self.velocity * dt
         self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
         self.velocity[1] += control.gravity * dt
+
+    def flip(self):
+        self.entity.rotation = (0, -90, 0)
 
 class Animator:
     def __init__(self, sprite, base_texture, max_frames, anim_every=10, cycle=True):

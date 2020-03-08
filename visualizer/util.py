@@ -64,9 +64,9 @@ def get_nearby_tiles(position, tile_array):
     if 0 <= (a + 1) < len(tile_array) and 0 <= (b + 1) < len(tile_array[a + 1]):
         yield tile_array[a + 1][b + 1]
 
-def get_nearby_ground_tiles(position, tile_array):
+def get_nearby_ground_tiles(position, tile_array, player=True):
     """Get all the adjacent tiles that are of type 'ground' (not air tiles)."""
-    return list(filter(lambda x: x.type.collides(), get_nearby_tiles(position, tile_array)))
+    return list(filter(lambda x: x.type.collides() or (player and x.type.player_collides()), get_nearby_tiles(position, tile_array)))
 
 def collide(p, t, x=True):
     chg = True
@@ -75,13 +75,13 @@ def collide(p, t, x=True):
         if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
             if t.collide(p):
                 p.position[0] = t.x + t.hitbox.max_x
-                direction = Direction.LEFT
+                direction = Direction.RIGHT
             else:
                 chg = False
         elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
             if t.collide(p):
                 p.position[0] = t.x - t.hitbox.max_x
-                direction = Direction.RIGHT
+                direction = Direction.LEFT
             else:
                 chg = False
         else:

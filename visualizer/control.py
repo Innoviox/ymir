@@ -53,7 +53,7 @@ class Controller():
         # todo: particle explosion animation
     # returns the ground tiles collided with, or an empty list for no collisions
     def sprite_colliding (self, sprite):
-        ground_tiles = get_nearby_ground_tiles(sprite.position, self.tile_array)
+        ground_tiles = get_nearby_ground_tiles(sprite.position, self.tile_array, player=isinstance(sprite, Player))
         ground_tiles.extend(self.moving_tiles)
         collided_tiles = list(filter(lambda x: inside(sprite.position, x), ground_tiles))
         return collided_tiles
