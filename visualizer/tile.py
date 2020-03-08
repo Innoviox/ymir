@@ -3,8 +3,8 @@ Create a 'Tile' object with type and (x,y) location.
 '''
 from visualizer import util
 from visualizer.util import *
-from visualizer import enemy
-from visualizer.player import Player
+from visualizer.sprite import enemy
+from visualizer.sprite import Player
 
 TEXTURES = {
     'A': 'grassCenter',

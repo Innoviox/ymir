@@ -2,9 +2,9 @@
 Central hub of the code, basically. Calls the necessary functions to 
 render the scene, get input, move the player, etc. 
 '''
-from visualizer.player import Player
+from visualizer.sprite import Player
 import numpy as np
-from visualizer.FileReader import *
+from visualizer.file_reader import *
 from ursina import *
 
 scale = 1
@@ -95,7 +95,7 @@ class Controller():
 
         self.sprites.append(self.player)
 
-        self.load_level("visualizer/test_file_2.txt")
+        self.load_level("visualizer/levels/test_file_2.txt")
         self.die() # to respawn player
 
         self.app.run()

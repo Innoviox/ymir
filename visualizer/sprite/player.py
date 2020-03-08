@@ -4,7 +4,7 @@ Create a 'Player' object that stores all of the necessary physics-y info
 '''
 import numpy as np
 
-from visualizer.sprite import Sprite
+from .sprite import Sprite
 from ursina.input_handler import held_keys
 
 #TODO get crushed
