@@ -2,6 +2,7 @@ import numpy as np
 from visualizer.util import *
 from abc import ABC, abstractmethod
 from collections import defaultdict
+from ursina import load_texture
 
 class Sprite(ABC):
     def __init__(self, position, entity, gravity=True):
@@ -77,16 +78,19 @@ class Sprite(ABC):
             self.velocity[1] += control.gravity * dt
 
 class Animator:
-    def __init__(self, sprite, base_texture, max_frames, anim_every=10, cycle=True):
+    def __init__(self, sprite, base_texture, anim_every=10, cycle=True):
         self.sprite = sprite
         self.anim_every = anim_every
         self.anim_step = 0
         self.anim_frame = 1
-        self.max_frames = max_frames
         self.base_texture = base_texture
         self.animating = False
         self.anim_dir = 1
         self.cycle = cycle
+
+        self.max_frames = 1
+        while load_texture(f"{self.base_texture}_{self.max_frames + 1}"):
+            self.max_frames += 1
 
     def update(self):
         if self.animating:
