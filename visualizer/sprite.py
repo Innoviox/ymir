@@ -1,6 +1,7 @@
 import numpy as np
 from visualizer.util import *
 from abc import ABC, abstractmethod
+from collections import defaultdict
 
 class Sprite(ABC):
     def __init__(self, position, entity):
@@ -20,16 +21,17 @@ class Sprite(ABC):
         self.entity.z = -1 # render on top of everything else
 
     def update_collisions(self, tiles, tile_array):
-        collided = []
+        collided = defaultdict(list)
 
         if len(tiles) == 0:
             pass
         elif len(tiles) == 2:
             # vertically stacked tiles, snap horizontally
+            t = tiles[0]
             if tiles[0].x == tiles[1].x:
-                collided.append(collide(self, tiles[0], x=True))
+                collided[collide(self, t, x=True)].append(t)
             else: # horizontally connected tiles, snap vertically
-                collided.append(collide(self, tiles[0], x=False))
+                collided[collide(self, tiles[0], x=False)].append(t)
         else:
             # position snapping, only if a single tile is collided, this will be buggy
             for tile in tiles:
@@ -48,14 +50,14 @@ class Sprite(ABC):
                     vert_time = 1000
                 # print(tiles, self.position, tile.position, self.velocity, vert_time, horiz_time)
                 if vert_time == horiz_time:
-                    collided.append(collide(self, tile, x=False))
-                    collided.append(collide(self, tile, x=True))
+                    collided[collide(self, tile, x=False)].append(tile)
+                    collided[collide(self, tile, x=True)].append(tile)
                 elif vert_time < horiz_time:
                     # vertical position snapping
-                    collided.append(collide(self, tile, x=False))
+                    collided[collide(self, tile, x=False)].append(tile)
                 else:
                     # horizontal position snapping
-                    collided.append(collide(self, tile, x=True))
+                    collided[collide(self, tile, x=True)].append(tile)
         return collided
 
     #abstract please overwrite me
@@ -69,10 +71,6 @@ class Sprite(ABC):
         self.position += self.velocity * dt
         self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
         self.velocity[1] += control.gravity * dt
-
-    def flip(self):
-        print(self.entity.rotation)
-        # self.entity.rotation = (90, 0, 0)
 
 class Animator:
     def __init__(self, sprite, base_texture, max_frames, anim_every=10, cycle=True):

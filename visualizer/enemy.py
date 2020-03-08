@@ -29,7 +29,7 @@ class Slime(Enemy):
         collided = super().update_collisions(tiles, tile_array)
         if Direction.LEFT in collided or Direction.RIGHT in collided:
             self.speed = -self.speed
-            self.flip()
+            # self.entity.scale = -1
 
 enemies = {
     'G': Slime
