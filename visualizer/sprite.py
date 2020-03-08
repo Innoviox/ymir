@@ -1,6 +1,7 @@
 import numpy as np
 from visualizer.util import *
 from abc import ABC, abstractmethod
+from collections import defaultdict
 
 class Sprite(ABC):
     def __init__(self, position, entity):
@@ -12,6 +13,7 @@ class Sprite(ABC):
         self.horizontal_speed = 10.0
         self.jump_speed = 2.0
         self.on_moving_tile = False
+        self.animator = None
 
     def update_render(self):
         self.entity.x = self.position[0]
@@ -19,16 +21,17 @@ class Sprite(ABC):
         self.entity.z = -1 # render on top of everything else
 
     def update_collisions(self, tiles, tile_array):
+        collided = defaultdict(list)
+
         if len(tiles) == 0:
-            return
-
-        if len(tiles) == 2:
+            pass
+        elif len(tiles) == 2:
             # vertically stacked tiles, snap horizontally
+            t = tiles[0]
             if tiles[0].x == tiles[1].x:
-                collide(self, tiles[0], x=True)
-            else: # horizantally connected tiles, snap vertically
-                collide(self, tiles[0], x=False)
-
+                collided[collide(self, t, x=True)].append(t)
+            else: # horizontally connected tiles, snap vertically
+                collided[collide(self, tiles[0], x=False)].append(t)
         else:
             # position snapping, only if a single tile is collided, this will be buggy
             for tile in tiles:
@@ -47,14 +50,15 @@ class Sprite(ABC):
                     vert_time = 1000
                 # print(tiles, self.position, tile.position, self.velocity, vert_time, horiz_time)
                 if vert_time == horiz_time:
-                    collide(self, tile, x=False)
-                    collide(self, tile, x=True)
+                    collided[collide(self, tile, x=False)].append(tile)
+                    collided[collide(self, tile, x=True)].append(tile)
                 elif vert_time < horiz_time:
                     # vertical position snapping
-                    collide(self, tile, x=False)
+                    collided[collide(self, tile, x=False)].append(tile)
                 else:
                     # horizontal position snapping
-                    collide(self, tile, x=True)
+                    collided[collide(self, tile, x=True)].append(tile)
+        return collided
 
     #abstract please overwrite me
     @abstractmethod
@@ -67,3 +71,41 @@ class Sprite(ABC):
         self.position += self.velocity * dt
         self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
         self.velocity[1] += control.gravity * dt
+
+class Animator:
+    def __init__(self, sprite, base_texture, max_frames, anim_every=10, cycle=True):
+        self.sprite = sprite
+        self.anim_every = anim_every
+        self.anim_step = 0
+        self.anim_frame = 1
+        self.max_frames = max_frames
+        self.base_texture = base_texture
+        self.animating = False
+        self.anim_dir = 1
+        self.cycle = cycle
+
+    def update(self):
+        if self.animating:
+            self.anim_step += 1
+            if self.anim_step % self.anim_every == 0:
+                self.animate()
+
+    def animate(self):
+        self.sprite.entity.texture = f"{self.base_texture}_{self.anim_frame}"
+
+        if self.cycle:
+            if self.anim_frame == self.max_frames:
+                self.anim_dir = -1
+            elif self.anim_frame == 1:
+                self.anim_dir = 1
+        else:
+            if self.anim_frame == self.max_frames:
+                self.anim_frame = 1
+
+        self.anim_frame += self.anim_dir
+
+    def start(self):
+        self.animating = True
+
+    def stop(self):
+        self.animating = False

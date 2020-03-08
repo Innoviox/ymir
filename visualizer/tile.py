@@ -3,6 +3,8 @@ Create a 'Tile' object with type and (x,y) location.
 '''
 from visualizer import util
 from visualizer.util import *
+from visualizer import enemy
+from visualizer.player import Player
 
 TEXTURES = {
     'A': 'grassCenter',
@@ -24,7 +26,8 @@ TEXTURES = {
     'L': 'lockBlue',
     ';': 'keyRed',
     "'": 'lockRed',
-    'Q': 'slicer'
+    'Q': 'slicer',
+    'G': 'slime_1'
 }
 
 texture_map = list(TEXTURES.values())
@@ -51,6 +54,7 @@ class TileType(Enum):
     KEY_RED = 18
     LOCK_RED = 19
     SLICER = 20
+    SLIME = 21
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -64,7 +68,10 @@ class TileType(Enum):
     def is_water(self): return self.value in [7, 9]
 
     def collides(self):
-        return self.is_ground() or self.value in [11, 13, 16, 17, 18, 19, 20]
+        return self.is_ground() or self.value in [17, 19]
+
+    def player_collides(self):
+        return self.value in [11, 13, 16, 18, 20]
 
     def deadly(self):
         return self.value in [13, 20]
@@ -106,11 +113,12 @@ class Tile():
         self.entity = None
         self.controller = controller
 
-        self.anim_dir = [-1, 1][self.type.char.isupper()]
-        self.anim_frame = 0
-        self.animating = False
-        self.anim_every = 1
-        self.anim_step = 0
+        # self.animator = Animator(self, f"{TEXTURES[t.upper()]}_to_{TEXTURES[t.lower()]}_slice_")
+        # self.anim_dir = [-1, 1][self.type.char.isupper()]
+        # self.anim_frame = 0
+        # self.animating = False
+        # self.anim_every = 1
+        # self.anim_step = 0
 
     def load(self, new_type, texture=True):
         self.type = new_type
@@ -121,12 +129,13 @@ class Tile():
     def load_toggle(self): self.load(self.type.toggle())
 
     def update(self):
-        if self.type.animatable() and self.animating:
-            self.anim_step += 1
-            if self.anim_step % self.anim_every == 0:
-                self.anim_toggle()
+        ...
+        # if self.type.animatable() and self.animating:
+        #     self.anim_step += 1
+        #     if self.anim_step % self.anim_every == 0:
+        #         self.anim_toggle()
 
-    def collide(self):
+    def collide(self, tile):
         return True  # if this method is called, then self.type.collides()
 
     @property
@@ -140,13 +149,14 @@ class Tile():
         return str(self.type).split(".")[1]# + " at " + str(self.position)
 
     def anim_toggle(self): # note: toggleanim files go from upper -> lower
-        self.anim_frame += 1
-        if self.anim_frame == 70:
-            self.load(self.type.toggle())
-            self.animating = False
-        else:
-            t = tile_map[self.type.value - 1]
-            self.entity.texture = f"{TEXTURES[t.upper()]}_to_{TEXTURES[t.lower()]}_slice_{self.anim_frame}"
+        ...
+        # self.anim_frame += 1
+        # if self.anim_frame == 70:
+        #     self.load(self.type.toggle())
+        #     self.animating = False
+        # else:
+        #     t = tile_map[self.type.value - 1]
+        #     self.entity.texture = f"{self.anim_frame}"
 
     def hide(self, now=False):
         self.type = TileType.AIR
@@ -196,7 +206,7 @@ class HorizontalMovingTile(Tile):
         self.offset = [-offset, total - offset]
 
 class CheckpointTile(Tile):
-    def collide(self):
+    def collide(self, tile):
         self.load_toggle()
         if isinstance(self.controller.starting_tile, CheckpointTile):
             self.controller.starting_tile.load_toggle()
@@ -204,20 +214,20 @@ class CheckpointTile(Tile):
         return False
 
 class KeyTile(Tile):
-    def collide(self):
+    def collide(self, tile):
         self.controller.unlock(self.type)
         self.hide(now=True)
         return False
 
 spikes_hitboxes = [
-    [0.1, 0, 0.9, 0.25],
+    [0.0 , 0, 0.9, 0.25],
     [0.1, 0.75, 0.9, 1],
     [0.85, 0.1, 1, 0.9],
     [0, 0.1, 0.15, 0.9]
 ]
 
 class DeadlyTile(Tile):
-    def collide(self):
+    def collide(self, tile):
         self.controller.die()
         return False
 
@@ -262,6 +272,11 @@ class SlicerTile(HorizontalMovingTile, DeadlyTile):
         if dist < 0.2:
             self.current_direction = self.current_direction.flip()
 
+class EnemyTile(Tile):
+    def setup(self):
+        self.controller.sprites.append(enemy.enemies[self.type.char](self.position, self.entity))
 
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
-                'K': KeyTile, ';': KeyTile, 'Q': SlicerTile}
+                'K': KeyTile, ';': KeyTile,
+                'Q': SlicerTile,
+                'G': EnemyTile}
