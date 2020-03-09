@@ -37,10 +37,4 @@ class FileReader():
                     else:
                         m_count = 0
 
-                    # if x < len(line) - 1 and level[y][x - 1].type == TileType.GROUND and level[y][x].type != TileType.GROUND:
-                    #     level[y][x-1].texture = assets.texture(tile_map[tile],GroundType.RIGHT, theme=theme)
-
-        #flip the ys
-        # level = [[type(t)([t.position[0],len(level) - t.position[1] - 1], t.type, None) for t in line] for line in level]
-
         return level

@@ -4,8 +4,8 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from .animator import Animator
 from .tile import Tile
+from visualizer.constants import GRAVITY
 
-GRAVITY = -.5
 
 class Sprite(Tile, ABC):
     def __init__(self, position, typ, controller, **kwargs):
