@@ -31,5 +31,6 @@ class HorizontalMovingTile(Tile):
         self.load(TileType.from_tile(f"N{'M' * (total - 2)},"[offset]))
         self.offset = [-offset, total - offset]
 
-    def collide(self, tile, direction):
-        return direction != Direction.DOWN
+    # uncomment if you want to jump through moving platforms
+    # def collide(self, tile, direction):
+    #     return direction != Direction.DOWN
