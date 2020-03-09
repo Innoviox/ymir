@@ -210,6 +210,9 @@ class HorizontalMovingTile(Tile):
         self.load(TileType.from_tile(f"N{'M' * (total - 2)},"[offset]))
         self.offset = [-offset, total - offset]
 
+    # def collide(self, tile, direction):
+    #     return direction != Direction.DOWN
+
 class CheckpointTile(Tile):
     def collide(self, tile, direction):
         self.load_toggle()
@@ -291,7 +294,6 @@ class SpringTile(Tile):
         if isinstance(tile, Sprite):
             if direction == Direction.UP:
                 tile.velocity[1] = 3
-                print(tile.velocity)
                 self.load_toggle()
                 return False
             return True
