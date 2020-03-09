@@ -4,6 +4,7 @@ Create a 'Tile' object with type and (x,y) location.
 from visualizer import util
 from visualizer.util import *
 from visualizer.sprite import Sprite, enemy
+from ursina import Sequence, Func
 
 TEXTURES = {
     'A': 'grassCenter',
@@ -294,7 +295,7 @@ class SpringTile(Tile):
         if isinstance(tile, Sprite):
             if direction == Direction.UP:
                 tile.velocity[1] = 3
-                self.load_toggle()
+                Sequence(Func(self.load_toggle), 1, Func(self.load_toggle)).start()
                 return False
             return True
         return False
