@@ -1,4 +1,5 @@
 from .Enemy import Enemy
+from visualizer.sprite.util import Direction
 
 class BasicEnemy(Enemy):
     def __init__(self, *args, **kwargs):
@@ -6,10 +7,11 @@ class BasicEnemy(Enemy):
 
         super().__init__(*args, **kwargs)
 
+    def setup(self):
         self.entity.double_sided = True
 
     def update(self, dt):
-        super().update()
+        super().update(dt)
         self.velocity[0] = self.speed
 
     def update_collisions(self, tiles, tile_array):

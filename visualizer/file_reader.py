@@ -2,6 +2,7 @@
 Read a level file, decode it into the necessary rendered tile objects.
 '''
 from visualizer.sprite.tile import *
+from visualizer.sprite.tiles import tile_classes
 
 class FileReader():
     def __init__(self, file_name):
@@ -12,7 +13,8 @@ class FileReader():
     def read(self):
         level = []
         with open(self.file_name,'r') as f:
-            lines = f.readlines()
+            lines = list(f.readlines())
+            total = len(lines)
             for y,line in enumerate(lines):
                 level.append([])
                 m_count = 0
@@ -25,7 +27,9 @@ class FileReader():
                     elif tile == 'W':
                         if y > 0 and not level[y-1][x].type.is_water():
                             tile = tile.lower()
-                    level[y].append(tile_classes.get(tile, Tile)([x, y], TileType.from_tile(tile), None))
+
+                    flipped_y = total - y - 1
+                    level[y].append(tile_classes.get(tile, Tile)([x, flipped_y], TileType.from_tile(tile), None))
 
                     if tile == 'M':
                         level[y][-1].set_offset(m_count, m_count + len(line[x:]) - len(line[x:].lstrip('M')))
@@ -38,8 +42,5 @@ class FileReader():
 
         #flip the ys
         # level = [[type(t)([t.position[0],len(level) - t.position[1] - 1], t.type, None) for t in line] for line in level]
-        for i in level:
-            for j in i:
-                j.position[1] = len(level) - j.position[1] - 1
 
         return level

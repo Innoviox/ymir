@@ -9,9 +9,9 @@ GRAVITY = -.5
 
 class Sprite(Tile, ABC):
     def __init__(self, position, typ, controller, **kwargs):
-        self.gravity = kwargs.pop("gravity")
+        self.gravity = kwargs.pop("gravity", True)
 
-        super().__init__(position, typ, controller, **kwargs)
+        super().__init__(position, typ, controller, **kwargs, z_index=2)
 
         self.can_jump = True
         self.position = np.array(position, dtype = 'float64')
@@ -85,14 +85,6 @@ class Sprite(Tile, ABC):
     def set_animator(self, texture):
         self.animator = Animator(self, texture)
         self.animator.start()
-
-    @property
-    def x(self):
-        return self.entity.x
-
-    @property
-    def y(self):
-        return self.entity.y
 
     def collide(self, tile, direction):
         return False

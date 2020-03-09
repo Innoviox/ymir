@@ -3,14 +3,14 @@ from visualizer.sprite.util import inside, Direction
 
 class HorizontalMovingTile(Tile):
     def __init__(self, *args):
-        super().__init__(*args, hitbox=[0.0, 0.5, 1.0, 1.0])
+        super().__init__(*args, hitbox=[0.0, 0.5, 1.0, 1.0], z_index=1)
 
         self.speed = 0.1
         self.offset = [0, 1]
         self.carry_with = True
 
     def update(self, dt):
-        super().update()
+        super().update(dt)
 
         self.entity.x += self.speed
         self.position[0] += self.speed

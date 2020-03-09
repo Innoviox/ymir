@@ -16,7 +16,7 @@ class SlicerTile(DeadlyTile, HorizontalMovingTile):
                      self.controller.next_ground(self, Direction.LEFT)[0]
 
     def update(self, dt):
-        super().update()
+        super().update(dt)
 
         self.entity.rotation_z += self.speed * 20
 

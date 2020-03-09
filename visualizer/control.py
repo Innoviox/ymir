@@ -7,6 +7,8 @@ import numpy as np
 from visualizer.file_reader import *
 from ursina import *
 from visualizer.sprite.util import *
+from visualizer.sprite.tiles import HorizontalMovingTile
+
 
 scale = 1
 dt = .1
@@ -35,7 +37,7 @@ class Controller():
     def update(self):
         for sprite in self.sprites:
             sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
-            sprite.update()
+            sprite.update(dt)
 
         if self.player.position[1] < 0:
             self.die()
@@ -46,7 +48,7 @@ class Controller():
             for x, j in enumerate(i):
                 if add and isinstance(j, HorizontalMovingTile):
                     self.moving_tiles.append(j)
-                j.update()
+                j.update(dt)
 
     def die(self):
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 0])
@@ -61,26 +63,28 @@ class Controller():
         collided_tiles = list(filter(lambda x: inside(sprite.position, x), ground_tiles))
         return collided_tiles
 
+    def make_tile(self, tile):
+        if tile.texture is None:
+            return
+
+        tile.controller = self
+
+        if tile.type == TileType.START:
+            self.starting_tile = tile
+        elif tile.type == TileType.END:
+            self.ending_tile = tile
+
+        tile.setup()
+
     def build_from_array(self, array):
         """Given a tile array, create the entities necessary for game rendering."""
         self.tile_array = array
         for y, row in enumerate(array):
             for x, tile in enumerate(row):
-                if tile.texture is None:
-                    continue
+                self.make_tile(tile)
 
-                tile.controller = self
-                tile.entity = Entity(model="quad",
-                                     texture=tile.texture,
-                                     scale=scale,
-                                     position=(round(OFFSET_X + scale * tile.x),
-                                               round(OFFSET_Y + scale * tile.y), 0))
-                if tile.type == TileType.START:
-                    self.starting_tile = tile
-                elif tile.type == TileType.END:
-                    self.ending_tile = tile
-
-                tile.setup()
+        for s in self.sprites:
+            self.make_tile(s)
 
     def load_level(self, level_file_name):
         """Start a level from a file. Initialize player position, etc."""
@@ -90,7 +94,8 @@ class Controller():
 
     def start(self):
         self.player = Player(position=np.array([0, 2], dtype='float64'),
-                             typ='', controller=self)
+                             typ=TileType.from_tile('~'), controller=self)
+
         camera.parent = self.player.entity
         camera.add_script(SmoothFollow(target=self.player.entity, offset=camera_offset, speed=camera_speed))
         input_handler.bind('right arrow', 'd')

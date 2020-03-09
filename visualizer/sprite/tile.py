@@ -3,10 +3,10 @@ Create a 'Tile' object with type and (x,y) location.
 '''
 from .util import *
 from .animator import Animator
-
+from ursina import Entity
 
 class Tile():
-    def __init__(self, position, typ, controller, hitbox=HITBOX): # hitbox: min-x, min-y, max-x, max-y
+    def __init__(self, position, typ, controller, hitbox=HITBOX, z_index=0): # hitbox: min-x, min-y, max-x, max-y
         self.position = position
         self.hitbox = Hitbox(hitbox[:])
 
@@ -15,6 +15,13 @@ class Tile():
         self.entity = None
         self.controller = controller
         self.animator = Animator(self, self.texture)
+
+        if self.texture:
+            self.entity = Entity(model="quad",
+                                 texture=self.texture,
+                                 scale=1,
+                                 position=(round(self.x),
+                                           round(self.y), z_index))
 
     def load(self, new_type, texture=True):
         self.type = new_type

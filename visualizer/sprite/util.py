@@ -131,7 +131,8 @@ TEXTURES = {
     'G': 'slime',
     'B': 'enemyFlying',
     'r': 'spring',
-    'R': 'sprung'
+    'R': 'sprung',
+    '~': 'player'
 }
 
 texture_map = list(TEXTURES.values())
@@ -162,6 +163,7 @@ class TileType(Enum):
     BUZZARD = 22
     SPRING_DOWN = 23
     SPRING_UP = 24
+    PLAYER = 25
 
     def texture(self):
         return texture_map[self.value - 1]

@@ -1,8 +1,6 @@
 from visualizer.sprite.tile import Tile
-from visualizer.sprite.enemy import enemies
+from visualizer.sprite.enemies import enemies
 
 class EnemyTile(Tile):
     def setup(self):
-        e = enemies[self.type.char](self.position, self.entity, self.controller, anim_texture=self.texture)
-
-        self.controller.sprites.append(e)
+        self.controller.sprites.append(enemies[self.type.char](self.position, self.type, self.controller))
