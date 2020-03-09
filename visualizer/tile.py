@@ -17,7 +17,7 @@ TEXTURES = {
     'w': 'liquidWaterTop_mid',
     'M': 'grassHalfMid',
     'c': 'flagPole',
-    'C': 'flagGreen_up',
+    'C': 'flagGreen',
     'P': 'spikes',
     'N': 'grassHalfLeft',
     ',': 'grassHalfRight',
