@@ -5,13 +5,11 @@ Create a 'Player' object that stores all of the necessary physics-y info
 import numpy as np
 
 from .sprite import Sprite
-from .enemy import BasicEnemy
 from ursina.input_handler import held_keys
-from visualizer.util import Direction
 
 #TODO get crushed
 class Player(Sprite):
-    def update(self,dt):
+    def update(self, dt):
         self.process_input(dt)
         super().update(dt)
 

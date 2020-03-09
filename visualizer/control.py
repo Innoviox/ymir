@@ -6,14 +6,13 @@ from visualizer.sprite import Player
 import numpy as np
 from visualizer.file_reader import *
 from ursina import *
-from visualizer.tile import Hitbox, HITBOX
+from visualizer.sprite.util import *
 
 scale = 1
 dt = .1
 camera_fov = 20
 camera_offset = [0, 1, -30]
 camera_speed = 2
-gravity = -.5
 
 h, w = window.size
 OFFSET_X = 0
@@ -36,7 +35,7 @@ class Controller():
     def update(self):
         for sprite in self.sprites:
             sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
-            sprite.update(dt)
+            sprite.update()
 
         if self.player.position[1] < 0:
             self.die()
@@ -83,9 +82,6 @@ class Controller():
 
                 tile.setup()
 
-        for s in self.sprites:
-            s.hitbox = Hitbox(s._hitbox)
-
     def load_level(self, level_file_name):
         """Start a level from a file. Initialize player position, etc."""
         reader = FileReader(level_file_name)
@@ -94,7 +90,7 @@ class Controller():
 
     def start(self):
         self.player = Player(position=np.array([0, 2], dtype='float64'),
-                             entity=Entity(model="cube", color=color.blue, scale=1), controller=self)
+                             typ='', controller=self)
         camera.parent = self.player.entity
         camera.add_script(SmoothFollow(target=self.player.entity, offset=camera_offset, speed=camera_speed))
         input_handler.bind('right arrow', 'd')
