@@ -12,7 +12,6 @@ class FileReader():
     '''
     def read(self):
         level = []
-        theme = ""
         with open(self.file_name,'r') as f:
             theme, *lines = f.readlines()
             total = len(lines)
