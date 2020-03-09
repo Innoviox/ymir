@@ -82,10 +82,6 @@ class Sprite(Tile, ABC):
         if self.gravity:
             self.velocity[1] += GRAVITY * dt
 
-    def set_animator(self, texture):
-        self.animator = Animator(self, texture)
-        self.animator.start()
-
     def collide(self, tile, direction):
         return False
 
