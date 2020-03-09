@@ -57,7 +57,8 @@ class Controller():
     def sprite_colliding (self, sprite):
         ground_tiles = get_nearby_ground_tiles(sprite.position, self.tile_array, player=isinstance(sprite, Player))
         ground_tiles.extend(self.moving_tiles)
-        # ground_tiles.extend(filter(lambda i: i is not sprite, self.sprites))
+        if isinstance(sprite, Player):
+            ground_tiles.extend(filter(lambda i: i is not sprite, self.sprites))
         collided_tiles = list(filter(lambda x: inside(sprite.position, x), ground_tiles))
         return collided_tiles
 
@@ -83,7 +84,7 @@ class Controller():
                 tile.setup()
 
         for s in self.sprites:
-            s.hitbox = Hitbox(HITBOX[:])
+            s.hitbox = Hitbox(s._hitbox)
 
     def load_level(self, level_file_name):
         """Start a level from a file. Initialize player position, etc."""
@@ -93,7 +94,7 @@ class Controller():
 
     def start(self):
         self.player = Player(position=np.array([0, 2], dtype='float64'),
-                             entity=Entity(model="cube", color=color.blue, scale=1))
+                             entity=Entity(model="cube", color=color.blue, scale=1), controller=self)
         camera.parent = self.player.entity
         camera.add_script(SmoothFollow(target=self.player.entity, offset=camera_offset, speed=camera_speed))
         input_handler.bind('right arrow', 'd')

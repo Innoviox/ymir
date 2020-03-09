@@ -136,7 +136,7 @@ class Tile():
         #     if self.anim_step % self.anim_every == 0:
         #         self.anim_toggle()
 
-    def collide(self, tile):
+    def collide(self, tile, direction):
         return True  # if this method is called, then self.type.collides()
 
     @property
@@ -207,7 +207,7 @@ class HorizontalMovingTile(Tile):
         self.offset = [-offset, total - offset]
 
 class CheckpointTile(Tile):
-    def collide(self, tile):
+    def collide(self, tile, direction):
         self.load_toggle()
         if isinstance(self.controller.starting_tile, CheckpointTile):
             self.controller.starting_tile.load_toggle()
@@ -215,7 +215,7 @@ class CheckpointTile(Tile):
         return False
 
 class KeyTile(Tile):
-    def collide(self, tile):
+    def collide(self, tile, direction):
         self.controller.unlock(self.type)
         self.hide(now=True)
         return False
@@ -228,7 +228,7 @@ spikes_hitboxes = [
 ]
 
 class DeadlyTile(Tile):
-    def collide(self, tile):
+    def collide(self, tile, direction):
         self.controller.die()
         return False
 
@@ -275,7 +275,7 @@ class SlicerTile(HorizontalMovingTile, DeadlyTile):
 
 class EnemyTile(Tile):
     def setup(self):
-        e = enemy.enemies[self.type.char](self.position, self.entity, anim_texture=self.texture)
+        e = enemy.enemies[self.type.char](self.position, self.entity, self.controller, anim_texture=self.texture)
 
         self.controller.sprites.append(e)
 

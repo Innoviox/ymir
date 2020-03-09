@@ -5,10 +5,11 @@ from collections import defaultdict
 from ursina import load_texture
 
 class Sprite(ABC):
-    def __init__(self, position, entity, gravity=True, anim_texture=None):
+    def __init__(self, position, entity, controller, gravity=True, anim_texture=None):
         self.can_jump = True
         self.position = np.array(position,dtype = 'float64')
         self.entity = entity
+        self.controller = controller
         self.velocity = np.array([0, 0], dtype='float64')
         self.friction = 0.1# value between 0 and 1; larger means more friction
         self.horizontal_speed = 10.0
@@ -17,6 +18,10 @@ class Sprite(ABC):
 
         self.animator = Animator(self, anim_texture) if anim_texture else None
         self.gravity = gravity
+
+        self._hitbox = [0, 0, 1, 1]
+        self.hitbox = None
+        self.dead = False
 
     def update_render(self):
         self.entity.x = self.position[0]
@@ -90,8 +95,11 @@ class Sprite(ABC):
     def y(self):
         return self.entity.y
 
-    def collide(self, tile):
-        return True
+    def collide(self, tile, direction):
+        return False
+
+    def die(self):
+        self.dead = True
 
 class Animator:
     def __init__(self, sprite, base_texture, anim_every=10, cycle=True):

@@ -24,14 +24,11 @@ class Player(Sprite):
         self.velocity[0] += self.input[0] * self.horizontal_speed * dt # slow down due to friction\\\
 
         if self.can_jump and self.input[1] > 0:
-            self.velocity[1] += self.jump_speed
-            self.can_jump = False
+            self.jump()
         else:
             if self.input[1] > 0:
                 self.input[1] = 0
 
-    def update_collisions(self, tiles, tile_array):
-        collided = super().update_collisions(tiles, tile_array)
-        down = collided.get(Direction.DOWN)
-        if isinstance(down, BasicEnemy):
-            down.kill()
+    def jump(self):
+        self.velocity[1] += self.jump_speed
+        self.can_jump = False

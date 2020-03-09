@@ -16,6 +16,7 @@ class BasicEnemy(Enemy):
 
         super().__init__(*args, **kwargs)
 
+        self._hitbox = [0, 0, 1, 0.7]
         self.entity.double_sided = True
 
     def update(self, dt):
@@ -30,8 +31,21 @@ class BasicEnemy(Enemy):
             self.entity.rotation_y += 180
 
     def die(self):
+        super().die()
+
         self.animator.kill()
-        self.entity.fade_out(duration=2)
+        self.speed = 0
+        self.entity.fade_out(duration=1, delay=1)
+
+    def collide(self, tile, direction):
+        if not self.dead and 'Player' in str(type(tile)): # hack to get around importing Player
+            if direction == Direction.UP:
+                tile.velocity[1] = tile.jump_speed
+                tile.can_jump = False
+                self.die()
+            else:
+                self.controller.die()
+        return False
 
 
 class Slime(BasicEnemy):

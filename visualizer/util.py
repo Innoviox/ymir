@@ -73,13 +73,13 @@ def collide(p, t, x=True):
     direction = None
     if x:
         if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
-            if t.collide(p):
+            if t.collide(p, Direction.LEFT):
                 p.position[0] = t.x + t.hitbox.max_x
                 direction = Direction.RIGHT
             else:
                 chg = False
         elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
-            if t.collide(p):
+            if t.collide(p, Direction.RIGHT):
                 p.position[0] = t.x - t.hitbox.max_x
                 direction = Direction.LEFT
             else:
@@ -90,14 +90,14 @@ def collide(p, t, x=True):
             p.velocity[0] = 0
     else:
         if t.y + t.hitbox.min_y < p.position[1] < t.y + t.hitbox.max_y:
-            if t.collide(p):
+            if t.collide(p, Direction.UP):
                 p.position[1] = t.y + t.hitbox.max_y
                 p.can_jump = True
                 direction = Direction.DOWN
             else:
                 chg = False
         elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
-            if t.collide(p):
+            if t.collide(p, Direction.DOWN):
                 p.position[1] = t.y - t.hitbox.max_y
                 direction = Direction.UP
             else:
