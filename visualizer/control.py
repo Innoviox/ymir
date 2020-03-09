@@ -56,7 +56,6 @@ class Controller():
         ground_tiles.extend(self.moving_tiles)
         if isinstance(sprite, Player):
             ground_tiles.extend(filter(lambda i: i is not sprite, self.sprites))
-
         collided_tiles = list(filter(lambda x: inside(sprite.position, x), ground_tiles))
         return collided_tiles
 

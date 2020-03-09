@@ -12,6 +12,8 @@ class Player(Sprite):
     def update(self, dt):
         self.process_input(dt)
         super().update(dt)
+        if self.can_jump:
+            self.velocity[1] = 0
 
     def process_input(self,dt):
         """Key player keyboard (WASD) input, store in player.input."""
@@ -19,7 +21,7 @@ class Player(Sprite):
 
     def update_position_velocity(self, dt):
         super().update_position_velocity(dt)
-        self.velocity[0] += self.input[0] * self.horizontal_speed * dt # slow down due to friction\\\
+        self.velocity[0] += self.input[0] * self.horizontal_speed * dt # slow down due to friction
 
         if self.can_jump and self.input[1] > 0:
             self.jump()

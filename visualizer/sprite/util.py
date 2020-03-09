@@ -29,17 +29,15 @@ def mag(a):
 def inside(position, tile, density = 10): # todo: transparency (hitboxes)
     """Tells if an entity (anything with an ordered pair position vector) is inside the given tile.
     Works by testing the boundary points of the one by one box with the bottom left corner 
-    in the specified position.""" 
+    in the specified position."""
     for i in range(0, density):
-        if point_inside([position[0] + 1.0 * i / density, position[1]], tile):
+        if point_inside([position[0] + i / density, position[1]], tile):
             return True
-        if point_inside([position[0] + 1.0 * i / density, position[1] + 1.0],
-                        tile):
+        if point_inside([position[0] + i / density, position[1] + 1.0], tile):
             return True
-        if point_inside([position[0], position[1] + 1.0 * i / density], tile):
+        if point_inside([position[0], position[1] + i / density], tile):
             return True
-        if point_inside([position[0] + 1.0, position[1] + 1.0 * i / density],
-                        tile):
+        if point_inside([position[0] + 1.0, position[1] + i / density], tile):
             return True
     return False
 
@@ -68,6 +66,8 @@ def get_nearby_ground_tiles(position, tile_array, player=True):
     return list(filter(lambda x: x.type.collides() or (player and x.type.player_collides()), get_nearby_tiles(position, tile_array)))
 
 def collide(p, t, x=True):
+    if 'Slime' in str(type(t)):
+        print(p, t, x)
     chg = True
     direction = None
     if x:
