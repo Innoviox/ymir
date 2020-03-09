@@ -3,7 +3,8 @@ Create a 'Tile' object with type and (x,y) location.
 '''
 from visualizer import util
 from visualizer.util import *
-from visualizer.sprite import Sprite, enemy
+from visualizer.sprite import Sprite
+from visualizer.sprite.enemy import enemies
 from ursina import Sequence, Func
 
 TEXTURES = {
@@ -87,6 +88,9 @@ class TileType(Enum):
 
     def animatable(self):
         return self.value in [3, 4, 5, 6]
+
+    def jump_through(self):
+        return self.value in [10, 14, 15]
 
     @property
     def char(self):
@@ -211,8 +215,8 @@ class HorizontalMovingTile(Tile):
         self.load(TileType.from_tile(f"N{'M' * (total - 2)},"[offset]))
         self.offset = [-offset, total - offset]
 
-    # def collide(self, tile, direction):
-    #     return direction != Direction.DOWN
+    def collide(self, tile, direction):
+        return direction != Direction.DOWN
 
 class CheckpointTile(Tile):
     def collide(self, tile, direction):
@@ -283,7 +287,7 @@ class SlicerTile(HorizontalMovingTile, DeadlyTile):
 
 class EnemyTile(Tile):
     def setup(self):
-        e = enemy.enemies[self.type.char](self.position, self.entity, self.controller, anim_texture=self.texture)
+        e = enemies[self.type.char](self.position, self.entity, self.controller, anim_texture=self.texture)
 
         self.controller.sprites.append(e)
 
@@ -303,5 +307,7 @@ class SpringTile(Tile):
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
                 'K': KeyTile, ';': KeyTile,
                 'Q': SlicerTile,
-                'G': EnemyTile, 'B': EnemyTile,
                 'r': SpringTile}
+
+for k in enemies:
+    tile_classes[k] = EnemyTile
