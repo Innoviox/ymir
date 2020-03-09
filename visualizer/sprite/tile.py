@@ -6,7 +6,7 @@ from .animator import Animator
 from ursina import Entity
 
 class Tile():
-    def __init__(self, position, typ, controller, hitbox=[0.0, 0.0, 1.0, 1.0], z_index=0): # hitbox: min-x, min-y, max-x, max-y
+    def __init__(self, position, typ, controller, hitbox=[0.0, 0.0, 1.0, 1.0], z_index=2): # hitbox: min-x, min-y, max-x, max-y
         self.position = position
         self.hitbox = Hitbox(hitbox[:])
 
@@ -21,7 +21,7 @@ class Tile():
                                  texture=self.texture,
                                  scale=1,
                                  position=(round(self.x),
-                                           round(self.y),  -1000 if type == TileType.AIR else z_index))
+                                           round(self.y),  z_index))
 
     def load(self, new_type, texture=True):
         self.type = new_type

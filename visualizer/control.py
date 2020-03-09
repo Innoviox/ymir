@@ -93,8 +93,8 @@ class Controller():
         load_texture(level_theme_map[theme])
         self.skybox = Entity(model="quad",
                                  texture=level_theme_map[theme],
-                                 scale=10,
-                                 position=(0,0,0))
+                                 scale=50,
+                                 position=(0, 10, 5))
 
     def start(self):
         self.player = Player(position=np.array([0, 2], dtype='float64'),

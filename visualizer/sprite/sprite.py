@@ -11,7 +11,7 @@ class Sprite(Tile, ABC):
     def __init__(self, position, typ, controller, **kwargs):
         self.gravity = kwargs.pop("gravity", True)
 
-        super().__init__(position, typ, controller, **kwargs, z_index=2)
+        super().__init__(position, typ, controller, **kwargs, z_index=4)
 
         self.can_jump = True
         self.position = np.array(position, dtype = 'float64')
