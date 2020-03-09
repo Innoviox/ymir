@@ -24,6 +24,10 @@ class Controller():
         window.color = color.white
         self.moving_tiles = []
         self.sprites = []
+
+        window.exit_button.visible = True
+        window.fps_counter.enabled = True
+        window.fps_counter.color = color.black
         # window.fullscreen = True
 
     def update(self):
