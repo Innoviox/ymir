@@ -8,7 +8,7 @@ from visualizer.file_reader import *
 from ursina import *
 from visualizer.sprite.util import *
 from visualizer.sprite.tiles import HorizontalMovingTile
-from visualizer.constants import camera_fov,dt,camera_offset,camera_speed
+from visualizer.constants import camera_fov,dt,camera_offset,camera_speed, LEVEL
 
 
 
@@ -97,7 +97,7 @@ class Controller():
 
         self.sprites.append(self.player)
 
-        self.load_level("./levels/test_file_3.txt")
+        self.load_level(LEVEL)
         self.die() # to respawn player
 
         self.app.run()

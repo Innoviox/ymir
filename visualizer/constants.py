@@ -9,3 +9,5 @@ OFFSET_Y = 0
 ### Physics Constants ###
 dt = .1
 GRAVITY = -.5
+
+LEVEL = "./levels/test_file_3.txt"
