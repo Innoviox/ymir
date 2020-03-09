@@ -21,7 +21,7 @@ class Tile():
                                  texture=self.texture,
                                  scale=1,
                                  position=(round(self.x),
-                                           round(self.y), z_index))
+                                           round(self.y),  -1000 if type == TileType.AIR else z_index))
 
     def load(self, new_type, texture=True):
         self.type = new_type

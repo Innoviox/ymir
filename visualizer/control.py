@@ -81,8 +81,16 @@ class Controller():
     def load_level(self, level_file_name):
         """Start a level from a file. Initialize player position, etc."""
         reader = FileReader(level_file_name)
-        self.build_from_array(reader.read())
+        theme, level = reader.read()
+
+        self.build_from_array(level)
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
+
+        load_texture(level_theme_map[theme])
+        self.skybox = Entity(model="quad",
+                                 texture=level_theme_map[theme],
+                                 scale=10,
+                                 position=(0,0,0))
 
     def start(self):
         self.player = Player(position=np.array([0, 2], dtype='float64'),

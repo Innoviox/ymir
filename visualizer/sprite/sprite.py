@@ -42,18 +42,18 @@ class Sprite(Tile, ABC):
         else:
             # position snapping, only if a single tile is collided, this will be buggy
             for tile in tiles:
-                try:
+                if self.velocity[0] != 0:
                     v = self.velocity[0]
                     if self.on_moving_tile:
                         v = self.on_moving_tile.speed * 10
                     horiz_time = min(abs(self.position[0] - tile.x - 1.0)
                                     , abs(self.position[0] + 1.0 - tile.x)) / abs(v)
-                except:
+                else:
                     horiz_time = 1000
-                try:
+                if self.velocity[1] != 0:
                     vert_time = min(abs(self.position[1] - tile.y - 1.0)
                                     , abs(self.position[1] + 1.0 - tile.y)) / abs(self.velocity[1])
-                except:
+                else:
                     vert_time = 1000
                 # print(tiles, self.position, tile.position, self.velocity, vert_time, horiz_time)
                 if vert_time == horiz_time:

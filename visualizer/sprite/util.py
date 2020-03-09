@@ -26,7 +26,7 @@ def mag(a):
     return math.sqrt(sum([x * x for x in a]))
 
 
-def inside(position, tile, density = 10): # todo: transparency (hitboxes)
+def inside(position, tile, density = 3): # todo: transparency (hitboxes)
     """Tells if an entity (anything with an ordered pair position vector) is inside the given tile.
     Works by testing the boundary points of the one by one box with the bottom left corner 
     in the specified position.""" 
@@ -137,6 +137,12 @@ TEXTURES = {
 
 texture_map = list(TEXTURES.values())
 tile_map = ''.join(TEXTURES.keys())
+
+level_theme_map = {
+    'sand' : "colored_desert",
+    'land' : "colored_land",
+    'shroom' : "colored_shroom"
+}
 
 class TileType(Enum):
     GROUND = 1

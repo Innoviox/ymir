@@ -11,3 +11,4 @@ dt = .1
 GRAVITY = -.5
 
 LEVEL = "./levels/test_file_3.txt"
+SKYBOX_PATHS = "./textures/Backgrounds"

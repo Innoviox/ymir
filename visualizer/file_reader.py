@@ -12,8 +12,9 @@ class FileReader():
     '''
     def read(self):
         level = []
+        theme = ""
         with open(self.file_name,'r') as f:
-            lines = list(f.readlines())
+            theme, *lines = f.readlines()
             total = len(lines)
             for y,line in enumerate(lines):
                 level.append([])
@@ -36,5 +37,4 @@ class FileReader():
                         m_count += 1
                     else:
                         m_count = 0
-
-        return level
+        return theme.strip(), level
