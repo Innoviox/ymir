@@ -11,7 +11,7 @@ class Animator:
         self.anim_dir = 1
         self.cycle = cycle
 
-        self.max_frames = 1
+        self.max_frames = 0
         while load_texture(f"{self.base_texture}_{self.max_frames + 1}"):
             self.max_frames += 1
 
@@ -22,6 +22,9 @@ class Animator:
                 self.animate()
 
     def animate(self):
+        if self.max_frames == 0:
+            return
+
         self.sprite.entity.texture = f"{self.base_texture}_{self.anim_frame}"
 
         if self.cycle:
