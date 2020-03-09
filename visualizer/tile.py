@@ -3,7 +3,7 @@ Create a 'Tile' object with type and (x,y) location.
 '''
 from visualizer import util
 from visualizer.util import *
-from visualizer.sprite import enemy
+from visualizer.sprite import Sprite, enemy
 
 TEXTURES = {
     'A': 'grassCenter',
@@ -27,7 +27,9 @@ TEXTURES = {
     "'": 'lockRed',
     'Q': 'slicer',
     'G': 'slime',
-    'B': 'enemyFlying'
+    'B': 'enemyFlying',
+    'r': 'spring',
+    'R': 'sprung'
 }
 
 texture_map = list(TEXTURES.values())
@@ -56,6 +58,8 @@ class TileType(Enum):
     SLICER = 20
     SLIME = 21
     BUZZARD = 22
+    SPRING_DOWN = 23
+    SPRING_UP = 24
 
     def texture(self):
         return texture_map[self.value - 1]
@@ -72,7 +76,7 @@ class TileType(Enum):
         return self.is_ground() or self.value in [17, 19]
 
     def player_collides(self):
-        return self.value in [11, 13, 16, 18, 20]
+        return self.value in [11, 13, 16, 18, 20, 23]
 
     def deadly(self):
         return self.value in [13, 20]
@@ -279,7 +283,22 @@ class EnemyTile(Tile):
 
         self.controller.sprites.append(e)
 
+class SpringTile(Tile):
+    def setup(self):
+        self.hitbox = Hitbox([0, 0, 1, 0.5])
+
+    def collide(self, tile, direction):
+        if isinstance(tile, Sprite):
+            if direction == Direction.UP:
+                tile.velocity[1] = 3
+                print(tile.velocity)
+                self.load_toggle()
+                return False
+            return True
+        return False
+
 tile_classes = {'M': HorizontalMovingTile, 'c': CheckpointTile, 'P': SpikesTile,
                 'K': KeyTile, ';': KeyTile,
                 'Q': SlicerTile,
-                'G': EnemyTile, 'B': EnemyTile}
+                'G': EnemyTile, 'B': EnemyTile,
+                'r': SpringTile}

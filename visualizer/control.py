@@ -104,7 +104,7 @@ class Controller():
 
         self.sprites.append(self.player)
 
-        self.load_level("visualizer/levels/test_file_2.txt")
+        self.load_level("visualizer/levels/test_file_3.txt")
         self.die() # to respawn player
 
         self.app.run()
