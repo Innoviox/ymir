@@ -138,12 +138,6 @@ TEXTURES = {
 texture_map = list(TEXTURES.values())
 tile_map = ''.join(TEXTURES.keys())
 
-level_theme_map = {
-    'sand' : "colored_desert",
-    'land' : "colored_land",
-    'shroom' : "colored_shroom"
-}
-
 class TileType(Enum):
     GROUND = 1
     AIR = 2

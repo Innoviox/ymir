@@ -36,4 +36,4 @@ class FileReader():
                         m_count += 1
                     else:
                         m_count = 0
-        return theme.strip(), level
+        return theme.split(","), level
