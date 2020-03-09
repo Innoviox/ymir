@@ -213,4 +213,3 @@ class Hitbox():
 
     @property
     def max_y(self): return self._hb[3]
-HITBOX=[0.0, 0.0, 1.0, 1.0]

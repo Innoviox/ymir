@@ -6,7 +6,7 @@ from .animator import Animator
 from ursina import Entity
 
 class Tile():
-    def __init__(self, position, typ, controller, hitbox=HITBOX, z_index=0): # hitbox: min-x, min-y, max-x, max-y
+    def __init__(self, position, typ, controller, hitbox=[0.0, 0.0, 1.0, 1.0], z_index=0): # hitbox: min-x, min-y, max-x, max-y
         self.position = position
         self.hitbox = Hitbox(hitbox[:])
 
