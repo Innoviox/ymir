@@ -99,6 +99,7 @@ class Sprite(ABC):
         return False
 
     def die(self):
+        self.controller.sprites.remove(self)
         self.dead = True
 
 class Animator:

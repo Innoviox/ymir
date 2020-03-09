@@ -16,7 +16,6 @@ class BasicEnemy(Enemy):
 
         super().__init__(*args, **kwargs)
 
-        self._hitbox = [0, 0, 1, 0.7]
         self.entity.double_sided = True
 
     def update(self, dt):
@@ -52,9 +51,13 @@ class Slime(BasicEnemy):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, speed=-0.2)
 
+        self._hitbox = [0, 0, 1, 0.7]
+
 class Buzzard(BasicEnemy):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, speed=0.2, gravity=False)
+
+        self._hitbox = [0, 0, 1, 0.6]
         self.animator.anim_every = 10
 
 enemies = {
