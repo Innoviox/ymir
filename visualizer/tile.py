@@ -258,7 +258,7 @@ class SpikesTile(DeadlyTile):
 
 
 max_slicer_speed = 0.5
-class SlicerTile(HorizontalMovingTile, DeadlyTile):
+class SlicerTile(DeadlyTile, HorizontalMovingTile):
     def __init__(self, *args):
         super().__init__(*args)
         self.current_direction = Direction.RIGHT
