@@ -73,7 +73,9 @@ class TileType(Enum):
     SPRING_UP = 24
     PLAYER = 25
 
-    def texture(self):
+    def texture(self, anim=False):
+        if self.value in [21, 22]:
+            return texture_map[self.value - 1] + "_1"
         return texture_map[self.value - 1]
 
     @classmethod
