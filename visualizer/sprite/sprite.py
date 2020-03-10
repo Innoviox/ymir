@@ -10,8 +10,9 @@ from visualizer.constants import GRAVITY
 class Sprite(Tile, ABC):
     def __init__(self, position, typ, controller, **kwargs):
         self.gravity = kwargs.pop("gravity", True)
+        z_index = kwargs.pop("z_index", 4)
 
-        super().__init__(position, typ, controller, **kwargs, z_index=4)
+        super().__init__(position, typ, controller, **kwargs, z_index=z_index)
 
         self.can_jump = True
         self.position = np.array(position, dtype = 'float64')

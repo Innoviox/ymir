@@ -54,14 +54,14 @@ def collide(p, t, x=True):
     # out = False
     if out: print(x, p.position, t.position)
     if x:
-        if t.x + t.hitbox.min_x <= p.position[0] <= t.x + t.hitbox.max_x:
+        if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
             if out: print("\ta")
             if t.collide(p, Direction.LEFT):
                 p.position[0] = t.x + t.hitbox.max_x
                 direction = Direction.RIGHT
             else:
                 chg = False
-        elif t.x + t.hitbox.min_x <= p.position[0] + t.hitbox.max_x <= t.x + t.hitbox.max_x:
+        elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
             if out: print("\tb")
             if t.collide(p, Direction.RIGHT):
                 p.position[0] = t.x - t.hitbox.max_x
@@ -73,7 +73,7 @@ def collide(p, t, x=True):
         if chg:
             p.velocity[0] = 0
     else:
-        if t.y + t.hitbox.min_y <= p.position[1] <= t.y + t.hitbox.max_y:
+        if t.y + t.hitbox.min_y < p.position[1] < t.y + t.hitbox.max_y:
             if out: print("\tc")
             if t.collide(p, Direction.UP):
                 p.position[1] = t.y + t.hitbox.max_y
@@ -81,7 +81,7 @@ def collide(p, t, x=True):
                 direction = Direction.DOWN
             else:
                 chg = False
-        elif t.y + t.hitbox.min_y <= p.position[1] + t.hitbox.max_y <= t.y + t.hitbox.max_y:
+        elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
             if out: print("\td")
             if t.collide(p, Direction.DOWN):
                 p.position[1] = t.y - t.hitbox.max_y

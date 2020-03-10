@@ -47,7 +47,7 @@ class Controller():
                 j.update(dt)
 
     def die(self):
-        self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 0.1])
+        self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 0])
         # todo: camera shift, slowdown, killcam?, say "crushed" or "shot" ala ROR1
         # todo: particle explosion animation
     # returns the ground tiles collided with, or an empty list for no collisions
@@ -96,7 +96,7 @@ class Controller():
             self.skyboxes.append(Entity(model="quad",
                                  texture=t.strip(),
                                  scale=50,
-                                 position=(x, 10 - i/11, 5)))
+                                 position=(x, 10 - i/11, 6)))
 
     def start(self):
         self.player = Player(position=np.array([0, 2], dtype='float64'),

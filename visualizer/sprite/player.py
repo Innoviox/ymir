@@ -9,6 +9,9 @@ from ursina.input_handler import held_keys
 
 #TODO get crushed
 class Player(Sprite):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs, z_index=5)
+
     def update(self, dt):
         self.process_input(dt)
         super().update(dt)
