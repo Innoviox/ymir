@@ -63,14 +63,14 @@ class Editor():
             x += .05
 
         self.grid = []
-        for y in range(10):
+        for y in range(15):
             self.grid.append([])
-            for x in range(10):
+            for x in range(20):
                 self.grid[-1].append(Voxel(self, (x / 2, y / 2 - 1, 0)))
 
         self.current_paint = Entity(
             parent=scene,
-            position=(-1, 0.5),
+            position=(-1, 0.5, -1),
             model='cube',
             origin_y=.5,
             texture=None,
@@ -81,8 +81,8 @@ class Editor():
         if key in dirs:
             for row in self.grid:
                 for e in row:
-                    e.entity.x += dirs[key][0]
-                    e.entity.y += dirs[key][1]
+                    e.x += dirs[key][0]
+                    e.y += dirs[key][1]
 
         if key == 'left mouse up': # what the hell ursina
             held_keys['left mouse down'] = 0
