@@ -4,6 +4,7 @@ Create a 'Tile' object with type and (x,y) location.
 from .util import *
 from .animator import Animator
 from ursina import Entity
+from visualizer.constants import TileType
 
 class Tile():
     def __init__(self, position, typ, controller, hitbox=[0.0, 0.0, 1.0, 1.0], z_index=2): # hitbox: min-x, min-y, max-x, max-y

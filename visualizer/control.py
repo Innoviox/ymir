@@ -8,7 +8,7 @@ from visualizer.file_reader import *
 from ursina import *
 from visualizer.sprite.util import *
 from visualizer.sprite.tiles import HorizontalMovingTile
-from visualizer.constants import camera_fov,dt,camera_offset,camera_speed, LEVEL
+from visualizer.constants import camera_fov,dt,camera_offset,camera_speed, LEVEL, TileType
 
 
 
