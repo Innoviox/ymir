@@ -52,7 +52,7 @@ class Controller():
         # todo: particle explosion animation
     # returns the ground tiles collided with, or an empty list for no collisions
     def sprite_colliding (self, sprite):
-        ground_tiles = get_nearby_ground_tiles(sprite.position, self.tile_array, player=isinstance(sprite, Player))
+        ground_tiles = self.get_nearby_ground_tiles(sprite.position, player=isinstance(sprite, Player))
         ground_tiles.extend(self.moving_tiles)
         if isinstance(sprite, Player):
             ground_tiles.extend(filter(lambda i: i is not sprite, self.sprites))
@@ -96,7 +96,7 @@ class Controller():
             self.skyboxes.append(Entity(model="quad",
                                  texture=t.strip(),
                                  scale=50,
-                                 position=(x, 10 - i/11, 5)))
+                                 position=(x, 10 - i/11, 6)))
 
     def start(self):
         self.player = Player(position=np.array([0, 2], dtype='float64'),
@@ -126,6 +126,20 @@ class Controller():
         x, y = int(x), int(y)
         if 0 <= y < len(self.tile_array) and 0 <= x < len(self.tile_array[y]):
             return self.tile_array[y][x]
+
+    def get_nearby_tiles(self, position):
+        """Return an array of the four tiles above, below, to the left and right of the position."""
+        temp_position = position / 1.0
+        temp_position[1] = len(self.tile_array) - temp_position[1] - 1
+        a, b = int(temp_position[1]), int(temp_position[0])
+        for (da, db) in [[0, 0], [1, 0], [0, 1], [1, 1]]:
+            t = self.tile_at(b + db, a + da)
+            if t: yield t
+
+    def get_nearby_ground_tiles(self, position, player=True):
+        """Get all the adjacent tiles that are of type 'ground' (not air tiles)."""
+        return list(filter(lambda x: x.type.collides() or (player and x.type.player_collides()),
+                           self.get_nearby_tiles(position)))
 
     def next_tile(self, tile, direction):
         if isinstance(direction, Direction):

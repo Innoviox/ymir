@@ -9,6 +9,9 @@ from ursina.input_handler import held_keys
 
 #TODO get crushed
 class Player(Sprite):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs, z_index=5)
+
     def update(self, dt):
         self.process_input(dt)
         super().update(dt)
@@ -19,7 +22,7 @@ class Player(Sprite):
 
     def update_position_velocity(self, dt):
         super().update_position_velocity(dt)
-        self.velocity[0] += self.input[0] * self.horizontal_speed * dt # slow down due to friction\\\
+        self.velocity[0] += self.input[0] * self.horizontal_speed * dt # slow down due to friction
 
         if self.can_jump and self.input[1] > 0:
             self.jump()
