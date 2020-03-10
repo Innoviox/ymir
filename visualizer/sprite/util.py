@@ -30,7 +30,7 @@ def inside(position, tile, density = 10): # todo: transparency (hitboxes)
     """Tells if an entity (anything with an ordered pair position vector) is inside the given tile.
     Works by testing the boundary points of the one by one box with the bottom left corner 
     in the specified position."""
-    for i in range(0, density):
+    for i in range(density):
         if point_inside([position[0] + i / density, position[1]], tile):
             return True
         if point_inside([position[0] + i / density, position[1] + 1.0], tile):
@@ -46,38 +46,23 @@ def point_inside(point, tile):
     return tile.x + tile.hitbox.min_x < point[0] < tile.x + tile.hitbox.max_x and \
             tile.y + tile.hitbox.min_y < point[1] < tile.y + tile.hitbox.max_y
 
-
-def get_nearby_tiles(position, tile_array):
-    """Return an array of the four tiles above, below, to the left and right of the position."""
-    temp_position = position / 1.0
-    temp_position[1] = len(tile_array) - temp_position[1] - 1
-    a, b = int(temp_position[1]), int(temp_position[0])
-    if 0 <= a < len(tile_array) and 0 <= b < len(tile_array[a]):
-        yield tile_array[a][b]
-    if 0 <= (a + 1) < len(tile_array) and 0 <= b < len(tile_array[a + 1]):
-        yield tile_array[a + 1][b]
-    if 0 <= a < len(tile_array) and 0 <= (b + 1) < len(tile_array[a]):
-        yield tile_array[a][b + 1]
-    if 0 <= (a + 1) < len(tile_array) and 0 <= (b + 1) < len(tile_array[a + 1]):
-        yield tile_array[a + 1][b + 1]
-
-def get_nearby_ground_tiles(position, tile_array, player=True):
-    """Get all the adjacent tiles that are of type 'ground' (not air tiles)."""
-    return list(filter(lambda x: x.type.collides() or (player and x.type.player_collides()), get_nearby_tiles(position, tile_array)))
-
 def collide(p, t, x=True):
-    if 'Slime' in str(type(t)):
-        print(p, t, x)
     chg = True
     direction = None
+    out = False
+    if 'Slime' in str(type(t)): out = True
+    # out = False
+    if out: print(x, p.position, t.position)
     if x:
-        if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
+        if t.x + t.hitbox.min_x <= p.position[0] <= t.x + t.hitbox.max_x:
+            if out: print("\ta")
             if t.collide(p, Direction.LEFT):
                 p.position[0] = t.x + t.hitbox.max_x
                 direction = Direction.RIGHT
             else:
                 chg = False
-        elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
+        elif t.x + t.hitbox.min_x <= p.position[0] + t.hitbox.max_x <= t.x + t.hitbox.max_x:
+            if out: print("\tb")
             if t.collide(p, Direction.RIGHT):
                 p.position[0] = t.x - t.hitbox.max_x
                 direction = Direction.LEFT
@@ -88,14 +73,16 @@ def collide(p, t, x=True):
         if chg:
             p.velocity[0] = 0
     else:
-        if t.y + t.hitbox.min_y < p.position[1] < t.y + t.hitbox.max_y:
+        if t.y + t.hitbox.min_y <= p.position[1] <= t.y + t.hitbox.max_y:
+            if out: print("\tc")
             if t.collide(p, Direction.UP):
                 p.position[1] = t.y + t.hitbox.max_y
                 p.can_jump = True
                 direction = Direction.DOWN
             else:
                 chg = False
-        elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
+        elif t.y + t.hitbox.min_y <= p.position[1] + t.hitbox.max_y <= t.y + t.hitbox.max_y:
+            if out: print("\td")
             if t.collide(p, Direction.DOWN):
                 p.position[1] = t.y - t.hitbox.max_y
                 direction = Direction.UP
@@ -105,6 +92,7 @@ def collide(p, t, x=True):
             chg = False
         if chg:
             p.velocity[1] = 0
+
     return direction
 
 TEXTURES = {

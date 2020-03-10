@@ -21,6 +21,7 @@ class Sprite(Tile, ABC):
         self.jump_speed = 2.0
         self.on_moving_tile = False
         self.dead = False
+        self.last_collided = None
 
     def update_render(self):
         self.entity.x = self.position[0]
@@ -55,16 +56,18 @@ class Sprite(Tile, ABC):
                                     , abs(self.position[1] + 1.0 - tile.y)) / abs(self.velocity[1])
                 else:
                     vert_time = 1000
+                # if 'Slime' in str(type(self)): print(tile)
                 # print(tiles, self.position, tile.position, self.velocity, vert_time, horiz_time)
                 if vert_time == horiz_time:
-                    collided[collide(self, tile, x=False)].append(tile)
                     collided[collide(self, tile, x=True)].append(tile)
+                    collided[collide(self, tile, x=False)].append(tile)
                 elif vert_time < horiz_time:
                     # vertical position snapping
                     collided[collide(self, tile, x=False)].append(tile)
                 else:
                     # horizontal position snapping
                     collided[collide(self, tile, x=True)].append(tile)
+        self.last_collided = collided
         return collided
 
     #abstract please overwrite me
@@ -79,8 +82,10 @@ class Sprite(Tile, ABC):
         self.on_moving_tile = False
         self.position += self.velocity * dt
         self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
-        if self.gravity:
+        if self.gravity and not self.on_ground:
             self.velocity[1] += GRAVITY * dt
+        if 'Slime' in str(type(self)):
+            print(self.velocity)
 
     def collide(self, tile, direction):
         return False
@@ -88,3 +93,8 @@ class Sprite(Tile, ABC):
     def die(self):
         self.controller.sprites.remove(self)
         self.dead = True
+
+    @property
+    def on_ground(self):
+        down = self.last_collided.get(Direction.DOWN)
+        return down and any(i.type.is_ground() for i in down)

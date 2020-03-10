@@ -10,5 +10,5 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/test_slime_jump"
+LEVEL = "./levels/test_slime_jump.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
