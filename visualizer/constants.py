@@ -74,7 +74,7 @@ class TileType(Enum):
     PLAYER = 25
 
     def texture(self, anim=False):
-        if self.value in [21, 22]:
+        if anim and self.value in [21, 22]:
             return texture_map[self.value - 1] + "_1"
         return texture_map[self.value - 1]
 
