@@ -85,8 +85,6 @@ class Sprite(Tile, ABC):
         self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
         if self.gravity and not self.on_ground:
             self.velocity[1] += GRAVITY * dt
-        if 'Slime' in str(type(self)):
-            print(self.velocity)
 
     def collide(self, tile, direction):
         return False

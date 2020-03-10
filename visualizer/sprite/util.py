@@ -49,20 +49,14 @@ def point_inside(point, tile):
 def collide(p, t, x=True):
     chg = True
     direction = None
-    out = False
-    if 'Slime' in str(type(t)): out = True
-    # out = False
-    if out: print(x, p.position, t.position)
     if x:
         if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
-            if out: print("\ta")
             if t.collide(p, Direction.LEFT):
                 p.position[0] = t.x + t.hitbox.max_x
                 direction = Direction.RIGHT
             else:
                 chg = False
         elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
-            if out: print("\tb")
             if t.collide(p, Direction.RIGHT):
                 p.position[0] = t.x - t.hitbox.max_x
                 direction = Direction.LEFT
@@ -74,7 +68,6 @@ def collide(p, t, x=True):
             p.velocity[0] = 0
     else:
         if t.y + t.hitbox.min_y < p.position[1] < t.y + t.hitbox.max_y:
-            if out: print("\tc")
             if t.collide(p, Direction.UP):
                 p.position[1] = t.y + t.hitbox.max_y
                 p.can_jump = True
@@ -82,7 +75,6 @@ def collide(p, t, x=True):
             else:
                 chg = False
         elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
-            if out: print("\td")
             if t.collide(p, Direction.DOWN):
                 p.position[1] = t.y - t.hitbox.max_y
                 direction = Direction.UP
