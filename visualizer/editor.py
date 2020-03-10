@@ -16,7 +16,10 @@ class Item(Button):
                          color=color.white)
 
     def on_click(self):
-        self.editor.current_paint.texture = self.tile_type.texture()
+        if self.tile_type.texture():
+            self.editor.current_paint.texture = self.tile_type.texture()
+        else:
+            self.editor.current_paint.texture = "white_cube"
 
 class Voxel(Button):
     def __init__(self, editor, position):
@@ -27,22 +30,24 @@ class Voxel(Button):
             model='cube',
             origin_y=.5,
             texture='white_cube',
-            color=color.color(0, 0, random.uniform(.9, 1.0)),
+            color=color.color(0, 0, 1),
             # highlight_color = color.lime,
             scale=0.5
         )
 
     def on_mouse_enter(self):
-        if not held_keys['left mouse down']:
+        self._update()
+
+    def on_click(self):
+        self._update(force=False)
+
+    def _update(self, force=True):
+        if force and not held_keys['left mouse down']:
             return
-        print(held_keys['left mouse down'])
         if self.editor.current_paint.texture:
             self.texture = self.editor.current_paint.texture
         else:
             self.texture = 'white_cube'
-
-    # def input(self, key):
-    #     print(key)
 
 dirs = {'w': [0, .1], 'a': [-.1, 0], 's': [0, -.1], 'd': [.1, 0]}
 
@@ -79,6 +84,12 @@ class Editor():
                     e.entity.x += dirs[key][0]
                     e.entity.y += dirs[key][1]
 
+        if key == 'left mouse up': # what the hell ursina
+            held_keys['left mouse down'] = 0
+
+    def update(self):
+        pass
+
 app = Ursina()
 
 editor = Editor()
@@ -88,7 +99,7 @@ input_handler.bind('left arrow', 'a')
 input_handler.bind('up arrow', 'w')
 input_handler.bind('down arrow', 's')
 
-# update = editor.update
+update = editor.update
 input = editor.input
 camera.position = (0, 0)
 
