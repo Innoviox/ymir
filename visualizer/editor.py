@@ -2,7 +2,7 @@ from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.input_handler import held_keys
 
-from visualizer.constants import TileType
+from visualizer.constants import *
 
 class Item(Button):
     def __init__(self, editor, position, typ):
@@ -16,6 +16,7 @@ class Item(Button):
                          color=color.white)
 
     def on_click(self):
+        self.editor.current_paint_type = self.tile_type
         if self.tile_type.texture():
             self.editor.current_paint.texture = self.tile_type.texture()
         else:
@@ -24,6 +25,7 @@ class Item(Button):
 class Voxel(Button):
     def __init__(self, editor, position):
         self.editor = editor
+        self.tile_type = TileType.AIR
         super().__init__(
             parent=scene,
             position=position,
@@ -45,11 +47,14 @@ class Voxel(Button):
         if force and not held_keys['left mouse down']:
             return
         if self.editor.current_paint.texture:
+            self.tile_type = self.editor.current_paint_type
             self.texture = self.editor.current_paint.texture
         else:
             self.texture = 'white_cube'
 
-dirs = {'w': [0, .1], 'a': [-.1, 0], 's': [0, -.1], 'd': [.1, 0]}
+        self.editor.save()
+
+dirs = {'s': [0, .1], 'd': [-.1, 0], 'w': [0, -.1], 'a': [.1, 0]}
 
 class Editor():
     def __init__(self):
@@ -76,19 +81,40 @@ class Editor():
             texture=None,
             scale=0.5
         )
+        self.current_paint_type = TileType.AIR
 
     def input(self, key):
-        if key in dirs:
-            for row in self.grid:
-                for e in row:
-                    e.x += dirs[key][0]
-                    e.y += dirs[key][1]
+        print(key)
+        # if key in dirs:
+            # for row in self.grid:
+            #     for e in row:
+            #         e.x += dirs[key][0]
+            #         e.y += dirs[key][1]
 
         if key == 'left mouse up': # what the hell ursina
             held_keys['left mouse down'] = 0
+        if key.endswith('up'):
+            held_keys[key[:-3]] = 0
+        else:
+            held_keys[key] = 1
 
     def update(self):
-        pass
+        for key in held_keys:
+            if key in dirs and held_keys[key]:
+                for row in self.grid:
+                    for e in row:
+                        e.x += dirs[key][0]
+                        e.y += dirs[key][1]
+
+    def save(self):
+        file = "levels/save.txt"
+        with open(file, "w") as f:
+            f.write("None\n")
+            for row in reversed(self.grid):
+                for e in row:
+                    f.write(e.tile_type.char)
+                f.write("\n")
+
 
 app = Ursina()
 
