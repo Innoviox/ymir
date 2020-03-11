@@ -24,7 +24,11 @@ In `sprite/enemy.py`:
     Provide automatic weapon-use behavior for enemies (`Enemy.py`?)
     Create user-controlled behavior for the player (`player.py`)
 2. Teleporters
-3. AI Level Generation (!!!)
-4. Pickups (tools, weapons)
-5. Skill points
-6. Character customization (tied to skill points)
+3. Lasers
+4. Buttons/switches
+5. AI Level Generation (!!!)
+6. Pickups (tools, weapons)
+7. Skill points
+8. Character customization (tied to skill points)
+9. Minions? Robots? 
+10. Boss fights
