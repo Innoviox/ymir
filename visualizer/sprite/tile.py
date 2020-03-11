@@ -31,7 +31,8 @@ class Tile():
         if self.entity and texture:
             self.entity.texture = self.texture
 
-    def load_toggle(self): self.load(self.type.toggle())
+    def load_toggle(self):
+        self.load(self.type.toggle())
 
     def update(self, dt):
         ...

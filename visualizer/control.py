@@ -137,6 +137,7 @@ class Controller():
         self.app.run()
 
     def unlock(self, typ):
+        if 'KEY' not in str(typ): return
         for row in self.tile_array:
             for t in row:
                 if t.type.value == typ.value + 1:
