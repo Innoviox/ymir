@@ -11,7 +11,7 @@ class Tile():
         self.position = position
         self.hitbox = Hitbox(hitbox[:])
         self.type = typ
-        self.texture = self.type.texture()
+        self.texture = self.type.default_texture()
         self.entity = None
         self.controller = controller
         self.animator = Animator(self, self.texture)
@@ -25,7 +25,7 @@ class Tile():
 
     def load(self, new_type, texture=True):
         self.type = new_type
-        self.texture = self.type.texture()
+        self.texture = self.type.default_texture()
         if self.entity and texture:
             self.entity.texture = self.texture
 
