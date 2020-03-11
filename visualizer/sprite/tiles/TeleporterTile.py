@@ -6,6 +6,7 @@ from collections import defaultdict
 
 teleporter_locations = defaultdict(list)
 teleporter_delay = 1 # teleporter delay in seconds
+                     # todo: put countdown in HUD
 
 class TeleporterTile(Tile):
     teleported = False
