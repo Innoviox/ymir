@@ -61,8 +61,6 @@ class Sprite(Tile, ABC):
                 else:
                     vert_time = 1000
 
-                # print(tile, vert_time, horiz_time, self.velocity)
-
                 if vert_time == horiz_time:
                     collided[collide(self, tile, x=True, commit=False)].append(tile)
                     collided[collide(self, tile, x=False, commit=False)].append(tile)
