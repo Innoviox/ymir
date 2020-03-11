@@ -9,7 +9,7 @@ from ursina import *
 from visualizer.sprite.util import *
 from visualizer.sprite.tiles import HorizontalMovingTile
 from visualizer.constants import camera_fov,dt,camera_offset,camera_speed, LEVEL, TileType
-
+from math import e
 
 
 
@@ -53,6 +53,18 @@ class Controller():
                 if add and isinstance(j, HorizontalMovingTile):
                     self.moving_tiles.append(j)
                 j.update(dt)
+
+        self.update_camera()
+
+    def update_camera(self):
+        def offset(v, ax=4.9, bx=5, cx=4, ay=4.9, by=5, cy=2, x=True): # https://www.desmos.com/calculator/za8yofdwtd
+            if x:
+                return bx / (1 + e ** -(cx * v - ax))
+            return by / (1 + e ** -(cy * v - ay))
+
+        a = offset(self.player.velocity[0], x=True)
+        b = offset(self.player.velocity[1], x=False)
+        camera.scripts[-1].offset = [a, b, -30]
 
     def die(self):
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 0])

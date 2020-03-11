@@ -3,6 +3,7 @@ from .HorizontalMovingTile import HorizontalMovingTile
 from visualizer.sprite.util import Direction
 
 max_slicer_speed = 0.5
+
 class SlicerTile(DeadlyTile, HorizontalMovingTile):
     def __init__(self, *args):
         super().__init__(*args)
