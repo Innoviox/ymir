@@ -12,7 +12,7 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/crush_test"
+LEVEL = "./levels/test_file_3.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
 TEXTURES = {
@@ -86,7 +86,7 @@ class TileType(Enum):
     def is_ground(self): return self.value in [1, 8]
     def is_water(self): return self.value in [7, 9]
 
-    def collides(self):
+    def solid(self):
         return self.is_ground() or self.value in [17, 19]
 
     def player_collides(self):

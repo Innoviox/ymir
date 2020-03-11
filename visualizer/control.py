@@ -158,7 +158,7 @@ class Controller():
 
     def get_nearby_ground_tiles(self, position, player=True):
         """Get all the adjacent tiles that are of type 'ground' (not air tiles)."""
-        return list(filter(lambda x: x.type.collides() or (player and x.type.player_collides()),
+        return list(filter(lambda x: x.type.solid() or (player and x.type.player_collides()),
                            self.get_nearby_tiles(position)))
 
     def next_tile(self, tile, direction):
