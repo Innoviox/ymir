@@ -79,9 +79,12 @@ class Editor():
         x = 0
         y = 0
         self.menu_items = []
-        for typ in TileType:
+        for i, typ in enumerate(TileType, start=1):
             self.menu_items.append(Item(self, (off_x+x, off_y+y), typ))
             x += .05
+            if i % 20 == 0:
+                x = 0
+                y -= .05
 
         self.grid = []
         self.height = 15
