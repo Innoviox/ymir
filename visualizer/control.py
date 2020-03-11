@@ -32,21 +32,18 @@ class Controller():
 
     def update(self):
         for sprite in self.sprites:
-            a = sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
-            # if a is not None and "Player" in str(type(sprite)):
-            #     print(a)
-            if a is not None and (a[Direction.LEFT] != [] and a[Direction.RIGHT] != [] or a[Direction.UP] != [] and a[Direction.DOWN] != []):
-                if "Player" in str(type(sprite)):
-                    self.die()
-                else:
-                    sprite.die()
+            c = sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
+
+            # Check if sprite is crushed
+            if c and ((c[Direction.LEFT] and c[Direction.RIGHT]) or (c[Direction.UP] and c[Direction.DOWN])):
+                sprite.die()
 
             sprite.update(dt)
 
-        if self.player.position[1] < 0:
+        if self.player.position[1] < 0: # kill player if player is below level
             self.die()
 
-        add = len(self.moving_tiles) == 0
+        add = len(self.moving_tiles) == 0 # whether or not to add moving tiles (e.g., whether or not this is the first update called)
 
         for y, i in enumerate(self.tile_array):
             for x, j in enumerate(i):
@@ -57,6 +54,7 @@ class Controller():
         self.update_camera()
 
     def update_camera(self):
+        """Update the camera position based on the player's velocity, giving the game a slight swing effect."""
         def offset(v, ax=4.9, bx=5, cx=4, ay=4.9, by=5, cy=2, x=True): # https://www.desmos.com/calculator/za8yofdwtd
             if x:
                 return bx / (1 + e ** -(cx * v - ax))
@@ -67,6 +65,7 @@ class Controller():
         camera.scripts[-1].offset = [a, b, -30]
 
     def die(self):
+        """Kill the player, returning it to the last checkpoint"""
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 0])
         # todo: camera shift, slowdown, killcam?, say "crushed" or "shot" ala ROR1
         # todo: particle explosion animation
@@ -137,12 +136,14 @@ class Controller():
         self.app.run()
 
     def unlock(self, typ):
+        """Unlock all lock tiles that go with a given key."""
         for row in self.tile_array:
             for t in row:
                 if t.type.value == typ.value + 1:
                     t.hide()
 
     def tile_at(self, x, y):
+        """Get the tile at a given position, or None if the position is out of bounds."""
         x, y = int(x), int(y)
         if 0 <= y < len(self.tile_array) and 0 <= x < len(self.tile_array[y]):
             return self.tile_array[y][x]
@@ -162,6 +163,7 @@ class Controller():
                            self.get_nearby_tiles(position)))
 
     def next_tile(self, tile, direction):
+        """Get the next tile in a given direction."""
         if isinstance(direction, Direction):
             dx, dy = direction.diff
         else:
@@ -173,10 +175,12 @@ class Controller():
         return self.tile_at(px, py)
 
     def next_is_ground(self, tile, direction):
+        """Check if the next tile in a given direction is a ground tile"""
         n = self.next_tile(tile, direction)
         return n and n.type.is_ground()
 
     def next_ground(self, tile, direction):
+        """Get the distance to the nearest ground tile"""
         curr = list(map(int, tile.position))
         while True:
             t = self.tile_at(*curr)
