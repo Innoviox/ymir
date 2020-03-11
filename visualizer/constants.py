@@ -93,21 +93,21 @@ class TileType(Enum):
 
     def solid(self):
         """Can a sprite NOT pass through this tile?"""
-        return self.is_ground() or self.value in [TileType.LOCK_BLUE, TileType.LOCK_RED]
+        return self.is_ground() or self in [TileType.LOCK_BLUE, TileType.LOCK_RED]
 
     def player_collides(self):
         """Does something happen when the player collides with this tile?"""
-        return self.value in [TileType.CHECKPOINT, TileType.SPIKES, TileType.KEY_BLUE, 
+        return self in [TileType.CHECKPOINT, TileType.SPIKES, TileType.KEY_BLUE,
                             TileType.KEY_RED, TileType.SLICER, TileType.SPRING_DOWN]
     def deadly(self):
         """Does this tile kill the player on collision?"""
-        return self.value in [TileType.SPIKES, TileType.SLICER]
+        return self in [TileType.SPIKES, TileType.SLICER]
     def animatable(self):
         """Does this tile have an associated Animator?"""
-        return self.value in [TileType.SLIME, TileType.BUZZARD]
+        return self in [TileType.SLIME, TileType.BUZZARD]
     def jump_through(self):
         """Can the player jump through the bottom of this tile?"""
-        return self.value in [TileType.MOVING, TileType.MOVING_LEFT, TileType.MOVING_RIGHT]
+        return self in [TileType.MOVING, TileType.MOVING_LEFT, TileType.MOVING_RIGHT]
    
     def toggle(self):
         """Return the TileType enum of the opposite state 
