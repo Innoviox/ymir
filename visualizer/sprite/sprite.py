@@ -52,14 +52,18 @@ class Sprite(Tile, ABC):
                         v = self.on_moving_tile.speed * 10
                     horiz_time = min(abs(self.position[0] - tile.x - 1.0)
                                     , abs(self.position[0] + 1.0 - tile.x)) / abs(v)
+                elif round(self.position[0] - tile.x) == 1:
+                    horiz_time = 0
                 else:
                     horiz_time = 1000
                 if self.velocity[1] != 0:
                     vert_time = min(abs(self.position[1] - tile.y - 1.0)
                                     , abs(self.position[1] + 1.0 - tile.y)) / abs(self.velocity[1])
+                elif round(self.position[1] - tile.y) == 1:
+                    vert_time = 0
                 else:
                     vert_time = 1000
-                # print(tile, vert_time, horiz_time)
+                # print(tile, vert_time, horiz_time, self.velocity)
                 if vert_time == horiz_time:
                     collided[collide(self, tile, x=True, commit=False)].append(tile)
                     collided[collide(self, tile, x=False, commit=False)].append(tile)
