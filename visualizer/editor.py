@@ -18,7 +18,7 @@ class Item(Button):
     def on_click(self):
         self.editor.current_paint_type = self.tile_type
         if self.tile_type.texture():
-            self.editor.current_paint.texture = self.tile_type.texture()
+            self.editor.current_paint.texture = self.tile_type.texture(anim=True)
         else:
             self.editor.current_paint.texture = "white_cube"
 
@@ -84,12 +84,13 @@ class Editor():
             x += .05
 
         self.grid = []
-        for y in range(15):
-            self.grid.append([])
-            for x in range(20):
-                self.grid[-1].append(Voxel(self, (x / 2, y / 2 - 1, 0)))
         self.height = 15
         self.width = 20
+        for y in range(self.height):
+            self.grid.append([])
+            for x in range(self.width):
+                self.grid[-1].append(Voxel(self, (x / 2, y / 2 - 1, 0)))
+
 
         self.current_paint = Entity(
             parent=scene,
