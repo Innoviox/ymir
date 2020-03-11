@@ -89,11 +89,7 @@ class Editor():
         self.grid = []
         self.height = 15
         self.width = 20
-        for y in range(self.height):
-            self.grid.append([])
-            for x in range(self.width):
-                self.grid[-1].append(Voxel(self, (x / 2, y / 2 - 1, 0)))
-
+        self.create_grid()
 
         self.current_paint = Entity(
             parent=scene,
@@ -135,6 +131,16 @@ class Editor():
             for x in range(self.width):
                 self.grid[y][x].position = (x / 2, y / 2 - 1, 0)
 
+    def create_grid(self):
+        for r in self.grid:
+            for j in r:
+                destroy(j)
+        self.grid = []
+        for y in range(self.height):
+            self.grid.append([])
+            for x in range(self.width):
+                self.grid[-1].append(Voxel(self, (x / 2, y / 2 - 1, 0)))
+
     def add_row(self):
         self.fix_grid()
         self.grid.append([])
@@ -148,9 +154,23 @@ class Editor():
             self.grid[y].append(Voxel(self, ((self.width - 1) / 2, y / 2 - 1, 0)))
         self.width += 1
 
+    def load_file(self, file):
+        with open(file) as f:
+            theme, *k = list(f.readlines())
+            self.height = len(k)
+            self.width = len(k[0])
+            self.create_grid()
+            for i, line in enumerate(k):
+                for j, tile in enumerate(line.strip()):
+                    t = TileType.from_tile(tile)
+                    self.grid[self.height-i-1][j].tile_type = t
+                    self.grid[self.height-i-1][j].texture = t.texture(anim=True)
+
 app = Ursina()
 
 editor = Editor()
+
+editor.load_file("./levels/test_file_3.txt")
 
 input_handler.bind('right arrow', 'd')
 input_handler.bind('left arrow', 'a')
