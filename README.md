@@ -1,4 +1,7 @@
 # ymir
+[TODO: Logo?]
+An AI-generated procedural pseudo-physics-based platformer
+[TODO: Image]
 
 ## How to Add an Enemy:
 
