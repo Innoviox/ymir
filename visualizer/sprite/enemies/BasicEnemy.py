@@ -28,8 +28,8 @@ class BasicEnemy(Enemy):
         self.speed = 0
         self.entity.fade_out(duration=1, delay=1)
 
-    def collide(self, tile, direction):
-        if not self.dead and 'Player' in str(type(tile)): # hack to get around importing Player
+    def collide(self, tile, direction, commit=True):
+        if commit and not self.dead and 'Player' in str(type(tile)): # hack to get around importing Player
             if direction == Direction.UP:
                 tile.velocity[1] = tile.jump_speed
                 tile.can_jump = False

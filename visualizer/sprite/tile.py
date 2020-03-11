@@ -37,7 +37,7 @@ class Tile():
     def update(self, dt):
         ...
 
-    def collide(self, tile, direction):
+    def collide(self, tile, direction, commit=True):
         return True  # if this method is called, then self.type.collides()
 
     @property

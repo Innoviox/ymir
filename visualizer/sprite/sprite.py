@@ -40,11 +40,9 @@ class Sprite(Tile, ABC):
             # vertically stacked tiles, snap horizontally
             t = tiles[0]
             if tiles[0].x == tiles[1].x:
-                collided[find_direction(self, t, x=True)].append(t)
-                collide(self, t, x=True)
+                collided[collide(self, t, x=True, commit=True)].append(t)
             else: # horizontally connected tiles, snap vertically
-                collided[find_direction(self, tiles[0], x=False)].append(t)
-                collide(self, t, x=False)
+                collided[collide(self, t, x=False, commit=True)].append(t)
         else:
             # position snapping, only if a single tile is collided, this will be buggy
             for tile in tiles:
@@ -63,19 +61,19 @@ class Sprite(Tile, ABC):
                     vert_time = 1000
 
                 if vert_time == horiz_time:
-                    collided[find_direction(self, tile, x=True)].append(tile)
-                    collided[find_direction(self, tile, x=False)].append(tile)
-                    collide(self, tile, x=True)
-                    collide(self, tile, x=False)
+                    collided[collide(self, tile, x=True, commit=False)].append(tile)
+                    collided[collide(self, tile, x=False, commit=False)].append(tile)
+                    collide(self, tile, x=True, commit=True)
+                    collide(self, tile, x=False, commit=True)
 
                 elif vert_time < horiz_time:
                     # vertical position snapping
-                    collided[find_direction(self, tile, x=False)].append(tile)
-                    collide(self, tile, x=False)
+                    collided[collide(self, tile, x=False, commit=False)].append(tile)
+                    collide(self, tile, x=False, commit=True)
                 else:
                     # horizontal position snapping
-                    collided[find_direction(self, tile, x=True)].append(tile)
-                    collide(self, tile, x=True)
+                    collided[collide(self, tile, x=True, commit=False)].append(tile)
+                    collide(self, tile, x=True, commit=True)
 
         self.last_collided = collided
         return collided
@@ -95,7 +93,7 @@ class Sprite(Tile, ABC):
         if self.gravity and not self.on_ground:
             self.velocity[1] += GRAVITY * dt
 
-    def collide(self, tile, direction):
+    def collide(self, tile, direction, commit=True):
         return False
 
     def die(self):
