@@ -10,9 +10,10 @@ from visualizer.constants import GRAVITY
 class Sprite(Tile, ABC):
     def __init__(self, position, typ, controller, **kwargs):
         self.gravity = kwargs.pop("gravity", True)
-        z_index = kwargs.pop("z_index", 5) # what 'layer' is the sprite rendered on? 
+        z_index = kwargs.pop("z_index", 5) # what 'layer' is the sprite rendered on
+                                           # default level is 5
                                             # (larger means farther away from camera) 
-                                            # TODO why .pop() ?
+                                            # pop so that you can't pass two z-indexes to __init__
         super().__init__(position, typ, controller, **kwargs, z_index=z_index)
 
         self.can_jump = True
