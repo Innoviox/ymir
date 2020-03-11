@@ -92,11 +92,11 @@ class Controller():
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 2])
 
         self.skyboxes = []
-        for t, (i, x) in zip(themes, enumerate(range(0, 100, 50))):
+        for t, (i, x) in zip(themes, enumerate(range(0, len(themes)))):#, int(100/len(themes))))):
             self.skyboxes.append(Entity(model="quad",
                                  texture=t.strip(),
-                                 scale=50,
-                                 position=(x, 10 - i/11, 6)))
+                                 scale = 1024 / 70 * len(level[0]) / len(themes), #split the level into bits
+                                 position=(x * len(level[0]) / len(themes), 0, 6)))
 
     def start(self):
         self.player = Player(position=np.array([0, 2], dtype='float64'),

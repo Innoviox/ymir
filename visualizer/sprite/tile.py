@@ -10,7 +10,6 @@ class Tile():
     def __init__(self, position, typ, controller, hitbox=[0.0, 0.0, 1.0, 1.0], z_index=2): # hitbox: min-x, min-y, max-x, max-y
         self.position = position
         self.hitbox = Hitbox(hitbox[:])
-
         self.type = typ
         self.texture = self.type.texture()
         self.entity = None

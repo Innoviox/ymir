@@ -3,7 +3,7 @@ from enum import Enum
 ### Camera constants ###
 scale = 1
 camera_fov = 20
-camera_offset = [0, 1, -30]
+camera_offset = [0, 3, -30]
 camera_speed = 2
 OFFSET_X = 0
 OFFSET_Y = 0
