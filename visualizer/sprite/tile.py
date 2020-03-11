@@ -24,6 +24,8 @@ class Tile():
                                            round(self.y),  z_index))
 
     def load(self, new_type, texture=True):
+        """Change the type of the tile to new_type. 
+        If texture is True, then also change the texture."""
         self.type = new_type
         self.texture = self.type.default_texture()
         if self.entity and texture:
@@ -45,7 +47,7 @@ class Tile():
         return self.position[1]
 
     def __repr__(self):
-        return str(self.type).split(".")[1]# + " at " + str(self.position)
+        return str(self.type).split(".")[1]
 
     def hide(self, now=False):
         self.type = TileType.AIR

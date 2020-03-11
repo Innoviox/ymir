@@ -10,8 +10,9 @@ from visualizer.constants import GRAVITY
 class Sprite(Tile, ABC):
     def __init__(self, position, typ, controller, **kwargs):
         self.gravity = kwargs.pop("gravity", True)
-        z_index = kwargs.pop("z_index", 5)
-
+        z_index = kwargs.pop("z_index", 5) # what 'layer' is the sprite rendered on? 
+                                            # (larger means farther away from camera) 
+                                            # TODO why .pop() ?
         super().__init__(position, typ, controller, **kwargs, z_index=z_index)
 
         self.can_jump = True
@@ -22,7 +23,7 @@ class Sprite(Tile, ABC):
         self.jump_speed = 2.0
         self.on_moving_tile = False
         self.dead = False
-        self.last_collided = None
+        self.last_collided = None   # the list of Tiles which the sprite is currently colliding with?
 
     def update_render(self):
         self.entity.x = self.position[0]
@@ -34,8 +35,6 @@ class Sprite(Tile, ABC):
 
         if len(tiles) == 0:
             pass
-
-
 
         if len(tiles) == 2:
             # vertically stacked tiles, snap horizontally

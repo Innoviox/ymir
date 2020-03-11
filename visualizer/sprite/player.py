@@ -7,7 +7,6 @@ import numpy as np
 from .sprite import Sprite
 from ursina.input_handler import held_keys
 
-#TODO get crushed
 class Player(Sprite):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, z_index=4)
@@ -17,17 +16,19 @@ class Player(Sprite):
         super().update(dt)
 
     def process_input(self,dt):
-        """Key player keyboard (WASD) input, store in player.input."""
+        """Get player keyboard (WASD) held keys, store in player.input."""
         self.input = dt * np.array([held_keys['d'] - held_keys['a'], held_keys['w'] - held_keys['s']])
 
     def update_position_velocity(self, dt):
+        """Update position and velocity."""
         super().update_position_velocity(dt)
-        self.velocity[0] += self.input[0] * self.horizontal_speed * dt # slow down due to friction
+        # move horizontally based on player input
+        self.velocity[0] += self.input[0] * self.horizontal_speed * dt 
 
-        if self.can_jump and self.input[1] > 0:
-            self.jump()
-        else:
-            if self.input[1] > 0:
+        if self.input[1] > 0: # player trying to move upwards
+            if self.can_jump: # jump if able
+               self.jump()
+            else: # if you can't jump, then null player input upwards
                 self.input[1] = 0
 
     def jump(self):

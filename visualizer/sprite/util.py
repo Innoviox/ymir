@@ -22,11 +22,11 @@ class Direction(Enum):
         return Direction._value2member_map_[self.value - 1]
 
 def mag(a):
-    """Returns the magnitude of an array, interpreted as a numeric vector.""" 
+    """Returns the magnitude of a list, interpreted as a numeric vector.""" 
     return math.sqrt(sum([x * x for x in a]))
 
 
-def inside(position, tile, density = 10): # todo: transparency (hitboxes)
+def inside(position, tile, density = 10): # TODO: transparency (hitboxes)
     """Tells if an entity (anything with an ordered pair position vector) is inside the given tile.
     Works by testing the boundary points of the one by one box with the bottom left corner 
     in the specified position."""
@@ -47,6 +47,9 @@ def point_inside(point, tile):
             tile.y + tile.hitbox.min_y < point[1] < tile.y + tile.hitbox.max_y
 
 def find_direction(p, t, x=True):
+    """ Return the direction of Sprite (?) t relative to Sprite (?) p, depending on x.
+        If x is false, return whether (the hitbox of) t is above p, below p, or neither.
+        If x is true, return whether (the hitbox of) t is to the left of p, right of p, or neither. """
     direction = None
     if x:
         if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
