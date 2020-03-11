@@ -148,7 +148,7 @@ class Controller():
             return self.tile_array[y][x]
 
     def get_nearby_tiles(self, position):
-        """Return an array of the four tiles above, below, to the left and right of the position."""
+        """Return an array of the four tiles in a square around the position's actual position."""
         temp_position = position / 1.0
         temp_position[1] = len(self.tile_array) - temp_position[1] - 1
         a, b = int(temp_position[1]), int(temp_position[0])

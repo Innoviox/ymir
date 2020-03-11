@@ -46,20 +46,36 @@ def point_inside(point, tile):
     return tile.x + tile.hitbox.min_x < point[0] < tile.x + tile.hitbox.max_x and \
             tile.y + tile.hitbox.min_y < point[1] < tile.y + tile.hitbox.max_y
 
-def collide(p, t, x=True):
-    chg = True
+def find_direction(p, t, x=True):
     direction = None
     if x:
         if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
             if t.collide(p, Direction.LEFT):
-                p.position[0] = t.x + t.hitbox.max_x
                 direction = Direction.RIGHT
+        elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
+            if t.collide(p, Direction.RIGHT):
+                direction = Direction.LEFT
+    else:
+        if t.y + t.hitbox.min_y < p.position[1] < t.y + t.hitbox.max_y:
+            if t.collide(p, Direction.UP):
+                direction = Direction.DOWN
+        elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
+            if t.collide(p, Direction.DOWN):
+                direction = Direction.UP
+
+    return direction
+
+def collide(p, t, x=True):
+    chg = True
+    if x:
+        if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
+            if t.collide(p, Direction.LEFT):
+                p.position[0] = t.x + t.hitbox.max_x
             else:
                 chg = False
         elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
             if t.collide(p, Direction.RIGHT):
                 p.position[0] = t.x - t.hitbox.max_x
-                direction = Direction.LEFT
             else:
                 chg = False
         else:
@@ -71,20 +87,19 @@ def collide(p, t, x=True):
             if t.collide(p, Direction.UP):
                 p.position[1] = t.y + t.hitbox.max_y
                 p.can_jump = True
-                direction = Direction.DOWN
             else:
                 chg = False
         elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
             if t.collide(p, Direction.DOWN):
                 p.position[1] = t.y - t.hitbox.max_y
-                direction = Direction.UP
             else:
                 chg = False
         else:
             chg = False
         if chg:
             p.velocity[1] = 0
-    return direction
+
+    return chg
 
 class Hitbox():
     def __init__(self, hb):
