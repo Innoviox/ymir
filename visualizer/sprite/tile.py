@@ -48,7 +48,7 @@ class Tile():
         return self.position[1]
 
     def __repr__(self):
-        return str(self.type).split(".")[1]
+        return str(self.type).split(".")[1] + f" at {self.position}"
 
     def hide(self, now=False):
         self.type = TileType.AIR

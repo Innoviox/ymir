@@ -100,7 +100,8 @@ class TileType(Enum):
     def player_collides(self):
         """Does something happen when the player collides with this tile?"""
         return self in [TileType.CHECKPOINT, TileType.SPIKES, TileType.KEY_BLUE,
-                            TileType.KEY_RED, TileType.SLICER, TileType.SPRING_DOWN]
+                            TileType.KEY_RED, TileType.SLICER, TileType.SPRING_DOWN,
+                        TileType.TELEPORTER]
     def deadly(self):
         """Does this tile kill the player on collision?"""
         return self in [TileType.SPIKES, TileType.SLICER]

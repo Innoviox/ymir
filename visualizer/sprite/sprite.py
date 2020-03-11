@@ -33,7 +33,6 @@ class Sprite(Tile, ABC):
 
     def update_collisions(self, tiles, tile_array):
         collided = defaultdict(list)
-
         if len(tiles) == 0:
             pass
 
@@ -60,7 +59,7 @@ class Sprite(Tile, ABC):
                                     , abs(self.position[1] + 1.0 - tile.y)) / abs(self.velocity[1])
                 else:
                     vert_time = 1000
-
+                # print(tile, vert_time, horiz_time)
                 if vert_time == horiz_time:
                     collided[collide(self, tile, x=True, commit=False)].append(tile)
                     collided[collide(self, tile, x=False, commit=False)].append(tile)
