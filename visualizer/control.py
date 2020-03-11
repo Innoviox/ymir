@@ -57,8 +57,8 @@ class Controller():
         """Update the camera position based on the player's velocity, giving the game a slight swing effect."""
         def offset(v, ax=4.9, bx=5, cx=4, ay=4.9, by=5, cy=2, x=True): # https://www.desmos.com/calculator/za8yofdwtd
             if x:
-                return bx / (1 + e ** -(cx * v - ax))
-            return by / (1 + e ** -(cy * v - ay))
+                return bx / (1 + e ** -(cx * round(v, 2) - ax))
+            return by / (1 + e ** -(cy * round(v, 2) - ay))
 
         a = offset(self.player.velocity[0], x=True)
         b = offset(self.player.velocity[1], x=False)

@@ -12,7 +12,7 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/test_file_3.txt"
+LEVEL = "./levels/teleporter_test.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
 # The key is the symbol that is used in the level files to represent the tile,
@@ -43,7 +43,8 @@ TEXTURES = {
     'B': 'enemyFlying',
     'r': 'spring',
     'R': 'sprung',
-    '~': 'player'
+    '~': 'player',
+    '1': 'teleporter1'
 }
 
 texture_map = list(TEXTURES.values())
@@ -76,6 +77,7 @@ class TileType(Enum):
     SPRING_DOWN = 23
     SPRING_UP = 24
     PLAYER = 25
+    TELEPORTER = 26
 
     def default_texture(self, anim=False):
         """Return the file name of the default texture for the enum."""
