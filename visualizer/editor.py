@@ -10,15 +10,15 @@ class Item(Button):
         self.editor = editor
 
         super().__init__(model="quad",
-                         texture=typ.texture(anim=True),
+                         texture=typ.default_texture(anim=True),
                          position=position,
                          scale=(0.05, 0.05, 0.05),
                          color=color.white)
 
     def on_click(self):
         self.editor.current_paint_type = self.tile_type
-        if self.tile_type.texture():
-            self.editor.current_paint.texture = self.tile_type.texture(anim=True)
+        if self.tile_type.default_texture():
+            self.editor.current_paint.texture = self.tile_type.default_texture(anim=True)
         else:
             self.editor.current_paint.texture = "white_cube"
 
@@ -163,8 +163,9 @@ class Editor():
             for i, line in enumerate(k):
                 for j, tile in enumerate(line.strip()):
                     t = TileType.from_tile(tile)
-                    self.grid[self.height-i-1][j].tile_type = t
-                    self.grid[self.height-i-1][j].texture = t.texture(anim=True)
+                    if t.default_texture():
+                        self.grid[self.height-i-1][j].tile_type = t
+                        self.grid[self.height-i-1][j].texture = t.default_texture(anim=True)
 
 app = Ursina()
 
