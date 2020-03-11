@@ -12,7 +12,7 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/save.txt"
+LEVEL = "./levels/test_laser.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
 # The key is the symbol that is used in the level files to represent the tile,
@@ -45,7 +45,13 @@ TEXTURES = {
     'R': 'sprung',
     '~': 'player',
     '1': 'teleporter1',
-    '2': 'teleporter2'
+    '2': 'teleporter2',
+    'T': 'laserUp', # blue laser
+    'Y': 'laserSwitchBlueOn',
+    'y': 'laserSwitchBlueOff',
+    'u': 'laserBlueHorizontal',
+    'U': 'laserBlueVertical',
+    't': 'laserUpShoot'
 }
 
 texture_map = list(TEXTURES.values())
@@ -80,6 +86,12 @@ class TileType(Enum):
     PLAYER = 25
     TELEPORTER_1= 26
     TELEPORTER_2 = 27
+    LASER_ON = 28
+    LASER_SWITCH_ON = 29
+    LASER_SWITCH_OFF = 30
+    LASER_HORIZ = 31
+    LASER_VERT = 32
+    LASER_OFF = 33
 
     def default_texture(self, anim=False):
         """Return the file name of the default texture for the enum."""
@@ -103,7 +115,9 @@ class TileType(Enum):
         """Does something happen when the player collides with this tile?"""
         return self in [TileType.CHECKPOINT, TileType.SPIKES, TileType.KEY_BLUE,
                             TileType.KEY_RED, TileType.SLICER, TileType.SPRING_DOWN,
-                        TileType.TELEPORTER_1, TileType.TELEPORTER_2]
+                        TileType.TELEPORTER_1, TileType.TELEPORTER_2,
+                        TileType.LASER_ON, TileType.LASER_OFF, TileType.LASER_SWITCH_OFF,
+                        TileType.LASER_SWITCH_ON, TileType.LASER_HORIZ, TileType.LASER_VERT]
     def deadly(self):
         """Does this tile kill the player on collision?"""
         return self in [TileType.SPIKES, TileType.SLICER]

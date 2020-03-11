@@ -1,4 +1,5 @@
 from .DeadlyTile import DeadlyTile
+from .MultidirectionalTile import MultidirectionalTile
 from visualizer.sprite.tile import Hitbox
 from visualizer.sprite.util import Direction
 
@@ -10,14 +11,6 @@ spikes_hitboxes = [
 ]
 
 
-class SpikesTile(DeadlyTile):
-    def __init__(self, *args):
-        super().__init__(*args)
-
+class SpikesTile(DeadlyTile, MultidirectionalTile):
     def setup(self):
-        super().setup()
-        for (hb, direction, rot) in zip(spikes_hitboxes, Direction, [0, 180, 270, 90]):
-            if self.controller.next_is_ground(self, direction):
-                self.hitbox = Hitbox(hb)
-                self.entity.rotation_z = rot
-                return
+        self.hitbox = Hitbox(spikes_hitboxes[super().setup().value])

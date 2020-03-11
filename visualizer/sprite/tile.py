@@ -15,13 +15,17 @@ class Tile():
         self.entity = None
         self.controller = controller
         self.animator = Animator(self, self.texture)
+        self.z_index = z_index
 
         if self.texture:
-            self.entity = Entity(model="quad",
-                                 texture=self.texture,
-                                 scale=1,
-                                 position=(round(self.x),
-                                           round(self.y),  z_index))
+            self.make_entity()
+
+    def make_entity(self):
+        self.entity = Entity(model="quad",
+                             texture=self.texture,
+                             scale=1,
+                             position=(round(self.x),
+                                       round(self.y), self.z_index))
 
     def load(self, new_type, texture=True):
         """Change the type of the tile to new_type. 
