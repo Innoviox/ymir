@@ -9,7 +9,7 @@ from ursina import *
 from visualizer.sprite.util import *
 from visualizer.sprite.tiles import HorizontalMovingTile
 from visualizer.constants import camera_fov,dt,camera_offset,camera_speed, LEVEL, TileType
-
+from math import e
 
 
 
@@ -32,7 +32,15 @@ class Controller():
 
     def update(self):
         for sprite in self.sprites:
-            sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
+            a = sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
+            # if a is not None and "Player" in str(type(sprite)):
+            #     print(a)
+            if a is not None and (a[Direction.LEFT] != [] and a[Direction.RIGHT] != [] or a[Direction.UP] != [] and a[Direction.DOWN] != []):
+                if "Player" in str(type(sprite)):
+                    self.die()
+                else:
+                    sprite.die()
+
             sprite.update(dt)
 
         if self.player.position[1] < 0:
@@ -45,6 +53,18 @@ class Controller():
                 if add and isinstance(j, HorizontalMovingTile):
                     self.moving_tiles.append(j)
                 j.update(dt)
+
+        self.update_camera()
+
+    def update_camera(self):
+        def offset(v, ax=4.9, bx=5, cx=4, ay=4.9, by=5, cy=2, x=True): # https://www.desmos.com/calculator/za8yofdwtd
+            if x:
+                return bx / (1 + e ** -(cx * v - ax))
+            return by / (1 + e ** -(cy * v - ay))
+
+        a = offset(self.player.velocity[0], x=True)
+        b = offset(self.player.velocity[1], x=False)
+        camera.scripts[-1].offset = [a, b, -30]
 
     def die(self):
         self.player.position = np.add(np.array(self.starting_tile.position, dtype='float64'), [0, 0])
@@ -138,7 +158,7 @@ class Controller():
 
     def get_nearby_ground_tiles(self, position, player=True):
         """Get all the adjacent tiles that are of type 'ground' (not air tiles)."""
-        return list(filter(lambda x: x.type.collides() or (player and x.type.player_collides()),
+        return list(filter(lambda x: x.type.solid() or (player and x.type.player_collides()),
                            self.get_nearby_tiles(position)))
 
     def next_tile(self, tile, direction):

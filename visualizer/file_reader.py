@@ -20,20 +20,19 @@ class FileReader():
                 level.append([])
                 m_count = 0
                 for x,tile in enumerate(line.strip()):
-                    if tile == 'A':
+                    tile_type = TileType.from_tile(tile)
+                    if tile_type == TileType.GROUND:
                         if y > 0 and not level[y-1][x].type.is_ground():
-                            tile = tile.lower()
-                        # elif x > 0 and level[y][x-1].type != TileType.GROUND:
-                        #     type = GroundType.LEFT
-                    elif tile == 'W':
+                            tile_type = tile_type.toggle()
+                    elif tile_type == TileType.WATER:
                         if y > 0 and not level[y-1][x].type.is_water():
-                            tile = tile.lower()
+                            tile_type = tile_type.toggle()
 
                     flipped_y = total - y - 1
-                    level[y].append(tile_classes.get(tile, Tile)([x, flipped_y], TileType.from_tile(tile), None))
+                    level[y].append(tile_classes.get(tile, Tile)([x, flipped_y], tile_type, None))
 
-                    if tile == 'M':
-                        level[y][-1].set_offset(m_count, m_count + len(line[x:]) - len(line[x:].lstrip('M')))
+                    if tile_type == TileType.MOVING:
+                        level[y][-1].set_offset(m_count, m_count + len(line[x:]) - len(line[x:].lstrip(tile)))
                         m_count += 1
                     else:
                         m_count = 0

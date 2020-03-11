@@ -77,7 +77,7 @@ class TileType(Enum):
     SPRING_UP = 24
     PLAYER = 25
 
-    def texture(self, anim=False):
+    def default_texture(self, anim=False):
         """Return the file name of the default texture for the enum."""
         if anim and self.animatable():
             return texture_map[self.value - 1] + "_1"
@@ -91,9 +91,10 @@ class TileType(Enum):
     def is_ground(self): return self in [TileType.GROUND, TileType.GROUND_TOP]
     def is_water(self): return self in [TileType.WATER, TileType.WATER_TOP]
 
-    def collides(self):
+    def solid(self):
         """Can a sprite NOT pass through this tile?"""
         return self.is_ground() or self.value in [TileType.LOCK_BLUE, TileType.LOCK_RED]
+
     def player_collides(self):
         """Does something happen when the player collides with this tile?"""
         return self.value in [TileType.CHECKPOINT, TileType.SPIKES, TileType.KEY_BLUE, 

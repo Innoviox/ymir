@@ -84,7 +84,6 @@ def collide(p, t, x=True):
             chg = False
         if chg:
             p.velocity[1] = 0
-
     return direction
 
 class Hitbox():
