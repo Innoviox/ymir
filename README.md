@@ -11,3 +11,13 @@ In `sprite/enemy.py`:
 
 1. Make your class
 2. Put `letter: your_class` in enemies (at the bottom)
+
+## TODO
+1. Weapons
+    Create a `tool` (`weapon?`) property of `Sprite`
+    Provide automatic weapon-use behavior for enemies
+2. Teleporters
+3. AI Level Generation (!!!)
+4. Pickups (tools, weapons)
+5. Skill points
+6. Character customization (tied to skill points)
