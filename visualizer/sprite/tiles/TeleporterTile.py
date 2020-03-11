@@ -9,17 +9,16 @@ teleporter_delay = 1 # teleporter delay in seconds
                      # todo: put countdown in HUD
 
 class TeleporterTile(Tile):
-    teleported = False
+    teleported = defaultdict(lambda: False)
 
     def setup(self):
         teleporter_locations[self.type.char].append(self.position)
 
     def collide(self, tile, direction, commit=True):
-        if commit and 'Player' in str(type(tile)) and held_keys['s'] and not TeleporterTile.teleported:
-            TeleporterTile.teleported = True
-            Sequence(teleporter_delay, Func(self.set_teleported, False)).start()
+        if commit and 'Player' in str(type(tile)) and held_keys['s'] and not TeleporterTile.teleported[self.type.char]:
+            Sequence(Func(self.set_teleported, True), teleporter_delay, Func(self.set_teleported, False)).start()
             self.controller.player.position = [i for i in teleporter_locations[self.type.char] if i != self.position][0]
         return False
 
     def set_teleported(self, val):
-        TeleporterTile.teleported = val
+        TeleporterTile.teleported[self.type.char] = val
