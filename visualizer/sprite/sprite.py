@@ -57,8 +57,7 @@ class Sprite(Tile, ABC):
                                     , abs(self.position[1] + 1.0 - tile.y)) / abs(self.velocity[1])
                 else:
                     vert_time = 1000
-                # if 'Slime' in str(type(self)): print(tile)
-                # print(tiles, self.position, tile.position, self.velocity, vert_time, horiz_time)
+
                 if vert_time == horiz_time:
                     collided[collide(self, tile, x=True)].append(tile)
                     collided[collide(self, tile, x=False)].append(tile)

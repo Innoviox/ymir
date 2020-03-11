@@ -32,7 +32,15 @@ class Controller():
 
     def update(self):
         for sprite in self.sprites:
-            sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
+            a = sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
+            # if a is not None and "Player" in str(type(sprite)):
+            #     print(a)
+            if a is not None and (a[Direction.LEFT] != [] and a[Direction.RIGHT] != [] or a[Direction.UP] != [] and a[Direction.DOWN] != []):
+                if "Player" in str(type(sprite)):
+                    self.die()
+                else:
+                    sprite.die()
+
             sprite.update(dt)
 
         if self.player.position[1] < 0:
