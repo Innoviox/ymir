@@ -33,3 +33,6 @@ class Player(Sprite):
     def jump(self):
         self.velocity[1] += self.jump_speed
         self.can_jump = False
+
+    def die(self):
+        self.controller.die()
