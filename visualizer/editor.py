@@ -171,7 +171,7 @@ app = Ursina()
 
 editor = Editor()
 
-editor.load_file("./levels/test_file_3.txt")
+# editor.load_file("./levels/test_file_3.txt")
 
 input_handler.bind('right arrow', 'd')
 input_handler.bind('left arrow', 'a')

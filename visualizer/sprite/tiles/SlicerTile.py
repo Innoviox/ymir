@@ -1,13 +1,16 @@
 from .DeadlyTile import DeadlyTile
 from .HorizontalMovingTile import HorizontalMovingTile
 from visualizer.sprite.util import Direction
-
+from random import choice
 max_slicer_speed = 0.5
 
 class SlicerTile(DeadlyTile, HorizontalMovingTile):
     def __init__(self, *args):
         super().__init__(*args)
-        self.current_direction = Direction.RIGHT
+
+        self.current_direction = choice([Direction.RIGHT, Direction.LEFT])
+        self.speed = [-1, 1][self.current_direction==Direction.RIGHT]*self.speed
+
         self.total = None
         self.carry_with = False
 

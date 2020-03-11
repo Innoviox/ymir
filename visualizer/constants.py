@@ -12,7 +12,7 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/teleporter_test.txt"
+LEVEL = "./levels/save.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
 # The key is the symbol that is used in the level files to represent the tile,
@@ -44,7 +44,8 @@ TEXTURES = {
     'r': 'spring',
     'R': 'sprung',
     '~': 'player',
-    '1': 'teleporter1'
+    '1': 'teleporter1',
+    '2': 'teleporter2'
 }
 
 texture_map = list(TEXTURES.values())
@@ -77,7 +78,8 @@ class TileType(Enum):
     SPRING_DOWN = 23
     SPRING_UP = 24
     PLAYER = 25
-    TELEPORTER = 26
+    TELEPORTER_1= 26
+    TELEPORTER_2 = 27
 
     def default_texture(self, anim=False):
         """Return the file name of the default texture for the enum."""
@@ -100,7 +102,8 @@ class TileType(Enum):
     def player_collides(self):
         """Does something happen when the player collides with this tile?"""
         return self in [TileType.CHECKPOINT, TileType.SPIKES, TileType.KEY_BLUE,
-                            TileType.KEY_RED, TileType.SLICER, TileType.SPRING_DOWN]
+                            TileType.KEY_RED, TileType.SLICER, TileType.SPRING_DOWN,
+                        TileType.TELEPORTER_1, TileType.TELEPORTER_2]
     def deadly(self):
         """Does this tile kill the player on collision?"""
         return self in [TileType.SPIKES, TileType.SLICER]
