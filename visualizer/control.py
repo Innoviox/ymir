@@ -145,13 +145,13 @@ class Controller():
     def tile_at(self, x, y):
         """Get the tile at a given position, or None if the position is out of bounds."""
         x, y = int(x), int(y)
+        y = len(self.tile_array) - y - 1
         if 0 <= y < len(self.tile_array) and 0 <= x < len(self.tile_array[y]):
             return self.tile_array[y][x]
 
     def get_nearby_tiles(self, position):
         """Return an array of the four tiles in a square around the position's actual position."""
         temp_position = position / 1.0
-        temp_position[1] = len(self.tile_array) - temp_position[1] - 1
         a, b = int(temp_position[1]), int(temp_position[0])
         for (da, db) in [[0, 0], [1, 0], [0, 1], [1, 1]]:
             t = self.tile_at(b + db, a + da)
@@ -169,8 +169,7 @@ class Controller():
         else:
             dx, dy = direction
 
-        l = len(self.tile_array)
-        px, py = int(tile.position[0] + dx), l - (int(tile.position[1] + dy)) - 1
+        px, py = int(tile.position[0] + dx), (int(tile.position[1] + dy))
 
         return self.tile_at(px, py)
 
