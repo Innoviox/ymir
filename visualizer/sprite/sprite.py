@@ -34,13 +34,18 @@ class Sprite(Tile, ABC):
 
         if len(tiles) == 0:
             pass
-        elif len(tiles) == 2:
+
+
+
+        if len(tiles) == 2:
             # vertically stacked tiles, snap horizontally
             t = tiles[0]
             if tiles[0].x == tiles[1].x:
-                collided[collide(self, t, x=True)].append(t)
+                collided[find_direction(self, t, x=True)].append(t)
+                collide(self, t, x=True)
             else: # horizontally connected tiles, snap vertically
-                collided[collide(self, tiles[0], x=False)].append(t)
+                collided[find_direction(self, tiles[0], x=False)].append(t)
+                collide(self, t, x=False)
         else:
             # position snapping, only if a single tile is collided, this will be buggy
             for tile in tiles:
@@ -59,14 +64,20 @@ class Sprite(Tile, ABC):
                     vert_time = 1000
 
                 if vert_time == horiz_time:
-                    collided[collide(self, tile, x=True)].append(tile)
-                    collided[collide(self, tile, x=False)].append(tile)
+                    collided[find_direction(self, tile, x=True)].append(tile)
+                    collided[find_direction(self, tile, x=False)].append(tile)
+                    collide(self, tile, x=True)
+                    collide(self, tile, x=False)
+
                 elif vert_time < horiz_time:
                     # vertical position snapping
-                    collided[collide(self, tile, x=False)].append(tile)
+                    collided[find_direction(self, tile, x=False)].append(tile)
+                    collide(self, tile, x=False)
                 else:
                     # horizontal position snapping
-                    collided[collide(self, tile, x=True)].append(tile)
+                    collided[find_direction(self, tile, x=True)].append(tile)
+                    collide(self, tile, x=True)
+
         self.last_collided = collided
         return collided
 
