@@ -10,7 +10,7 @@ class Item(Button):
         self.editor = editor
 
         super().__init__(model="quad",
-                         texture=typ.texture(),
+                         texture=typ.texture(anim=True),
                          position=position,
                          scale=(0.05, 0.05, 0.05),
                          color=color.white)
@@ -58,6 +58,22 @@ dirs = {'s': [0, .1], 'd': [-.1, 0], 'w': [0, -.1], 'a': [.1, 0]}
 
 class Editor():
     def __init__(self):
+        self.add_row_button = Button(
+            parent=scene,
+            position=(-0.5, 4, -1),
+            origin_y=.5,
+            on_click=self.add_row,
+            text='+r'
+        )
+
+        self.add_col_button = Button(
+            parent=scene,
+            position=(2, 4, -1),
+            origin_y=.5,
+            on_click=self.add_col,
+            text='+c'
+        )
+
         off_x = -.4
         off_y = .4
         x = 0
@@ -72,6 +88,8 @@ class Editor():
             self.grid.append([])
             for x in range(20):
                 self.grid[-1].append(Voxel(self, (x / 2, y / 2 - 1, 0)))
+        self.height = 15
+        self.width = 20
 
         self.current_paint = Entity(
             parent=scene,
@@ -84,13 +102,6 @@ class Editor():
         self.current_paint_type = TileType.AIR
 
     def input(self, key):
-        print(key)
-        # if key in dirs:
-            # for row in self.grid:
-            #     for e in row:
-            #         e.x += dirs[key][0]
-            #         e.y += dirs[key][1]
-
         if key == 'left mouse up': # what the hell ursina
             held_keys['left mouse down'] = 0
         if key.endswith('up'):
@@ -115,6 +126,23 @@ class Editor():
                     f.write(e.tile_type.char)
                 f.write("\n")
 
+    def fix_grid(self):
+        for y in range(self.height):
+            for x in range(self.width):
+                self.grid[y][x].position = (x / 2, y / 2 - 1, 0)
+
+    def add_row(self):
+        self.fix_grid()
+        self.grid.append([])
+        for x in range(self.width):
+            self.grid[-1].append(Voxel(self, (x / 2, self.height / 2 - 1, 0)))
+        self.height += 1
+
+    def add_col(self):
+        self.fix_grid()
+        for y in range(self.height):
+            self.grid[y].append(Voxel(self, ((self.width - 1) / 2, y / 2 - 1, 0)))
+        self.width += 1
 
 app = Ursina()
 
