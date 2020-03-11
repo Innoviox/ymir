@@ -15,6 +15,9 @@ GRAVITY = -.5
 LEVEL = "./levels/test_file_3.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
+# The key is the symbol that is used in the level files to represent the tile,
+# The value is the name of the .png texture file
+# Opposing states are represented by opposite case characters.
 TEXTURES = {
     'A': 'grassCenter',
     'O': None,
@@ -46,6 +49,7 @@ TEXTURES = {
 texture_map = list(TEXTURES.values())
 tile_map = ''.join(TEXTURES.keys())
 
+# TODO remove pointless TileType enums (e.g. GROUND vs GROUND_TOP)
 class TileType(Enum):
     GROUND = 1
     AIR = 2
@@ -74,36 +78,42 @@ class TileType(Enum):
     PLAYER = 25
 
     def texture(self, anim=False):
-        if anim and self.value in [21, 22]:
+        """Return the file name of the default texture for the enum."""
+        if anim and self.animatable():
             return texture_map[self.value - 1] + "_1"
         return texture_map[self.value - 1]
 
     @classmethod
     def from_tile(cls, t):
+        """Given the character symbol of the texture, get the enum associated."""
         return cls._value2member_map_[tile_map.index(t) + 1]
 
-    # todo: make better
-    def is_ground(self): return self.value in [1, 8]
-    def is_water(self): return self.value in [7, 9]
+    def is_ground(self): return self in [TileType.GROUND, TileType.GROUND_TOP]
+    def is_water(self): return self in [TileType.WATER, TileType.WATER_TOP]
 
     def collides(self):
-        return self.is_ground() or self.value in [17, 19]
-
+        """Can a sprite NOT pass through this tile?"""
+        return self.is_ground() or self.value in [TileType.LOCK_BLUE, TileType.LOCK_RED]
     def player_collides(self):
-        return self.value in [11, 13, 16, 18, 20, 23]
-
+        """Does something happen when the player collides with this tile?"""
+        return self.value in [TileType.CHECKPOINT, TileType.SPIKES, TileType.KEY_BLUE, 
+                            TileType.KEY_RED, TileType.SLICER, TileType.SPRING_DOWN]
     def deadly(self):
-        return self.value in [13, 20]
-
-    def toggle(self):
-        return TileType.from_tile(self.char.swapcase())
-
+        """Does this tile kill the player on collision?"""
+        return self.value in [TileType.SPIKES, TileType.SLICER]
     def animatable(self):
-        return self.value in [3, 4, 5, 6]
-
+        """Does this tile have an associated Animator?"""
+        return self.value in [TileType.SLIME, TileType.BUZZARD]
     def jump_through(self):
-        return self.value in [10, 14, 15]
+        """Can the player jump through the bottom of this tile?"""
+        return self.value in [TileType.MOVING, TileType.MOVING_LEFT, TileType.MOVING_RIGHT]
+   
+    def toggle(self):
+        """Return the TileType enum of the opposite state 
+        (the one associated with the opposite case character symbol)."""
+        return TileType.from_tile(self.char.swapcase())
 
     @property
     def char(self):
+        """Given an enum, get the associated character symbol."""
         return tile_map[self.value - 1]

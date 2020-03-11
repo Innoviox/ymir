@@ -3,13 +3,14 @@ from ursina import load_texture
 class Animator:
     def __init__(self, sprite, base_texture, anim_every=10, cycle=True):
         self.sprite = sprite
-        self.anim_every = anim_every
+        self.anim_every = anim_every # loop cycle
         self.anim_step = 0
         self.anim_frame = 1
         self.base_texture = base_texture
         self.animating = True
         self.anim_dir = 1
-        self.cycle = cycle
+        self.cycle = cycle  # True: oscillates through textures (1,2,3,2,1,2,3...)
+                            # False: loops through textures (1,2,3,1,2,3,1,2,3...)
 
         self.max_frames = 0
         while load_texture(f"{self.base_texture}_{self.max_frames + 1}"):
