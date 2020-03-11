@@ -2,8 +2,9 @@ from visualizer.sprite.tile import Tile, TileType
 from visualizer.sprite.util import inside, Direction
 
 class HorizontalMovingTile(Tile):
-    def __init__(self, *args):
-        super().__init__(*args, hitbox=[0.0, 0.5, 1.0, 1.0], z_index=3)
+    def __init__(self, *args, **kwargs):
+        hitbox = kwargs.pop("hitbox", [0.0, 0.5, 1.0, 1.0])
+        super().__init__(*args, hitbox=hitbox, z_index=3)
 
         self.speed = 0.1
         self.offset = [0, 1]

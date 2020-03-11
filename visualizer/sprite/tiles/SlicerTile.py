@@ -6,7 +6,7 @@ max_slicer_speed = 0.5
 
 class SlicerTile(DeadlyTile, HorizontalMovingTile):
     def __init__(self, *args):
-        super().__init__(*args)
+        super().__init__(*args, hitbox=[0, 0, 1, 1])
 
         self.current_direction = choice([Direction.RIGHT, Direction.LEFT])
         self.speed = [-1, 1][self.current_direction==Direction.RIGHT]*self.speed
