@@ -1,7 +1,7 @@
 from visualizer.sprite.tile import Tile, Hitbox
 from visualizer.sprite.sprite import Sprite
 from visualizer.sprite.util import Direction
-from ursina import Sequence, Func, Wait
+from ursina import Sequence, Func
 
 class SpringTile(Tile):
     def setup(self):
@@ -11,8 +11,7 @@ class SpringTile(Tile):
         if commit and isinstance(tile, Sprite):
             if direction == Direction.UP:
                 tile.velocity[1] = 3
-                self.sequence = Sequence(Func(self.load_toggle), Wait(5), Func(self.load_toggle))
-                self.sequence.start()
+                Sequence(Func(self.load_toggle), 1, Func(self.load_toggle)).start()
                 return False
             return True
         return False
