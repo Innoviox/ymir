@@ -34,8 +34,7 @@ class Sprite(Tile, ABC):
     def update_collisions(self, tiles, tile_array):
         collided = defaultdict(list)
 
-        # solid_tiles = [i for i in tiles if i.type.solid()]
-        solid_tiles = tiles
+        solid_tiles = [i for i in tiles if i.type.solid()]
 
         if len(solid_tiles) == 0:
             pass

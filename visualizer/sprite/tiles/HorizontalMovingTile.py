@@ -1,5 +1,5 @@
 from visualizer.sprite.tile import Tile, TileType
-from visualizer.sprite.util import Direction
+from visualizer.sprite.util import inside
 
 class HorizontalMovingTile(Tile):
     def __init__(self, *args, **kwargs):
@@ -21,7 +21,7 @@ class HorizontalMovingTile(Tile):
 
         if self.carry_with:
             for entity in self.controller.sprites:
-                if not entity.on_moving_tile and self.inside_position(entity.position + [0, -.1], entity.hitbox):
+                if not entity.on_moving_tile and inside(entity.position + [0, -.1], self, hitbox = entity.hitbox):
                     entity.position[0] += self.speed
                     entity.on_moving_tile = self
 
