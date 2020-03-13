@@ -55,17 +55,17 @@ def collide(p, t, x=True, commit=False):
     chg = True
     direction = None
     if x:
-        if t.x + t.hitbox.min_x < p.position[0] + p.hitbox.min_x < t.x + t.hitbox.max_x:
+        if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
             if t.collide(p, Direction.LEFT, commit=commit):
                 if commit:
-                    p.position[0] = t.x + t.hitbox.max_x - p.hitbox.min_x
+                    p.position[0] = t.x + t.hitbox.max_x
                 direction = Direction.RIGHT
             else:
                 chg = False
-        elif t.x + t.hitbox.min_x < p.position[0] + p.hitbox.max_x < t.x + t.hitbox.max_x:
+        elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
             if t.collide(p, Direction.RIGHT, commit=commit):
                 if commit:
-                    p.position[0] = t.x - (p.hitbox.max_x) #- p.hitbox.min_x)
+                    p.position[0] = t.x - t.hitbox.max_x
                 direction = Direction.LEFT
             else:
                 chg = False
@@ -74,7 +74,7 @@ def collide(p, t, x=True, commit=False):
         if chg and commit:
             p.velocity[0] = 0
     else:
-        if t.y + t.hitbox.min_y < p.position[1] + p.hitbox.min_y < t.y + t.hitbox.max_y:
+        if t.y + t.hitbox.min_y < p.position[1] < t.y + t.hitbox.max_y:
             if t.collide(p, Direction.UP, commit=commit):
                 if commit:
                     p.position[1] = t.y + t.hitbox.max_y
@@ -82,10 +82,10 @@ def collide(p, t, x=True, commit=False):
                 direction = Direction.DOWN
             else:
                 chg = False
-        elif t.y + t.hitbox.min_y < p.position[1] + p.hitbox.max_y < t.y + t.hitbox.max_y:
+        elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
             if t.collide(p, Direction.DOWN, commit=commit):
                 if commit:
-                    p.position[1] = t.y - p.hitbox.max_y
+                    p.position[1] = t.y - t.hitbox.max_y
                 direction = Direction.UP
             else:
                 chg = False

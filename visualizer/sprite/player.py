@@ -4,7 +4,6 @@ Create a 'Player' object that stores all of the necessary physics-y info
 '''
 import numpy as np
 
-from visualizer.sprite import util
 from .sprite import Sprite
 from ursina.input_handler import held_keys
 
@@ -14,6 +13,7 @@ class Player(Sprite):
         self.animator.stop()
         self.animator.anim_every = 5
         self.animator.cycle = False
+
     def setup(self):
         self.entity.double_sided = True
 
