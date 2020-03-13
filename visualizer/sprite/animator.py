@@ -7,6 +7,7 @@ class Animator:
         self.anim_step = 0  # increments every time update() is called, used w/ anim_every 
         self.anim_frame = 1 # the current (sort of) frame of animation 
         self.base_texture = base_texture
+        self._base_texture = base_texture
         self.animating = True
         self.anim_dir = 1   # in what direction should the animation proceed?
                             # if 1, then go forwards; if -1, then go backwards
@@ -60,3 +61,6 @@ class Animator:
     def set_texture(self, t):
         self.stop()
         self.sprite.entity.texture = f"{self.base_texture}_{t}"
+
+    def set_base(self, n):
+        self.base_texture = self._base_texture + n

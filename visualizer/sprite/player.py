@@ -9,7 +9,7 @@ from ursina.input_handler import held_keys
 
 class Player(Sprite):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, z_index=4)
+        super().__init__(*args, **kwargs, hitbox=[.13, 0, .86, .84], z_index=4)
         self.animator.stop()
 
     def setup(self):
@@ -35,18 +35,17 @@ class Player(Sprite):
             else: # if you can't jump, then null player input upwards
                 self.input[1] = 0
 
+        if self.velocity[0] < 0: # can't rotate player because then the camera would rotate
+            self.animator.set_base("_flipped")
+        elif self.velocity[0] > 0:
+            self.animator.set_base("")
+
         if self.velocity[1] < -0.1:
             self.animator.set_texture("fall")
+        elif abs(self.velocity[0]) > 0.1:
+            self.animator.start()
         else:
-            if abs(self.velocity[0]) > 0.1:
-                self.animator.start()
-            else:
-                self.animator.stop()
-
-        if self.velocity[0] < 0:
-            self.entity.rotation_y = 180
-        elif self.velocity[0] > 0:
-            self.entity.rotation_y = 0
+            self.animator.stop()
 
     def jump(self):
         self.velocity[1] += self.jump_speed
