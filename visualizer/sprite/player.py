@@ -7,9 +7,14 @@ import numpy as np
 from .sprite import Sprite
 from ursina.input_handler import held_keys
 
+player_hitboxes = {
+    'adventurer': [.13, 0, .86, .84]
+}
+
 class Player(Sprite):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, hitbox=[.13, 0, .86, .84], z_index=4)
+        super().__init__(*args, **kwargs, z_index=4)
+        self.hitbox._hb = player_hitboxes[self.type.default_texture()]
         self.animator.stop()
 
     def setup(self):
