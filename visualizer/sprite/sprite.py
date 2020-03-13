@@ -109,6 +109,12 @@ class Sprite(Tile, ABC):
         if self.gravity and not self.on_ground:
             self.velocity[1] += GRAVITY * dt
 
+        # d = self.last_collided.get(Direction.DOWN)
+        # if d:
+        #     m = [i for i in d if i.type.moving()]
+        #     if m:
+        #         self.position[0] += m[0].speed
+
     def collide(self, tile, direction, commit=True):
         return False
 
