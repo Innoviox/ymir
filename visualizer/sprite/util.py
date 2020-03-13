@@ -25,19 +25,34 @@ def mag(a):
     """Returns the magnitude of a list, interpreted as a numeric vector.""" 
     return math.sqrt(sum([x * x for x in a]))
 
+class Hitbox():
+    def __init__(self, hb):
+        self._hb = hb[:]
 
-def inside(position, tile, density = 10): # TODO: transparency (hitboxes)
+    @property
+    def min_x(self): return self._hb[0]
+
+    @property
+    def min_y(self): return self._hb[1]
+
+    @property
+    def max_x(self): return self._hb[2]
+
+    @property
+    def max_y(self): return self._hb[3]
+
+def inside(position, tile, density = 10, hitbox = Hitbox([0,0,1,1])): # TODO: transparency (hitboxes)
     """Tells if an entity (anything with an ordered pair position vector) is inside the given tile.
     Works by testing the boundary points of the one by one box with the bottom left corner 
     in the specified position."""
     for i in range(density):
-        if point_inside([position[0] + i / density, position[1]], tile):
+        if point_inside([position[0] + i / density * (hitbox[2] - hitbox[0]), position[1] + hitbox[1]], tile):
             return True
-        if point_inside([position[0] + i / density, position[1] + 1.0], tile):
+        if point_inside([position[0] + i / density * (hitbox[2] - hitbox[0]), position[1] + hitbox[3]], tile):
             return True
-        if point_inside([position[0], position[1] + i / density], tile):
+        if point_inside([position[0] + hitbox[0], position[1] + i / density * (hitbox[3] - hitbox[1])], tile):
             return True
-        if point_inside([position[0] + 1.0, position[1] + i / density], tile):
+        if point_inside([position[0] + hitbox[2], position[1] + i / density * (hitbox[3] - hitbox[1])], tile):
             return True
     return False
 
@@ -95,18 +110,3 @@ def collide(p, t, x=True, commit=False):
 
     return direction
 
-class Hitbox():
-    def __init__(self, hb):
-        self._hb = hb[:]
-
-    @property
-    def min_x(self): return self._hb[0]
-
-    @property
-    def min_y(self): return self._hb[1]
-
-    @property
-    def max_x(self): return self._hb[2]
-
-    @property
-    def max_y(self): return self._hb[3]

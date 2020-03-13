@@ -155,7 +155,9 @@ class Controller():
         a, b = int(temp_position[1]), int(temp_position[0])
         for (da, db) in [[0, 0], [1, 0], [0, 1], [1, 1]]:
             t = self.tile_at(b + db, a + da)
-            if t: yield t
+
+            if t:
+                yield t
 
     def get_nearby_ground_tiles(self, position, player=True):
         """Get all the adjacent tiles that are of type 'ground' (not air tiles)."""
