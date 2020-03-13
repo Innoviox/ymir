@@ -37,7 +37,7 @@ class Player(Sprite):
             else: # if you can't jump, then null player input upwards
                 self.input[1] = 0
 
-        if self.animator.anim_step % 20 == 0:
+        if self.animator.anim_step % 50 == 0:
             self.retexture()
 
     def retexture(self):
