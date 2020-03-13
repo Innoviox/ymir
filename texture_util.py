@@ -1,4 +1,5 @@
-from PIL import Image
+from PIL import Image, ImageOps
+from os import listdir
 
 def animate(from_file, to_file, slice_width):
     from_img = Image.open("visualizer/textures/"+from_file+".png")
@@ -17,9 +18,6 @@ def animate(from_file, to_file, slice_width):
 
         width += slice_width
 
-animate("door_openTop", "door_closedTop", 1)
-animate("door_openMid", "door_closedMid", 1)
-
 def fix(file):
     img = Image.open(file + ".png")
     out = Image.new('RGBA', (70, 70), (0, 0, 0, 0))
@@ -29,3 +27,20 @@ def fix(file):
 
     out.paste(x, (0, 70 - new_h, 70, 70))
     out.save(file+".png")
+
+def _flip(file):
+    img = Image.open(file)
+    img = ImageOps.mirror(img)
+    if '_' in file:
+        print(file)
+        a, b = file.split("_")
+        img.save(a+"_flipped_"+b)
+    else:
+        a, b = file.split(".")
+        img.save(a+"_flipped."+b)
+    
+
+def flip(player_directory):
+    for file in listdir(player_directory):
+        if file.endswith(".png"):
+            _flip(player_directory + file)

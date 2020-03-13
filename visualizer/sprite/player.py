@@ -8,13 +8,14 @@ from .sprite import Sprite
 from ursina.input_handler import held_keys
 
 player_hitboxes = {
-    'adventurer': [.13, 0, .86, .84]
+    'adventurer': [.13, 0, .86, .84],
+    # 'alienBlue':
 }
 
 class Player(Sprite):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, z_index=4)
-        self.hitbox._hb = player_hitboxes[self.type.default_texture()]
+        # self.hitbox._hb =  [.13, 0, .86, .84]
         self.animator.stop()
 
     def setup(self):
@@ -45,7 +46,9 @@ class Player(Sprite):
         elif self.velocity[0] > 0:
             self.animator.set_base("")
 
-        if self.velocity[1] < -0.1:
+        if self.velocity[1] > 0.1:
+            self.animator.set_texture("jump")
+        elif self.velocity[1] < -0.1:
             self.animator.set_texture("fall")
         elif abs(self.velocity[0]) > 0.1:
             self.animator.start()

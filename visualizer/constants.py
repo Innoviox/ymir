@@ -43,7 +43,7 @@ TEXTURES = {
     'B': 'enemyFlying',
     'r': 'spring',
     'R': 'sprung',
-    '~': 'adventurer',
+    '~': 'alienBlue',
     '1': 'teleporter1',
     '2': 'teleporter2'
 }
