@@ -10,6 +10,10 @@ from ursina.input_handler import held_keys
 class Player(Sprite):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, z_index=4)
+        self.animator.stop()
+
+    def setup(self):
+        self.entity.double_sided = True
 
     def update(self, dt):
         self.process_input(dt)
@@ -30,6 +34,19 @@ class Player(Sprite):
                self.jump()
             else: # if you can't jump, then null player input upwards
                 self.input[1] = 0
+
+        if self.velocity[1] < -0.1:
+            self.animator.set_texture("fall")
+        else:
+            if abs(self.velocity[0]) > 0.1:
+                self.animator.start()
+            else:
+                self.animator.stop()
+
+        if self.velocity[0] < 0:
+            self.entity.rotation_y = 180
+        elif self.velocity[0] > 0:
+            self.entity.rotation_y = 0
 
     def jump(self):
         self.velocity[1] += self.jump_speed

@@ -12,7 +12,7 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/wfc.txt"
+LEVEL = "./levels/test_file_3.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
 # The key is the symbol that is used in the level files to represent the tile,
@@ -43,7 +43,7 @@ TEXTURES = {
     'B': 'enemyFlying',
     'r': 'spring',
     'R': 'sprung',
-    '~': 'player',
+    '~': 'adventurer',
     '1': 'teleporter1',
     '2': 'teleporter2'
 }

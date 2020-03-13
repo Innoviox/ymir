@@ -52,7 +52,11 @@ class Animator:
 
     def stop(self):
         self.animating = False
+        self.sprite.entity.texture = self.base_texture
 
     def kill(self):
+        self.set_texture("dead")
+
+    def set_texture(self, t):
         self.stop()
-        self.sprite.entity.texture = f"{self.base_texture}_dead"
+        self.sprite.entity.texture = f"{self.base_texture}_{t}"
