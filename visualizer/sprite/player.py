@@ -7,16 +7,12 @@ import numpy as np
 from .sprite import Sprite
 from ursina.input_handler import held_keys
 
-player_hitboxes = {
-    'adventurer': [.13, 0, .86, .84],
-    # 'alienBlue':
-}
-
 class Player(Sprite):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, z_index=4)
-        # self.hitbox._hb =  [.13, 0, .86, .84]
         self.animator.stop()
+        self.animator.anim_every = 5
+        self.animator.cycle = False
 
     def setup(self):
         self.entity.double_sided = True
