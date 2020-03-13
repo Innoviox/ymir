@@ -46,7 +46,7 @@ class Player(Sprite):
             self.animator.set_texture("jump")
         elif self.velocity[1] < -0.1:
             self.animator.set_texture("fall")
-        elif abs(self.velocity[0]) > 0.1:
+        elif abs(self.velocity[0]) > 0.2:
             self.animator.start()
         else:
             self.animator.stop()

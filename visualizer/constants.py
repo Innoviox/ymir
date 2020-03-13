@@ -2,7 +2,7 @@ from enum import Enum
 
 ### Camera constants ###
 scale = 1
-camera_fov = 20
+camera_fov = 10
 camera_offset = [0, 3, -30]
 camera_speed = 2
 OFFSET_X = 0
@@ -12,7 +12,7 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/walktest.txt"
+LEVEL = "./levels/test_file_3.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
 # The key is the symbol that is used in the level files to represent the tile,
