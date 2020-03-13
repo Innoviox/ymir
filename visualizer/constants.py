@@ -12,7 +12,7 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/teleporter_test.txt"
+LEVEL = "./levels/test_file_3.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
 # The key is the symbol that is used in the level files to represent the tile,
@@ -97,7 +97,8 @@ class TileType(Enum):
 
     def solid(self):
         """Can a sprite NOT pass through this tile?"""
-        return self.is_ground() or self in [TileType.LOCK_BLUE, TileType.LOCK_RED]
+        return self.is_ground() or self in [TileType.LOCK_BLUE, TileType.LOCK_RED,
+                                            TileType.MOVING, TileType.MOVING_LEFT, TileType.MOVING_RIGHT]
 
     def player_collides(self):
         """Does something happen when the player collides with this tile?"""
