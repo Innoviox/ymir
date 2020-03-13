@@ -46,13 +46,13 @@ def inside(position, tile, density = 10, hitbox = Hitbox([0,0,1,1])): # TODO: tr
     Works by testing the boundary points of the one by one box with the bottom left corner 
     in the specified position."""
     for i in range(density):
-        if point_inside([position[0] + i / density * (hitbox[2] - hitbox[0]), position[1] + hitbox[1]], tile):
+        if point_inside([position[0] + i / density * (hitbox.max_x - hitbox.min_x), position[1] + hitbox.min_y], tile):
             return True
-        if point_inside([position[0] + i / density * (hitbox[2] - hitbox[0]), position[1] + hitbox[3]], tile):
+        if point_inside([position[0] + i / density * (hitbox.max_x - hitbox.min_x), position[1] + hitbox.max_y], tile):
             return True
-        if point_inside([position[0] + hitbox[0], position[1] + i / density * (hitbox[3] - hitbox[1])], tile):
+        if point_inside([position[0] + hitbox.min_x, position[1] + i / density * (hitbox.max_y - hitbox.min_y)], tile):
             return True
-        if point_inside([position[0] + hitbox[2], position[1] + i / density * (hitbox[3] - hitbox[1])], tile):
+        if point_inside([position[0] + hitbox.max_x, position[1] + i / density * (hitbox.max_y - hitbox.min_y)], tile):
             return True
     return False
 
@@ -69,17 +69,17 @@ def collide(p, t, x=True, commit=False):
     chg = True
     direction = None
     if x:
-        if t.x + t.hitbox.min_x < p.position[0] < t.x + t.hitbox.max_x:
+        if t.x + t.hitbox.min_x < p.position[0] + p.hitbox.min_x < t.x + t.hitbox.max_x:
             if t.collide(p, Direction.LEFT, commit=commit):
                 if commit:
-                    p.position[0] = t.x + t.hitbox.max_x
+                    p.position[0] = t.x + t.hitbox.max_x - p.hitbox.min_x
                 direction = Direction.RIGHT
             else:
                 chg = False
-        elif t.x + t.hitbox.min_x < p.position[0] + t.hitbox.max_x < t.x + t.hitbox.max_x:
+        elif t.x + t.hitbox.min_x < p.position[0] + p.hitbox.max_x < t.x + t.hitbox.max_x:
             if t.collide(p, Direction.RIGHT, commit=commit):
                 if commit:
-                    p.position[0] = t.x - t.hitbox.max_x
+                    p.position[0] = t.x - (p.hitbox.max_x) #- p.hitbox.min_x)
                 direction = Direction.LEFT
             else:
                 chg = False
@@ -88,7 +88,7 @@ def collide(p, t, x=True, commit=False):
         if chg and commit:
             p.velocity[0] = 0
     else:
-        if t.y + t.hitbox.min_y < p.position[1] < t.y + t.hitbox.max_y:
+        if t.y + t.hitbox.min_y < p.position[1] + p.hitbox.min_y < t.y + t.hitbox.max_y:
             if t.collide(p, Direction.UP, commit=commit):
                 if commit:
                     p.position[1] = t.y + t.hitbox.max_y
@@ -96,10 +96,10 @@ def collide(p, t, x=True, commit=False):
                 direction = Direction.DOWN
             else:
                 chg = False
-        elif t.y + t.hitbox.min_y < p.position[1] + t.hitbox.max_y < t.y + t.hitbox.max_y:
+        elif t.y + t.hitbox.min_y < p.position[1] + p.hitbox.max_y < t.y + t.hitbox.max_y:
             if t.collide(p, Direction.DOWN, commit=commit):
                 if commit:
-                    p.position[1] = t.y - t.hitbox.max_y
+                    p.position[1] = t.y - p.hitbox.max_y
                 direction = Direction.UP
             else:
                 chg = False
