@@ -14,6 +14,7 @@ class Player(Sprite):
         self.animator.stop()
         self.animator.anim_every = 5
         self.animator.cycle = False
+        # self.hitbox = util.Hitbox([.3,0,.6,1])
     def setup(self):
         self.entity.double_sided = True
 

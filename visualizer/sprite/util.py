@@ -65,7 +65,7 @@ def collide(p, t, x=True, commit=False):
         elif t.x + t.hitbox.min_x < p.position[0] + p.hitbox.max_x < t.x + t.hitbox.max_x:
             if t.collide(p, Direction.RIGHT, commit=commit):
                 if commit:
-                    p.position[0] = t.x - (p.hitbox.max_x) #- p.hitbox.min_x)
+                    p.position[0] = t.x - (p.hitbox.max_x - p.hitbox.min_x)
                 direction = Direction.LEFT
             else:
                 chg = False
