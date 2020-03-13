@@ -37,6 +37,10 @@ class Player(Sprite):
             else: # if you can't jump, then null player input upwards
                 self.input[1] = 0
 
+        if self.animator.anim_step % 20 == 0:
+            self.retexture()
+
+    def retexture(self):
         if self.velocity[0] < 0: # can't rotate player because then the camera would rotate
             self.animator.set_base("_flipped")
         elif self.velocity[0] > 0:

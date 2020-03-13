@@ -27,6 +27,9 @@ class Animator:
             if self.anim_step % self.anim_every == 0:
                 self.animate()
 
+    def tick(self):
+        return self.anim_step % self.anim_every == 0
+
     def animate(self):
         if self.max_frames == 0:
             return
