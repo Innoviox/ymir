@@ -31,13 +31,16 @@ def fix(file):
 def _flip(file):
     img = Image.open(file)
     img = ImageOps.mirror(img)
-    if '_' in file:
-        print(file)
-        a, b = file.split("_")
-        img.save(a+"_flipped_"+b)
-    else:
-        a, b = file.split(".")
-        img.save(a+"_flipped."+b)
+    try:
+        if '_' in file:
+            a, b = file.split("_")
+            img.save(a+"_flipped_"+b)
+        else:
+            a, b = file.split(".")
+            img.save(a+"_flipped."+b)
+        print("flipped", file)
+    except Exception as e:
+        print("couldn't flip", file, e)
     
 
 def flip(player_directory):
