@@ -2,6 +2,7 @@
 Central hub of the code, basically. Calls the necessary functions to 
 render the scene, get input, move the player, etc. 
 '''
+from visualizer import constants
 from visualizer.sprite import Player
 import numpy as np
 from visualizer.file_reader import *
@@ -18,6 +19,8 @@ class Controller():
     def __init__(self):
         self.app = Ursina()
         self.tile_array = []
+        self.last_update = time.time()
+        self.frame_number = 0
         camera.orthographic = True
         camera.fov = camera_fov
         window.borderless = False
@@ -30,7 +33,19 @@ class Controller():
         window.fps_counter.color = color.black
         # window.fullscreen = True
 
+
     def update(self):
+        if self.frame_number == 0:
+            self.frame_number += 1
+            self.last_update = time.time()
+        elif self.frame_number < 120:
+            self.frame_number += 1
+        elif self.frame_number == 120:
+            self.frame_number += 1
+            delta = 120 / (time.time() - self.last_update)
+            constants.dt = 60/delta * .1
+            print("Using %f as dt" % constants.dt)
+
         for sprite in self.sprites:
             c = sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
 
@@ -38,7 +53,7 @@ class Controller():
             if c and ((c[Direction.LEFT] and c[Direction.RIGHT]) or (c[Direction.UP] and c[Direction.DOWN])):
                 sprite.die()
 
-            sprite.update(dt)
+            sprite.update(constants.dt)
 
         if self.player.position[1] < 0: # kill player if player is below level
             self.die()
@@ -49,7 +64,7 @@ class Controller():
             for x, j in enumerate(i):
                 if add and isinstance(j, HorizontalMovingTile):
                     self.moving_tiles.append(j)
-                j.update(dt)
+                j.update(constants.dt)
 
         self.update_camera()
 
