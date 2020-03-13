@@ -28,18 +28,7 @@ def mag(a):
 class Hitbox():
     def __init__(self, hb):
         self._hb = hb[:]
-
-    @property
-    def min_x(self): return self._hb[0]
-
-    @property
-    def min_y(self): return self._hb[1]
-
-    @property
-    def max_x(self): return self._hb[2]
-
-    @property
-    def max_y(self): return self._hb[3]
+        self.min_x, self.min_y, self.max_x, self.max_y = self._hb
 
 def point_inside(point, position, hitbox):
     """Tells if a position is inside a tile."""
