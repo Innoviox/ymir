@@ -118,7 +118,7 @@ class Editor():
                         e.y += dirs[key][1]
 
     def save(self):
-        file = "levels/test_move.txt"
+        file = "levels/save.txt"
         with open(file, "w") as f:
             f.write("None\n")
             for row in reversed(self.grid):

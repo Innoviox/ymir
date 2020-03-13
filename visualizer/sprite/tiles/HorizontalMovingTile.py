@@ -21,9 +21,8 @@ class HorizontalMovingTile(Tile):
 
         if self.carry_with:
             for entity in self.controller.sprites:
-                if not entity.on_moving_tile and inside(entity.position + [0, -.1], self, hitbox=entity.hitbox):
+                if not entity.on_moving_tile and inside(entity.position + [0, -.1], self, hitbox = entity.hitbox):
                     entity.position[0] += self.speed
-                    entity.velocity[1] = max(0, entity.velocity[1])
                     entity.on_moving_tile = self
 
     def set_offset(self, offset, total):

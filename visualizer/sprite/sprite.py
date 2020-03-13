@@ -38,7 +38,8 @@ class Sprite(Tile, ABC):
 
         if len(solid_tiles) == 0:
             pass
-        elif len(solid_tiles) == 2:
+
+        if len(solid_tiles) == 2:
             # vertically stacked tiles, snap horizontally
             t = solid_tiles[0]
             if t.x == solid_tiles[1].x:
@@ -118,4 +119,4 @@ class Sprite(Tile, ABC):
     @property
     def on_ground(self):
         down = self.last_collided.get(Direction.DOWN)
-        return down and any(i.type.solid() for i in down)
+        return down and any(i.type.is_ground() for i in down)
