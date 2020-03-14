@@ -99,6 +99,9 @@ class TileType(Enum):
         """Can a sprite NOT pass through this tile?"""
         return self.is_ground() or self in [TileType.LOCK_BLUE, TileType.LOCK_RED]
 
+    def moving(self):
+        return self in [TileType.MOVING, TileType.MOVING_LEFT, TileType.MOVING_RIGHT]
+
     def player_collides(self):
         """Does something happen when the player collides with this tile?"""
         return self in [TileType.CHECKPOINT, TileType.SPIKES, TileType.KEY_BLUE,
