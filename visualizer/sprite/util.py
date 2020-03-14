@@ -45,10 +45,11 @@ def inside(position, tile, density = 10, hitbox = Hitbox([0,0,1,1])): # TODO: tr
             return True
     return False
 
-def point_inside(point, tile):
+def point_inside(point, position, hitbox):
     """Tells if a position is inside a tile."""
-    return tile.x + tile.hitbox.min_x < point[0] < tile.x + tile.hitbox.max_x and \
-            tile.y + tile.hitbox.min_y < point[1] < tile.y + tile.hitbox.max_y
+    x, y = position
+    return x + hitbox.min_x < point[0] < x + hitbox.max_x and \
+            y + hitbox.min_y < point[1] < y + hitbox.max_y
 
 def collide(p, t, x=True, commit=False):
     """ Return the direction of Sprite (?) t relative to Sprite (?) p, depending on x.

@@ -64,5 +64,28 @@ class Tile():
     def setup(self):
         ...
 
-    def inside(self, tile):
-        return inside(self.position, tile, hitbox=self.hitbox)
+    def inside(self, tile, density=10):  # TODO: transparency (hitboxes)
+        """Tells if this tile is inside the given tile.
+        Works by testing the boundary points of the one by one box with the bottom left corner
+        in the specified position."""
+        return self.inside_position(tile.position, tile.hitbox, density=density)
+
+    def inside_position(self, position, hitbox, density=3):
+        for i in range(density):
+            if point_inside([self.position[0] + i / density * (self.hitbox.max_x - self.hitbox.min_x),
+                             self.position[1] + self.hitbox.min_y],
+                            position, hitbox):
+                return True
+            if point_inside([self.position[0] + i / density * (self.hitbox.max_x - self.hitbox.min_x),
+                             self.position[1] + self.hitbox.max_y],
+                            position, hitbox):
+                return True
+            if point_inside([self.position[0] + self.hitbox.min_x,
+                             self.position[1] + i / density * (self.hitbox.max_y - self.hitbox.min_y)],
+                            position, hitbox):
+                return True
+            if point_inside([self.position[0] + self.hitbox.max_x,
+                             self.position[1] + i / density * (self.hitbox.max_y - self.hitbox.min_y)],
+                            position, hitbox):
+                return True
+        return False
