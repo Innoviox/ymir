@@ -46,42 +46,46 @@ class Sprite(Tile, ABC):
         else:
             # position snapping, only if a single tile is collided, this will be buggy
             for tile in tiles:
-                if self.velocity[0] != 0:
-                    v = self.velocity[0]
-                    if self.on_moving_tile:
-                        v = self.on_moving_tile.speed * 10
-                    horiz_time = min(abs(self.position[0] + self.hitbox.min_x - (tile.x + tile.hitbox.max_x))
-                                    , abs(self.position[0] + self.hitbox.max_x - (tile.x + tile.hitbox.min_x))) / abs(v)
-                elif round(self.position[0] - tile.x) == 1:
-                    horiz_time = 0
-                else:
-                    horiz_time = 1000
-                if self.velocity[1] != 0:
-                    vert_time = min(abs(self.position[1] + self.hitbox.min_y - (tile.y + tile.hitbox.max_y))
-                                    , abs(self.position[1] + self.hitbox.max_y - (tile.y + tile.hitbox.min_y))) / abs(self.velocity[1])
-                elif round(self.position[1] + self.hitbox.min_y - (tile.y - self.hitbox.max_y)) == 0:
-                    vert_time = 0
-                else:
-                    vert_time = 1000
-
-                if vert_time == horiz_time:
-                    collided[collide(self, tile, x=True, commit=False)].append(tile)
-                    collided[collide(self, tile, x=False, commit=False)].append(tile)
-                    collide(self, tile, x=True, commit=True)
-                    collide(self, tile, x=False, commit=True)
-
-                elif vert_time < horiz_time:
-                    # vertical position snapping
-                    collided[collide(self, tile, x=False, commit=False)].append(tile)
-                    collide(self, tile, x=False, commit=True)
-
-                else:
-                    # horizontal position snapping
-                    collided[collide(self, tile, x=True, commit=False)].append(tile)
-                    collide(self, tile, x=True, commit=True)
+                self._three_collide(tile, collided)
 
         self.last_collided = collided
         return collided
+
+    def _three_collide(self, tile, collided):
+        if self.velocity[0] != 0:
+            v = self.velocity[0]
+            if self.on_moving_tile:
+                v = self.on_moving_tile.speed * 10
+            horiz_time = min(abs(self.position[0] + self.hitbox.min_x - (tile.x + tile.hitbox.max_x))
+                             , abs(self.position[0] + self.hitbox.max_x - (tile.x + tile.hitbox.min_x))) / abs(v)
+        elif round(self.position[0] - tile.x) == 1:
+            horiz_time = 0
+        else:
+            horiz_time = 1000
+        if self.velocity[1] != 0:
+            vert_time = min(abs(self.position[1] + self.hitbox.min_y - (tile.y + tile.hitbox.max_y))
+                            , abs(self.position[1] + self.hitbox.max_y - (tile.y + tile.hitbox.min_y))) / abs(
+                self.velocity[1])
+        elif round(self.position[1] + self.hitbox.min_y - (tile.y - self.hitbox.max_y)) == 0:
+            vert_time = 0
+        else:
+            vert_time = 1000
+
+        if vert_time == horiz_time:
+            collided[collide(self, tile, x=True, commit=False)].append(tile)
+            collided[collide(self, tile, x=False, commit=False)].append(tile)
+            collide(self, tile, x=True, commit=True)
+            collide(self, tile, x=False, commit=True)
+
+        elif vert_time < horiz_time:
+            # vertical position snapping
+            collided[collide(self, tile, x=False, commit=False)].append(tile)
+            collide(self, tile, x=False, commit=True)
+
+        else:
+            # horizontal position snapping
+            collided[collide(self, tile, x=True, commit=False)].append(tile)
+            collide(self, tile, x=True, commit=True)
 
     #abstract please overwrite me
     @abstractmethod
