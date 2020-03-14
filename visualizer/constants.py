@@ -12,7 +12,7 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/test_move.txt"
+LEVEL = "./levels/test_file_3.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
 # The key is the symbol that is used in the level files to represent the tile,
@@ -116,9 +116,9 @@ class TileType(Enum):
     def jump_through(self):
         """Can the player jump through the bottom of this tile?"""
         return self in [TileType.MOVING, TileType.MOVING_LEFT, TileType.MOVING_RIGHT]
-   
+
     def toggle(self):
-        """Return the TileType enum of the opposite state 
+        """Return the TileType enum of the opposite state
         (the one associated with the opposite case character symbol)."""
         return TileType.from_tile(self.char.swapcase())
 

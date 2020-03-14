@@ -128,4 +128,4 @@ class Sprite(Tile, ABC):
     @property
     def on_ground(self):
         down = self.last_collided.get(Direction.DOWN)
-        return down and any(i.type.solid() for i in down)
+        return down and any(i.type.is_ground() for i in down)
