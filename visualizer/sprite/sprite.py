@@ -40,12 +40,13 @@ class Sprite(Tile, ABC):
         for i in tiles:
             [see_through, solid][i.type.solid() or i.type.moving()].append(i)
 
-        if not solid:
-            pass
-        elif len(solid) == 2:
+        if len(solid) == 2:
             self._two_collide(solid, collided)
         else:
             self._three_collide(solid, collided)
+
+        # i like this oneliner :)
+        # [self._three_collide, self._two_collide][len(solid) == 2](solid, collided)
 
         self._three_collide(see_through, collided)
 
