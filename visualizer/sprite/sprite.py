@@ -33,20 +33,28 @@ class Sprite(Tile, ABC):
 
     def update_collisions(self, tiles, tile_array):
         collided = defaultdict(list)
-        if len(tiles) == 0:
-            pass
 
-        if len(tiles) == 2:
+        solid, see_through = [], []
+        for i in tiles:
+            [see_through, solid][i.type.solid()].append(i)
+
+
+        if not solid:
+            pass
+        elif len(solid) == 2:
             # vertically stacked tiles, snap horizontally
-            t = tiles[0]
-            if tiles[0].x == tiles[1].x:
+            t = solid[0]
+            if solid[0].x == solid[1].x:
                 collided[collide(self, t, x=True, commit=True)].append(t)
             else: # horizontally connected tiles, snap vertically
                 collided[collide(self, t, x=False, commit=True)].append(t)
         else:
             # position snapping, only if a single tile is collided, this will be buggy
-            for tile in tiles:
+            for tile in solid:
                 self._three_collide(tile, collided)
+
+        for tile in see_through:
+            self._three_collide(tile, collided)
 
         self.last_collided = collided
         return collided
