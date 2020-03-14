@@ -1,5 +1,5 @@
 from visualizer.sprite.tile import Tile, TileType
-from visualizer.sprite.util import Direction
+from visualizer.sprite.util import inside, Direction, collide
 
 class HorizontalMovingTile(Tile):
     def __init__(self, *args, **kwargs):
@@ -21,9 +21,13 @@ class HorizontalMovingTile(Tile):
 
         if self.carry_with:
             for entity in self.controller.sprites:
-                if not entity.on_moving_tile and self.inside_position(entity.position + [0, -.1], entity.hitbox):
-                    entity.position[0] += self.speed
+                if not entity.on_moving_tile and entity.inside(self):
+                    if collide(entity, self, x=False, commit=False) == Direction.DOWN:
+                        entity.can_jump = True
+                        entity.velocity[1] = 0
+                        entity.position[1] = self.y + self.hitbox.max_y
                     entity.on_moving_tile = self
+                    entity.position[0] += self.speed * 2
 
     def set_offset(self, offset, total):
         if total == 1:
@@ -32,6 +36,7 @@ class HorizontalMovingTile(Tile):
         self.load(TileType.from_tile(f"N{'M' * (total - 2)},"[offset]))
         self.offset = [-offset, total - offset]
 
-    # uncomment if you want to jump through moving platforms
-    # def collide(self, tile, direction):
-    #     return direction != Direction.DOWN
+    # def collide(self, tile, direction, commit=True):
+    #     if commit and direction == Direction.UP:
+    #         tile.velocity[1] = 0
+    #     return True
