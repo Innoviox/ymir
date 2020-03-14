@@ -38,7 +38,11 @@ class Sprite(Tile, ABC):
         # DO NOT MERGE THE .SOLID AND .MOVING METHODS. EVERYTHING WILL BREAK. I DON'T KNOW WHY.
         solid, see_through = [], []
         for i in tiles:
-            [see_through, solid][i.type.solid() or i.type.moving()].append(i)
+            if i.type.solid() or i.type.moving():
+                solid.append(i)
+            else:
+                see_through.append(i)
+            # [see_through, solid][i.type.solid() or i.type.moving()].append(i)
 
         if len(solid) == 2:
             self._two_collide(solid, collided)
@@ -112,12 +116,6 @@ class Sprite(Tile, ABC):
         self.velocity[0] += -self.velocity[0] * (1-self.friction) * dt # slow down due to friction
         if self.gravity and not self.on_ground:
             self.velocity[1] += GRAVITY * dt
-
-        # d = self.last_collided.get(Direction.DOWN)
-        # if d:
-        #     m = [i for i in d if i.type.moving()]
-        #     if m:
-        #         self.position[0] += m[0].speed
 
     def collide(self, tile, direction, commit=True):
         return False
