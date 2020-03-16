@@ -12,7 +12,7 @@ from visualizer.sprite.tiles import HorizontalMovingTile
 from visualizer.constants import camera_fov,dt,camera_offset,camera_speed, LEVEL, TileType
 from math import e
 
-
+from .log import log
 
 
 class Controller():
@@ -43,8 +43,10 @@ class Controller():
         elif self.frame_number == 120:
             self.frame_number += 1
             delta = 120 / (time.time() - self.last_update)
-            constants.dt = 60/delta * .1
+            # constants.dt = 60/delta * .1
             print("Using %f as dt" % constants.dt)
+
+        log.debug(self.player.position)
 
         for sprite in self.sprites:
             c = sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
