@@ -3,6 +3,12 @@
 An AI-generated procedural pseudo-physics-based platformer
 [TODO: Image]
 
+## Dependencies
+- Ursina (the whole 'game' thing)
+- Numpy (for float arrays and that's it)
+- PIL (image processing)
+- Colorama (because WFC needs it)
+
 ## How to Add an Enemy:
 
 In `sprite/tile.py`: 
