@@ -70,7 +70,7 @@ class Tile():
         in the specified position."""
         return self.inside_position(tile.position, tile.hitbox, density=density)
 
-    def inside_position(self, position, hitbox, density=3):
+    def inside_position(self, position, hitbox, density=10):
         for i in range(density):
             if point_inside([self.position[0] + i / density * (self.hitbox.max_x - self.hitbox.min_x), self.position[1] + self.hitbox.min_y],
                             position, hitbox):
