@@ -90,6 +90,7 @@ class Controller():
     def sprite_colliding (self, sprite):
         ground_tiles = self.get_nearby_ground_tiles(sprite.position, player=isinstance(sprite, Player))
         ground_tiles.extend(self.moving_tiles)
+        #todo filter out ground tiles from being added in this loop (this will dramatically speed things up for player collisions)
         if isinstance(sprite, Player):
             ground_tiles.extend(filter(lambda i: i is not sprite, self.sprites))
         collided_tiles = list(filter(sprite.inside, ground_tiles))
