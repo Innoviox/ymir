@@ -1,5 +1,5 @@
 from visualizer.sprite.tile import Tile, TileType
-from visualizer.sprite.util import Direction
+from visualizer.sprite.util import inside, Direction, collide
 
 class HorizontalMovingTile(Tile):
     def __init__(self, *args, **kwargs):
@@ -32,6 +32,7 @@ class HorizontalMovingTile(Tile):
         self.load(TileType.from_tile(f"N{'M' * (total - 2)},"[offset]))
         self.offset = [-offset, total - offset]
 
-    # uncomment if you want to jump through moving platforms
-    # def collide(self, tile, direction):
-    #     return direction != Direction.DOWN
+    # def collide(self, tile, direction, commit=True):
+    #     if commit and direction == Direction.UP:
+    #         tile.velocity[1] = 0
+    #     return True

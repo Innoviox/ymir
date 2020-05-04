@@ -41,14 +41,14 @@ class Player(Sprite):
             self.retexture()
 
     def retexture(self):
-        if self.velocity[0] < 0: # can't rotate player because then the camera would rotate
+        if self.velocity[0] < 0.1: # can't rotate player because then the camera would rotate
             self.animator.set_base("_flipped")
-        elif self.velocity[0] > 0:
+        elif self.velocity[0] > 0.1:
             self.animator.set_base("")
 
-        if self.velocity[1] > 0.1:
+        if self.velocity[1] > 0.2:
             self.animator.set_texture("jump")
-        elif self.velocity[1] < -0.1:
+        elif self.velocity[1] < -0.2:
             self.animator.set_texture("fall")
         elif abs(self.velocity[0]) > 0.2:
             self.animator.start()

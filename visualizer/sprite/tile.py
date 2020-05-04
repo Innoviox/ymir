@@ -72,16 +72,20 @@ class Tile():
 
     def inside_position(self, position, hitbox, density=10):
         for i in range(density):
-            if point_inside([self.position[0] + i / density * (self.hitbox.max_x - self.hitbox.min_x), self.position[1] + self.hitbox.min_y],
+            if point_inside([self.position[0] + i / density * (self.hitbox.max_x - self.hitbox.min_x),
+                             self.position[1] + self.hitbox.min_y],
                             position, hitbox):
                 return True
-            if point_inside([self.position[0] + i / density * (self.hitbox.max_x - self.hitbox.min_x), self.position[1] + self.hitbox.max_y],
+            if point_inside([self.position[0] + i / density * (self.hitbox.max_x - self.hitbox.min_x),
+                             self.position[1] + self.hitbox.max_y],
                             position, hitbox):
                 return True
-            if point_inside([self.position[0] + self.hitbox.min_x, self.position[1] + i / density * (self.hitbox.max_y - self.hitbox.min_y)],
+            if point_inside([self.position[0] + self.hitbox.min_x,
+                             self.position[1] + i / density * (self.hitbox.max_y - self.hitbox.min_y)],
                             position, hitbox):
                 return True
-            if point_inside([self.position[0] + self.hitbox.max_x, self.position[1] + i / density * (self.hitbox.max_y - self.hitbox.min_y)],
+            if point_inside([self.position[0] + self.hitbox.max_x,
+                             self.position[1] + i / density * (self.hitbox.max_y - self.hitbox.min_y)],
                             position, hitbox):
                 return True
         return False

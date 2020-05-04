@@ -30,6 +30,21 @@ class Hitbox():
         self._hb = hb[:]
         self.min_x, self.min_y, self.max_x, self.max_y = self._hb
 
+def inside(position, tile, density = 10, hitbox = Hitbox([0,0,1,1])): # TODO: transparency (hitboxes)
+    """Tells if an entity (anything with an ordered pair position vector) is inside the given tile.
+    Works by testing the boundary points of the one by one box with the bottom left corner
+    in the specified position."""
+    for i in range(density):
+        if point_inside([position[0] + i / density * (hitbox.max_x - hitbox.min_x), position[1] + hitbox.min_y], tile):
+            return True
+        if point_inside([position[0] + i / density * (hitbox.max_x - hitbox.min_x), position[1] + hitbox.max_y], tile):
+            return True
+        if point_inside([position[0] + hitbox.min_x, position[1] + i / density * (hitbox.max_y - hitbox.min_y)], tile):
+            return True
+        if point_inside([position[0] + hitbox.max_x, position[1] + i / density * (hitbox.max_y - hitbox.min_y)], tile):
+            return True
+    return False
+
 def point_inside(point, position, hitbox):
     """Tells if a position is inside a tile."""
     x, y = position

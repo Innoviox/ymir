@@ -12,7 +12,7 @@ OFFSET_Y = 0
 dt = .1
 GRAVITY = -.5
 
-LEVEL = "./levels/hard_platforming.txt"
+LEVEL = "./levels/test_positions.txt"
 SKYBOX_PATHS = "./textures/Backgrounds"
 
 # The key is the symbol that is used in the level files to represent the tile,
@@ -99,6 +99,9 @@ class TileType(Enum):
         """Can a sprite NOT pass through this tile?"""
         return self.is_ground() or self in [TileType.LOCK_BLUE, TileType.LOCK_RED]
 
+    def moving(self):
+        return self in [TileType.MOVING, TileType.MOVING_LEFT, TileType.MOVING_RIGHT]
+
     def player_collides(self):
         """Does something happen when the player collides with this tile?"""
         return self in [TileType.CHECKPOINT, TileType.SPIKES, TileType.KEY_BLUE,
@@ -113,9 +116,9 @@ class TileType(Enum):
     def jump_through(self):
         """Can the player jump through the bottom of this tile?"""
         return self in [TileType.MOVING, TileType.MOVING_LEFT, TileType.MOVING_RIGHT]
-   
+
     def toggle(self):
-        """Return the TileType enum of the opposite state 
+        """Return the TileType enum of the opposite state
         (the one associated with the opposite case character symbol)."""
         return TileType.from_tile(self.char.swapcase())
 

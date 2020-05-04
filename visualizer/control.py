@@ -12,7 +12,7 @@ from visualizer.sprite.tiles import HorizontalMovingTile
 from visualizer.constants import camera_fov,dt,camera_offset,camera_speed, LEVEL, TileType
 from math import e
 
-
+from .log import log
 
 
 class Controller():
@@ -43,8 +43,10 @@ class Controller():
         elif self.frame_number == 120:
             self.frame_number += 1
             delta = 120 / (time.time() - self.last_update)
-            constants.dt = 60/delta * .1
+            # constants.dt = 60/delta * .1
             print("Using %f as dt" % constants.dt)
+
+        log.debug(self.player.position)
 
         for sprite in self.sprites:
             c = sprite.update_collisions(self.sprite_colliding(sprite), self.tile_array)
@@ -109,6 +111,9 @@ class Controller():
     def build_from_array(self, array):
         """Given a tile array, create the entities necessary for game rendering."""
         self.tile_array = array
+        self.width = len(array[0])
+        self.height = len(array)
+
         for y, row in enumerate(array):
             for x, tile in enumerate(row):
                 self.make_tile(tile)
@@ -159,8 +164,8 @@ class Controller():
     def tile_at(self, x, y):
         """Get the tile at a given position, or None if the position is out of bounds."""
         x, y = int(x), int(y)
-        y = len(self.tile_array) - y - 1
-        if 0 <= y < len(self.tile_array) and 0 <= x < len(self.tile_array[y]):
+        y = self.height - y - 1
+        if 0 <= y < self.height and 0 <= x < self.width:
             return self.tile_array[y][x]
 
     def get_nearby_tiles(self, position):
