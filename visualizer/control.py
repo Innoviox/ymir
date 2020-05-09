@@ -43,7 +43,7 @@ class Controller():
         elif self.frame_number == 120:
             self.frame_number += 1
             delta = 120 / (time.time() - self.last_update)
-            # constants.dt = 60/delta * .1
+            constants.dt = 60/delta * .1
             print("Using %f as dt" % constants.dt)
 
         log.debug(self.player.position)
